@@ -1,10 +1,15 @@
-import React from 'react'
+import LoginForm from '@/features/login/components/LoginForm'
+import React, { ReactElement } from 'react'
 
-type Props = {}
+interface Props {
+  
+}
 
-const index = (props: Props) => {
+function index({}: Props): ReactElement {
   return (
-    <div>index</div>
+    <div>
+      <LoginForm/>
+    </div>
   )
 }
 
