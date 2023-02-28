@@ -19,6 +19,7 @@ specifiers:
   prettier-plugin-tailwindcss: ^0.2.1
   react: 18.2.0
   react-dom: 18.2.0
+  react-hook-form: ^7.43.2
   react-redux: ^8.0.5
   simple-peer: ^9.11.1
   socket.io-client: ^4.6.1
@@ -31,6 +32,7 @@ dependencies:
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-hook-form: 7.43.2_react@18.2.0
   react-redux: 8.0.5_3xleytyzprlgycb2ded54tx72i
   simple-peer: 9.11.1
   socket.io-client: 4.6.1
@@ -2314,6 +2316,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hook-form/7.43.2_react@18.2.0:
+    resolution: {integrity: sha512-NvD3Oe2Y9hhqo2R4I4iJigDzSLpdMnzUpNMxlnzTbdiT7NT3BW0GxWCzEtwPudZMUPbZhNcSy1EcGAygyhDORg==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:
