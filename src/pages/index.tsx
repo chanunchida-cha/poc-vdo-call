@@ -1,16 +1,16 @@
-import LoginForm from '@/features/login/components/LoginForm'
-import React, { ReactElement } from 'react'
+import LoginForm from "@/features/login/components/LoginForm";
+import ChatUi from "@/features/videoChat/layouts/ChatUi";
+import React, { ReactElement } from "react";
 
-interface Props {
-  
-}
+interface Props {}
 
 function index({}: Props): ReactElement {
   return (
     <div>
-      <LoginForm/>
+      {/* <LoginForm /> */}
+      <ChatUi/>
     </div>
-  )
+  );
 }
 
-export default index
+export default index;
