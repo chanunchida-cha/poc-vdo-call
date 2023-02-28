@@ -7,9 +7,10 @@ type Props = {
 };
 
 const Layout = ({ children }: Props) => {
+  const role: string = "pharmacy";
   return (
     <>
-      <NavbarPharmacy />
+      {role === "user" ? <NavbarUser /> : <NavbarPharmacy />}
       <main>{children}</main>
     </>
   );
