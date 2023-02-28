@@ -5,12 +5,15 @@ import Layout from "@/global/layouts/Layout";
 import { Prompt } from "@next/font/google";
 
 // If loading a variable font, you don't need to specify the font weight
-const inter = Prompt({ weight:'400',subsets: ["latin","thai"] });
+const prompt = Prompt({
+  weight: "400",
+  subsets: ["latin", "thai", "vietnamese", "latin-ext"],
+});
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <Layout>
-      <main className={inter.className}>
+      <main className={prompt.className}>
         <Component {...pageProps} />
       </main>
     </Layout>
