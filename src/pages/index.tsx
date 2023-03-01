@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 interface Props {}
 
 function index({}: Props): ReactElement {
-  const [overlayStatus, setOverlayStatus] = useState(true);
+  const [overlayStatus, setOverlayStatus] = useState(false);
   return (
     // <div className="{inter.className}">
     <div className="{inter.className}">
