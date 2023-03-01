@@ -1,9 +1,14 @@
 import React from "react";
+import Layout from "../../layouts/Layout";
 
 type Props = {};
 
-const videoChatPharmacy = (props: Props) => {
-  return <div>videoChatPharmacy</div>;
+const VideoChatPharmacy = (props: Props) => {
+  return (
+    <div className="">
+      <Layout />
+    </div>
+  );
 };
 
-export default videoChatPharmacy;
+export default VideoChatPharmacy;

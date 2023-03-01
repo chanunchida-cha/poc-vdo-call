@@ -1,5 +1,6 @@
 import LoginForm from "@/features/login/components/LoginForm";
 import VideoChatForm from "@/features/videoChat/components/videoChatForm";
+import VideoChatPharmacy from "@/features/videoChat/components/videoChatPharmacy/videoChatPharmacy";
 import ChatUi from "@/features/videoChat/layouts/ChatUi";
 import React, { ReactElement } from "react";
 
@@ -9,7 +10,8 @@ function index({}: Props): ReactElement {
   return (
     <div>
       {/* <LoginForm /> */}
-      <ChatUi />
+      <VideoChatPharmacy/>
+      {/* <VideoChatForm/> */}
     </div>
   );
 }
