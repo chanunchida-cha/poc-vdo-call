@@ -7,7 +7,7 @@ type Props = {
 function ChatUi({ video ,chat}: Props) {
   return (
     <div className="h-screen w-screen ">
-      <div className="flex h-full w-screen flex-row justify-center pt-6  ">
+      <div className="flex h-full w-full flex-row justify-center pt-6 flex-wrap ">
         {video}
         {chat}
       </div>
