@@ -11,13 +11,9 @@ export default function ToggleIcon(Props: status) {
     <>
       <div className="cursor-pointer ">
         {Props.onClick ? (
-          <div className="h-[100px] w-[100px] hover:brightness-[0.75] ">
-            {Props.IconToggle}
-          </div>
+          <div className="hover:brightness-[0.75] ">{Props.IconToggle}</div>
         ) : (
-          <div className="h-[100px] w-[100px] hover:brightness-[0.75] ">
-            {Props.Icon}
-          </div>
+          <div className="hover:brightness-[0.75] ">{Props.Icon}</div>
         )}
         {Props.Text ? (
           <h5 className="mt-[0.5rem] text-center">{Props.Text}</h5>
