@@ -23,23 +23,13 @@ function VideoChatForm({}: Props) {
                 className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
               />
             </div>
-            <div className="absolute bottom-0 left-0 right-0 m-auto flex  h-20 w-60 flex-row items-center justify-center rounded-3xl bg-slate-300 ">
-              <button
-                type="submit"
-                className=" h-10 w-10  rounded-full bg-slate-400  "
-              >
-                <img
-                  src="/assets/images/smile.png"
-                  alt="image"
-                  className="h-full w-full rounded-3xl   object-cover drop-shadow-xl "
-                />
-              </button>
+            <div className="absolute bottom-0 left-0 right-0 m-auto flex  h-20 w-40 flex-row rounded-3xl items-center  justify-around ">
               <button
                 type="submit"
                 className=" h-10 w-10 rounded-full bg-slate-400  "
               >
                 <img
-                  src="/assets/images/smile.png"
+                  src="/assets/images/voice.png"
                   alt="image"
                   className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
                 />
@@ -49,7 +39,17 @@ function VideoChatForm({}: Props) {
                 className=" h-10 w-10 rounded-full bg-slate-400  "
               >
                 <img
-                  src="/assets/images/smile.png"
+                  src="/assets/images/leave.png"
+                  alt="image"
+                  className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
+                />
+              </button>
+              <button
+                type="submit"
+                className=" h-10 w-10 rounded-full bg-slate-400  "
+              >
+                <img
+                  src="/assets/images/video.png"
                   alt="image"
                   className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
                 />
@@ -58,16 +58,16 @@ function VideoChatForm({}: Props) {
           </div>
         }
         chat={
-          <div className="flex  h-full   basis-1/5  flex-col ">
-            <div className="flex h-4/5 w-full flex-col justify-center rounded-2xl bg-white drop-shadow-xl ">
+          <div className="flex  h-5/6  basis-1/5 w-full flex-col   ">
+            <div className="flex h-full w-full flex-col justify-center rounded-2xl bg-white drop-shadow-xl ">
               <p className=" mx-6 pt-6 text-start text-2xl text-primary">
                 Yok Park
               </p>
               <div className=" mx-6 h-px bg-primary"></div>
-              <div className=" mx-6 my-2 h-5/6  flex-col ">
+              <div className=" mx-6 my-2 h-5/6  flex-col  w-auto px-4">
                 <div className="flex-row p-4">
                   <div className="flex flex-wrap  ">
-                    <div className="h-14  w-14">
+                    <div className="h-10  w-10">
                       <img
                         src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
                         alt="image"
@@ -80,11 +80,11 @@ function VideoChatForm({}: Props) {
                   </div>
                 </div>
                 <div className="flex flex-row justify-end p-4">
-                  <div className="flex flex-wrap  ">
+                  <div className="flex   ">
                     <p className="mx-4 flex items-center rounded-tr-3xl rounded-bl-3xl rounded-tl-3xl bg-slate-200 px-10 text-center before:content-[attr(before)]">
                       โอ้ว อย่าเลยอย่าพบชั้น!!!
                     </p>
-                    <div className="h-14  w-14">
+                    <div className="h-10  w-10">
                       <img
                         src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
                         alt="image"
@@ -95,29 +95,29 @@ function VideoChatForm({}: Props) {
                 </div>
               </div>
             </div>
-            <div className=" mt-4  flex h-auto  flex-row  justify-between  ">
+            <div className=" mt-4  flex   h-auto  w-screen flex-row justify-between rounded-xl   sm:w-[25.688rem] ">
               <div className="flex  w-full flex-row items-center justify-center rounded-xl bg-input-massage p-2 drop-shadow-xl">
-                <div className="flex h-full w-10  items-center  ">
+                <div className="flex h-6 w-6  items-center  ">
                   <img src="/assets/images/attach-file.png" alt="attach" />
                 </div>
                 <div
-                  className="relative w-96 py-3 px-3"
+                  className="relative h-auto w-auto py-3 px-3"
                   data-te-input-wrapper-init
                 >
                   <input
                     type="text"
-                    className=" bg-bg-white   w-full rounded-3xl py-3 px-3 drop-shadow-xl "
+                    className=" bg-bg-white   w-auto rounded-3xl py-3 px-3 drop-shadow-xl "
                     id="exampleFormControlInput1"
                     placeholder="Imput massage"
                   />
                 </div>
-                <div className=" h-10 w-10  items-center  ">
+                <div className=" h-6 w-6  items-center  ">
                   <img src="/assets/images/smile.png" alt="smile" />
                 </div>
               </div>
-              <div className="ml-2 flex h-auto w-20  items-center rounded-xl bg-input-massage">
+              <div className="ml-2 flex h-auto w-auto  items-center rounded-xl bg-input-massage  ">
                 <img
-                  className=" h-16 w-16 items-center justify-center p-2"
+                  className=" h-14 w-14 items-center justify-center p-2"
                   src="/assets/images/send.png"
                   alt="send"
                 />

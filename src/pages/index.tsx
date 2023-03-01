@@ -8,8 +8,8 @@ interface Props {}
 function index({}: Props): ReactElement {
   return (
     <div>
-      <LoginForm />
-      {/* <VideoChatForm/> */}
+      {/* <LoginForm /> */}
+      <VideoChatForm/>
     </div>
   );
 }
