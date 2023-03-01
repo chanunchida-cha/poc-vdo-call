@@ -8,7 +8,7 @@ function index({}: Props): ReactElement {
   return (
     <div>
       {/* <LoginForm /> */}
-      <ChatUi/>
+      <ChatUi />
     </div>
   );
 }

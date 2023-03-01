@@ -1,10 +1,19 @@
 import Image from "next/image";
 import React from "react";
 import LayoutLogin from "../layouts/LayoutLogin";
+import { useForm } from "react-hook-form";
 
 type Props = {};
 
 function LoginForm({}: Props) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data: any) => console.log(data);
+  console.log(errors);
+
   return (
     <>
       <LayoutLogin
@@ -17,7 +26,7 @@ function LoginForm({}: Props) {
           />
         }
         form={
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-6">
               <div className="mb-6">
                 <label
@@ -29,10 +38,12 @@ function LoginForm({}: Props) {
                 <input
                   type="text"
                   id="Email"
-                  name="Email"
                   className="block w-full rounded-full border border-gray-300 bg-white py-[0.5rem] px-[1.5rem] text-[0.8rem] text-gray-900 shadow-md"
                   placeholder="samitivej@gmail.com"
-                  required
+                  {...register("Email", {
+                    required: true,
+                    pattern: /^\S+@\S+$/i,
+                  })}
                 />
               </div>
               <div className="mb-6">
@@ -45,7 +56,7 @@ function LoginForm({}: Props) {
                 <input
                   type="password"
                   id="password"
-                  name="password"
+                  {...register("Password")}
                   className="block w-full rounded-full border border-gray-300 bg-white py-[0.5rem] px-[1.5rem] text-[0.8rem] text-gray-900 shadow-md"
                   placeholder="•••••••••"
                   required
