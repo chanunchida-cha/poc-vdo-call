@@ -17,6 +17,7 @@ function index({}: Props): ReactElement {
     }
   }, [statusLogin]);
 
+  const [overlayStatus, setOverlayStatus] = useState(false);
   return (
     // <div className="{inter.className}">
     <div className="{inter.className}">history</div>

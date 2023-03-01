@@ -1,6 +1,7 @@
 import React from "react";
-import NavbarPharmacy from "../ui/NavbarPharmacy";
-import NavbarUser from "../ui/NavbarUser";
+import Navbar from "../ui/Navbar";
+// import NavbarPharmacy from "../ui/NavbarPharmacy";
+// import NavbarUser from "../ui/NavbarUser";
 
 type Props = {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ const Layout = ({ children }: Props) => {
   const role: string = "pharmacy";
   return (
     <>
-      {role === "user" ? <NavbarUser /> : <NavbarPharmacy />}
+      <Navbar role={"pharmacy"} />
       <main>{children}</main>
     </>
   );

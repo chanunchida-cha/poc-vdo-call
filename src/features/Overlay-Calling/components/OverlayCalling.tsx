@@ -1,15 +1,4 @@
-import React, { useEffect, useState } from "react";
-import DeclinedCall from "@/Model/Svg/DeclinedCall.svg";
-
-import MuteIcon from "@/Model/Svg/Mute.svg";
-import UnMuteIcon from "@/Model/Svg/UnMute.svg";
-import CallIcon from "@/Model/Svg/Call.svg";
-import DeclinedCallIcon from "@/Model/Svg/DeclinedCall.svg";
-import ToggleIcon from "@/global/components/ToggleIcon";
-import VDOIcon from "@/Model/Svg/VDO.svg";
-import UnVDOIcon from "@/Model/Svg/UnVDO.svg";
 import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
-
 interface Status {
   Overlaystatus: boolean;
   role: "user" | "pharmacy";
@@ -18,9 +7,6 @@ interface Status {
 }
 
 export default function OverlayCalling(Props: Status) {
-  const [onMute, setMute] = useState(false);
-  const [onVDO, setVDO] = useState(false);
-  const textBtnOnMute = onMute ? "Mute" : "Unmute";
   return (
     <>
       {Props.Overlaystatus && (
