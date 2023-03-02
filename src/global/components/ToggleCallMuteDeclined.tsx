@@ -6,13 +6,11 @@ import ToggleIcon from "@/global/components/ToggleIcon";
 import VDOIcon from "@/Model/Svg/VDO.svg";
 import UnVDOIcon from "@/Model/Svg/UnVDO.svg";
 
-interface Props {
-  setOverlay?: (status: boolean) => void;
-  Overlaystatus?: boolean;
-  onClickCamera:(status: boolean) => void;
-  openCamera:boolean
+interface Status {
+  setOverlay: (status: boolean) => void;
+  Overlaystatus: boolean;
 }
-export default function ToggleCallMuteDeclined({}: Props) {
+export default function ToggleCallMuteDeclined(Props: Status) {
   const [onMute, setMute] = useState(false);
   const [onVDO, setVDO] = useState(false);
   return (
@@ -27,7 +25,7 @@ export default function ToggleCallMuteDeclined({}: Props) {
         </div>
       </div>
       <div className="flex cursor-pointer items-center justify-center">
-        <div onClick={() => Props.setOverlay!(!Props.Overlaystatus)}>
+        <div onClick={() => Props.setOverlay(!Props.Overlaystatus)}>
           <DeclinedCallIcon className="hover:brightness-[0.75] " />
         </div>
       </div>

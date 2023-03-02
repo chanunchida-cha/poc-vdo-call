@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import LoginForm from "@/features/login/components/LoginForm";
 import OverlayCalling from "@/features/Overlay-Calling/components/OverlayCalling";
-import VideoChatPharmacy from "@/features/videoChat/components/videoChatPharmacy/videoChatPharmacy";
 import { useAppSelector } from "@/stores/store";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
@@ -21,7 +20,7 @@ function index({}: Props): ReactElement {
   const [overlayStatus, setOverlayStatus] = useState(false);
   return (
     // <div className="{inter.className}">
-    <div className="{inter.className}"><VideoChatPharmacy/></div>
+    <div className="{inter.className}">history</div>
   );
 }
 
