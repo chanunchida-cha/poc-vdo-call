@@ -1,51 +1,48 @@
 import React from "react";
 import ChatUi from "../layouts/ChatUi";
 import { useEffect, useRef, useState } from "react";
-import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
 
 type Props = {};
 
 function VideoChatForm({}: Props) {
-  const [stream, setStream] = useState<MediaStream>();
-  const myVideo: any = useRef(null);
-  const [openVDO, setOpenVDO] = useState(true);
-
-  useEffect(() => {
-    const stream = async () => {
-      const currentStream = await navigator.mediaDevices.getUserMedia({
-        video: openVDO,
-        audio: true,
-      });
-      try {
-        setStream(currentStream);
-        myVideo.current.srcObject = currentStream;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    stream();
-  }, [ openVDO]);
-
+    const [stream, setStream] = useState<MediaStream>();
+    const myVideo: any = useRef(null);
+  
+    useEffect(() => {
+      const stream = async () => {
+        const currentStream = await navigator.mediaDevices.getUserMedia({
+          video:false,
+          audio: true,
+        });
+        try {
+          setStream(currentStream);
+          myVideo.current.srcObject = currentStream;
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      stream();
+    }, []);
   return (
     <>
       <ChatUi
         video={
           <div className="relative mx-6 my-4 h-5/6 flex-1 basis-1/2 rounded-2xl   ">
             <div className="absolute  h-full  w-full">
-              {stream && (
+            {/* {stream && (
                 <video
                   playsInline
                   muted
                   ref={myVideo}
                   autoPlay
-                  className="h-full w-full object-cover sm:rounded-xl"
+                  className="h-full w-full sm:rounded-xl object-cover"
                 />
-              )}
-              {/* <img
+              )} */}
+              <img
                 src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
                 alt="image"
                 className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
-              /> */}
+              />
             </div>
             <div className=" absolute right-0 mr-10 mt-10 h-[8rem] w-[12rem] rounded-3xl md:shrink-0 ">
               <img
@@ -55,9 +52,39 @@ function VideoChatForm({}: Props) {
               />
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 m-auto flex  h-20 w-auto flex-row items-center justify-around  rounded-3xl ">
-              <ToggleCallMuteDeclined onClickVDO={setOpenVDO} />
+            <div className="absolute bottom-0 left-0 right-0 m-auto flex  h-20 w-40 flex-row items-center justify-around  rounded-3xl ">
+              {/* <button
+                type="submit"
+                className=" h-10 w-10 rounded-full bg-slate-400  "
+              >
+                <img
+                  src="/assets/images/voice.png"
+                  alt="image"
+                  className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
+                />
+              </button>
+              <button
+                type="submit"
+                className=" h-10 w-10 rounded-full bg-slate-400  "
+              >
+                <img
+                  src="/assets/images/leave.png"
+                  alt="image"
+                  className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
+                />
+              </button>
+              <button
+                type="submit"
+                className=" h-10 w-10 rounded-full bg-slate-400  "
+              >
+                <img
+                  src="/assets/images/video.png"
+                  alt="image"
+                  className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
+                />
+              </button> */}
             </div>
+
           </div>
         }
         chat={
