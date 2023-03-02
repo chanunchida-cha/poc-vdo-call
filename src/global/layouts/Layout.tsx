@@ -8,7 +8,6 @@ type Props = {
 };
 
 const Layout = ({ children }: Props) => {
-  const role: string = "pharmacy";
   return (
     <>
       <Navbar role={"pharmacy"} />

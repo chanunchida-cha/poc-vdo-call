@@ -1,15 +1,43 @@
 import React from "react";
 import ChatUi from "../layouts/ChatUi";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {};
 
 function VideoChatForm({}: Props) {
+    const [stream, setStream] = useState<MediaStream>();
+    const myVideo: any = useRef(null);
+  
+    useEffect(() => {
+      const stream = async () => {
+        const currentStream = await navigator.mediaDevices.getUserMedia({
+          video:false,
+          audio: true,
+        });
+        try {
+          setStream(currentStream);
+          myVideo.current.srcObject = currentStream;
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      stream();
+    }, []);
   return (
     <>
       <ChatUi
         video={
           <div className="relative mx-6 my-4 h-5/6 flex-1 basis-1/2 rounded-2xl   ">
             <div className="absolute  h-full  w-full">
+            {/* {stream && (
+                <video
+                  playsInline
+                  muted
+                  ref={myVideo}
+                  autoPlay
+                  className="h-full w-full sm:rounded-xl object-cover"
+                />
+              )} */}
               <img
                 src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
                 alt="image"
@@ -23,8 +51,9 @@ function VideoChatForm({}: Props) {
                 className="h-full w-full rounded-3xl  object-cover drop-shadow-xl md:h-full md:w-48"
               />
             </div>
+
             <div className="absolute bottom-0 left-0 right-0 m-auto flex  h-20 w-40 flex-row items-center justify-around  rounded-3xl ">
-              <button
+              {/* <button
                 type="submit"
                 className=" h-10 w-10 rounded-full bg-slate-400  "
               >
@@ -53,8 +82,9 @@ function VideoChatForm({}: Props) {
                   alt="image"
                   className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
                 />
-              </button>
+              </button> */}
             </div>
+
           </div>
         }
         chat={
