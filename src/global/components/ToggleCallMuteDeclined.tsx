@@ -9,6 +9,7 @@ import UnVDOIcon from "@/Model/Svg/UnVDO.svg";
 interface Status {
   setOverlay?: (status: boolean) => void;
   Overlaystatus?: boolean;
+  onClickVDO?: (status: boolean) => void;
 }
 export default function ToggleCallMuteDeclined(Props: Status) {
   const [onMute, setMute] = useState(false);
@@ -36,7 +37,10 @@ export default function ToggleCallMuteDeclined(Props: Status) {
         )}
       </div>
       <div className="flex cursor-pointer items-center justify-center pr-[4rem]">
-        <div onClick={() => setVDO(!onVDO)}>
+        <div onClick={() =>{ setVDO(!onVDO)
+        Props.onClickVDO!(onVDO) }
+      
+        }>
           <ToggleIcon
             onClick={onVDO}
             Icon={<VDOIcon />}
