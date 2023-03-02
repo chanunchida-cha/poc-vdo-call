@@ -20,6 +20,7 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   react-hook-form: ^7.43.2
+  react-icons: ^4.7.1
   react-redux: ^8.0.5
   simple-peer: ^9.11.1
   socket.io-client: ^4.6.1
@@ -33,6 +34,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.43.2_react@18.2.0
+  react-icons: 4.7.1_react@18.2.0
   react-redux: 8.0.5_3xleytyzprlgycb2ded54tx72i
   simple-peer: 9.11.1
   socket.io-client: 4.6.1
@@ -2323,6 +2325,14 @@ packages:
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /react-icons/4.7.1_react@18.2.0:
+    resolution: {integrity: sha512-yHd3oKGMgm7zxo3EA7H2n7vxSoiGmHk5t6Ou4bXsfcgWyhfDKMpyKfhHR6Bjnn63c+YXBLBPUql9H4wPJM6sXw==}
+    peerDependencies:
+      react: '*'
     dependencies:
       react: 18.2.0
     dev: false
