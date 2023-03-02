@@ -11,7 +11,7 @@ export default function ToggleIcon(Props: status) {
     <>
       <div className="cursor-pointer ">
         {Props.onClick ? (
-          <div className="hover:brightness-[0.75] ">{Props.IconToggle}</div>
+          <div className="hover:brightness-[0.75]">{Props.IconToggle}</div>
         ) : (
           <div className="hover:brightness-[0.75] ">{Props.Icon}</div>
         )}

@@ -7,8 +7,8 @@ import VDOIcon from "@/Model/Svg/VDO.svg";
 import UnVDOIcon from "@/Model/Svg/UnVDO.svg";
 
 interface Status {
-  setOverlay: (status: boolean) => void;
-  Overlaystatus: boolean;
+  setOverlay?: (status: boolean) => void;
+  Overlaystatus?: boolean;
 }
 export default function ToggleCallMuteDeclined(Props: Status) {
   const [onMute, setMute] = useState(false);
@@ -25,9 +25,15 @@ export default function ToggleCallMuteDeclined(Props: Status) {
         </div>
       </div>
       <div className="flex cursor-pointer items-center justify-center">
-        <div onClick={() => Props.setOverlay(!Props.Overlaystatus)}>
-          <DeclinedCallIcon className="hover:brightness-[0.75] " />
-        </div>
+        {Props.setOverlay ? (
+          <div onClick={() => Props.setOverlay!(!Props.Overlaystatus)}>
+            <DeclinedCallIcon className="hover:brightness-[0.75] " />
+          </div>
+        ) : (
+          <div>
+            <DeclinedCallIcon className="hover:brightness-[0.75] " />
+          </div>
+        )}
       </div>
       <div className="flex cursor-pointer items-center justify-center pr-[4rem]">
         <div onClick={() => setVDO(!onVDO)}>

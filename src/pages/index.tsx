@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import LoginForm from "@/features/login/components/LoginForm";
 import OverlayCalling from "@/features/Overlay-Calling/components/OverlayCalling";
+import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
 import { useAppSelector } from "@/stores/store";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
@@ -17,10 +18,17 @@ function index({}: Props): ReactElement {
     }
   }, [statusLogin]);
 
-  const [overlayStatus, setOverlayStatus] = useState(false);
+  const [overlayStatus, setOverlayStatus] = useState(true);
   return (
     // <div className="{inter.className}">
-    <div className="{inter.className}">history</div>
+
+    <div className="{inter.className}">
+      <OverlayCalling
+        Overlaystatus={overlayStatus}
+        role="user"
+        setOverlay={setOverlayStatus}
+      />
+    </div>
   );
 }
 
