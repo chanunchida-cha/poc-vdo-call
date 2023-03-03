@@ -6,6 +6,7 @@ import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
+import User from "./chat/Doctor";
 
 interface Props {}
 
@@ -16,16 +17,20 @@ function index({}: Props): ReactElement {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (statusLogin.status === false) {
-      router.push("/login");
-    }
-  }, [statusLogin]);
+  // useEffect(() => {
+  //   if (statusLogin.status === false) {
+  //     router.push("/login");
+  //   }
+  // }, [statusLogin]);
 
   return (
     // <div className="{inter.className}">
     // <div className="{inter.className}">history</div>
-    <>{<VideoChatForm />}</>
+    // <>{<VideoChatForm />}</>
+    <>
+      <User />
+      <OverlayCalling />
+    </>
   );
 }
 

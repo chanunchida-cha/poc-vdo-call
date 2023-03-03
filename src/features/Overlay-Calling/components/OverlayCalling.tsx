@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector } from "@/stores/store";
 
 export default function OverlayCalling() {
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
+  console.log(statusOverlay);
+
   return (
     <>
       {statusOverlay && (
