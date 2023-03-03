@@ -7,10 +7,7 @@ import { Provider } from "react-redux";
 import { store } from "@/stores/store";
 
 // If loading a variable font, you don't need to specify the font weight
-const prompt = Prompt({
-  weight: "400",
-  subsets: ["latin", "thai", "vietnamese", "latin-ext"],
-});
+const prompt = Prompt({ weight: "400", subsets: ["thai", "latin"] });
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
