@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 type Props = {};
 
 function LoginForm({}: Props) {
-  const statusLogin = useAppSelector((state) => state.statusLogin);
+  const statusLogin = useAppSelector((state) => state.loginSlice.status);
   const dispath = useDispatch();
   const router = useRouter();
   console.log(statusLogin);
