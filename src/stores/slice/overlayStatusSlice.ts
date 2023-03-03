@@ -1,7 +1,7 @@
 import React from 'react'
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 
-const overlayStatus =true
+const overlayStatus =false
 export const OverlayStatusSlice = createSlice({
     name:"overlayStatus",
     initialState:overlayStatus,

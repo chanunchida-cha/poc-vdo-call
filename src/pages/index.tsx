@@ -17,11 +17,11 @@ function index({}: Props): ReactElement {
 
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (statusLogin.status === false) {
-  //     router.push("/login");
-  //   }
-  // }, [statusLogin]);
+  useEffect(() => {
+    if (statusLogin.status === false) {
+      router.push("/login");
+    }
+  }, [statusLogin]);
 
   return (
     // <div className="{inter.className}">
