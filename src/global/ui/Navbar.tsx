@@ -45,9 +45,9 @@ export default function Navbar(Props: Status) {
                 />
               </div>
             </div>
-            <div className="basis[10rem] mx-2 flex flex-col  ">
-              <div className=" flex justify-end pb-[0.3rem] font-semibold text-white">
-                Yok park
+            <div className="basis-[20rem] mx-2 flex flex-col  ">
+              <div className=" flex justify-start pb-[0.3rem] font-semibold text-white">
+              ธีรพัฒน์ หงส์วรพิพัฒน์
               </div>
 
               {Props.role === "pharmacy" && (
