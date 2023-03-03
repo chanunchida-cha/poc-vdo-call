@@ -1,64 +1,60 @@
-import React from "react";
+import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
+import React, { useEffect, useRef, useState } from "react";
 
 type Props = {};
 
 function Layout({}: Props) {
+  const [stream, setStream] = useState<MediaStream>();
+  const [openCamera, setOpenCamera] = useState<boolean>(true);
+  const myVideo: any = useRef(null);
+
+  useEffect(() => {
+    const stream = async () => {
+      const currentStream = await navigator.mediaDevices.getUserMedia({
+        video: openCamera,
+        audio: true,
+      });
+      try {
+        setStream(currentStream);
+        myVideo.current.srcObject = currentStream;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    stream();
+  }, [openCamera]);
+
   return (
-    <div className="mx-10 my-5 max-w-full">
+    <div className="overflow-y-hidden sm:mx-10 sm:my-5  sm:max-w-full">
       <div className="grid gap-5 sm:grid-cols-3">
-        <div className="col-span-2 h-[35rem] rounded-xl bg-primary">
-        <div className="relative mr-20 h-full w-full rounded-xl   ">
+        <div className="col-span-2 h-screen rounded-xl  bg-bg-close-camera sm:h-[35rem]">
+          <div className="relative mr-20 h-full w-full rounded-xl   ">
             <div className="absolute  h-full  w-full rounded-xl">
-              <img
-                src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
-                alt="image"
-                className="h-full w-full  object-cover drop-shadow-xl rounded-xl"
-              />
+              {stream && (
+                <video
+                  playsInline
+                  muted
+                  ref={myVideo}
+                  autoPlay
+                  className="h-full w-full object-cover sm:rounded-xl"
+                />
+              )}
             </div>
-            <div className=" absolute right-0 mr-10 mt-10 h-40 w-60  ">
+            <div className=" absolute right-0  mt-3 h-[10rem] w-[10rem] px-3  sm:h-[10rem] sm:w-[15rem]">
               <img
                 src="https://i.pinimg.com/originals/5a/e9/7f/5ae97f2a2d3b223a6af48d4aca84e6eb.jpg"
                 alt="image"
-                className="h-full w-full  object-cover drop-shadow-xl rounded-xl"
+                className="h-full w-full  rounded-xl object-cover drop-shadow-xl"
               />
             </div>
-            <div className="absolute bottom-0 left-0 right-0 m-auto flex  h-20 w-60 flex-row items-center justify-center rounded-3xl bg-slate-300 ">
-              <button
-                type="submit"
-                className=" h-10 w-10  rounded-full bg-slate-400  "
-              >
-                <img
-                  src="/assets/images/smile.png"
-                  alt="image"
-                  className="h-full w-full rounded-3xl   object-cover drop-shadow-xl "
-                />
-              </button>
-              <button
-                type="submit"
-                className=" h-10 w-10 rounded-full bg-slate-400  "
-              >
-                <img
-                  src="/assets/images/smile.png"
-                  alt="image"
-                  className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
-                />
-              </button>
-              <button
-                type="submit"
-                className=" h-10 w-10 rounded-full bg-slate-400  "
-              >
-                <img
-                  src="/assets/images/smile.png"
-                  alt="image"
-                  className="h-full w-full rounded-3xl  object-cover drop-shadow-xl "
-                />
-              </button>
+            <div className="absolute bottom-0 left-0 right-0 m-auto flex  h-20 w-full  items-center justify-center  ">
+              <ToggleCallMuteDeclined  onClickVDO={setOpenCamera}  />
             </div>
           </div>
         </div>
         <div className="flex flex-col">
-          <div className="flex basis-11/12 bg-blue-500 rounded-xl">v</div>
-          <div className="flex basis-1/12 bg-amber-300 mt-3 rounded-xl">v</div>
+          <div className="flex basis-11/12 rounded-xl bg-blue-500">v</div>
+          <div className="mt-3 flex basis-1/12 rounded-xl bg-amber-300">v</div>
         </div>
       </div>
     </div>
