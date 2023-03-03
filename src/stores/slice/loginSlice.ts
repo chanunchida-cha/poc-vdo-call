@@ -1,11 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const statusLogin: boolean = false;
+interface StatusLogin{
+  status: boolean,
+  role: "user" | "pharmacy"|"admin"|"";
+
+}
+const statusLogin:StatusLogin={
+  status:false,
+  role:"",
+}
+
 export const LoginSlice = createSlice({
   name: "statusLogin",
   initialState: statusLogin,
   reducers: {
-    onChangeLoginStatusState: state => state = true,
+    onChangeLoginStatusState: (state:StatusLogin) => {state.status = true},
   },
 });
 

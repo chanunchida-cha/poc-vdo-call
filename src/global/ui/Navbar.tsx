@@ -1,22 +1,34 @@
 import React from "react";
 import VoiceCall from "@/Model/Svg/VoiceCall.svg";
 import VDOCall from "@/Model/Svg/VDOCall.svg";
-
+import { useAppDispatch, useAppSelector } from "@/stores/store";
+import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 interface Status {
   role: "user" | "pharmacy";
 }
 
-const callButton = [
-  {
-    title: "สนทนาด้วยเสียง",
-    icon: <VoiceCall />,
-  },
-  {
-    title: "วิดีโอคอล",
-    icon: <VDOCall />,
-  },
-];
 export default function Navbar(Props: Status) {
+  const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
+  const dispatch = useAppDispatch();
+
+  const callButton = [
+    {
+      title: "สนทนาด้วยเสียง",
+      icon: <VoiceCall />,
+      setOverlay: () => {
+        console.log("Click Voice call");
+        return dispatch(setOverlayStatus());
+      },
+    },
+    {
+      title: "วิดีโอคอล",
+      icon: <VDOCall />,
+      setOverlay: () => {
+        console.log("Click Vdo call");
+        return dispatch(setOverlayStatus());
+      },
+    },
+  ];
   return (
     <>
       <div className=" border-borderNav  h-[3.8rem]  border-b  bg-primary px-2">
@@ -51,11 +63,12 @@ export default function Navbar(Props: Status) {
             <div className="flex w-full flex-row items-center justify-end sm:px-5">
               {callButton.map((item) => {
                 return (
-                  <div className="mr-2 flex h-[2rem] w-[4rem] sm:w-[11rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white">
-                    <div className="hidden sm:flex mr-3">{item.title}</div>
-                    <div>
-                     {item.icon}
-                    </div>
+                  <div
+                    className="mr-2 flex h-[2rem] w-[4rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[11rem]"
+                    onClick={item.setOverlay}
+                  >
+                    <div className="mr-3 hidden sm:flex">{item.title}</div>
+                    <div>{item.icon}</div>
                   </div>
                 );
               })}

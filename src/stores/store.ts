@@ -1,10 +1,11 @@
-import { LoginSlice } from './slice/loginSlice';
-
+import loginSlice from './slice/loginSlice';
+import overlayStatusSlice from './slice/overlayStatusSlice';
 import {configureStore} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
 const reducer = {
-  statusLogin: LoginSlice.reducer
+  loginSlice,overlayStatusSlice
+  
 };
 
 export const store = configureStore({
