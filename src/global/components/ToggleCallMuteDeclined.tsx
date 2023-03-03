@@ -8,7 +8,6 @@ import UnVDOIcon from "@/Model/Svg/UnVDO.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 
-
 interface Status {
   onClickVDO?: (status: boolean) => void;
 }
@@ -43,7 +42,9 @@ export default function ToggleCallMuteDeclined(Props: Status) {
         <div
           onClick={() => {
             setVDO(!onVDO);
-            Props.onClickVDO!(onVDO);
+            {
+              Props.onClickVDO && Props.onClickVDO!(onVDO);
+            }
           }}
         >
           <ToggleIcon
