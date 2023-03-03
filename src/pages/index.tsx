@@ -16,22 +16,16 @@ function index({}: Props): ReactElement {
 
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (statusLogin.status === false) {
-  //     router.push("/login");
-  //   }
-  // }, [statusLogin]);
-  console.log(statusLogin);
+  useEffect(() => {
+    if (statusLogin.status === false) {
+      router.push("/login");
+    }
+  }, [statusLogin]);
 
   return (
     // <div className="{inter.className}">
     // <div className="{inter.className}">history</div>
-    <>
-      <div>{statusOverlay ? "true" : "false"} </div>
-      <button onClick={() => dispatch(setOverlayStatus())}>Click Here</button>
-      <OverlayCalling role="user" />
-      {/* <VideoChatForm /> */}
-    </>
+    <>{<VideoChatForm />}</>
   );
 }
 
