@@ -1,15 +1,11 @@
 import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
-interface Status {
-  Overlaystatus: boolean;
-  role: "user" | "pharmacy";
-  setOverlay: (status: boolean) => void;
-  // setSatus: (status: boolean) => boolean;
-}
+import { useAppDispatch, useAppSelector } from "@/stores/store";
 
-export default function OverlayCalling(Props: Status) {
+export default function OverlayCalling() {
+  const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
   return (
     <>
-      {Props.Overlaystatus && (
+      {statusOverlay && (
         <div className="fixed inset-0 flex h-screen w-full items-center justify-center bg-black opacity-[0.87]">
           <div className="grid h-[40rem] w-[25rem] grid-rows-2">
             <div className="mx-auto mt-[4rem]  text-white">
@@ -23,10 +19,7 @@ export default function OverlayCalling(Props: Status) {
                 Calling...
               </div>
             </div>
-            <ToggleCallMuteDeclined
-              Overlaystatus={Props.Overlaystatus}
-              setOverlay={Props.setOverlay}
-            />
+            <ToggleCallMuteDeclined />
           </div>
         </div>
       )}
