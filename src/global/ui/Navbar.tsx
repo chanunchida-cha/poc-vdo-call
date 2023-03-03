@@ -6,7 +6,7 @@ interface Status {
 export default function Navbar(Props: Status) {
   return (
     <>
-      <div className=" border-borderNav  h-[3.8rem]  border-b  bg-primary px-2">
+     <div className="border-borderNav fixed z-10 flex h-[3.8rem] w-full flex-row items-center justify-between border-b bg-primary px-2 sm:justify-start">
         <div className="flex  h-full items-center">
           <div className="flex flex-row items-center">
             <div className="mx-2 flex h-[2.5rem] w-[2.5rem] items-center overflow-hidden rounded-full">
