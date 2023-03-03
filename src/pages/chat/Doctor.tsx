@@ -62,17 +62,51 @@ function User({}: Props): ReactElement {
             isActive={activeChannel == 5}
             onClick={() => setActiveChannel(5)}
           />
+          <ChatChannel
+            name="Yok"
+            avatar={`https://ui-avatars.com/api/?name= YO`}
+            message="สวัสดี"
+            isActive={activeChannel == 6}
+            onClick={() => setActiveChannel(6)}
+          />
+          <ChatChannel
+            name="App"
+            avatar={`https://ui-avatars.com/api/?name= AP`}
+            message="สวัสดี"
+            isActive={activeChannel == 7}
+            onClick={() => setActiveChannel(7)}
+          />
+          <ChatChannel
+            name="Stang"
+            avatar={`https://ui-avatars.com/api/?name= ST`}
+            message="สวัสดี"
+            isActive={activeChannel == 8}
+            onClick={() => setActiveChannel(8)}
+          />
+          <ChatChannel
+            name="Pleng"
+            avatar={`https://ui-avatars.com/api/?name= PL`}
+            message="สวัสดี"
+            isActive={activeChannel == 9}
+            onClick={() => setActiveChannel(9)}
+          />
+          <ChatChannel
+            name="Khaowoat"
+            avatar={`https://ui-avatars.com/api/?name= KH`}
+            message="สวัสดี"
+            isActive={activeChannel == 10}
+            onClick={() => setActiveChannel(10)}
+          />
         </ChatHistory>
 
         {activeChannel === 0 && (
           <ChatRoom title="Jacky">
-         
             <ChatMessageOther
               name="Jackey"
               avatar={`https://ui-avatars.com/api/?name=JA`}
               message="ไม่สบายทำไงดี"
             />
-               <ChatMessageMe
+            <ChatMessageMe
               name="Doctor"
               avatar={`https://ui-avatars.com/api/?name= DA`}
               message="ทำใจ"
@@ -92,13 +126,12 @@ function User({}: Props): ReactElement {
 
         {activeChannel === 1 && (
           <ChatRoom title="Champ">
-           
             <ChatMessageOther
               name="Champ"
               avatar={`https://ui-avatars.com/api/?name=CH`}
               message="สวัสดี"
             />
-             <ChatMessageMe
+            <ChatMessageMe
               name="Doctor"
               avatar={`https://ui-avatars.com/api/?name= DA`}
               message="หวัดดีคนไข้"
@@ -107,67 +140,133 @@ function User({}: Props): ReactElement {
         )}
 
         {activeChannel === 2 && (
-           <ChatRoom title="Junior">
-           
-           <ChatMessageOther
-             name="Junior"
-             avatar={`https://ui-avatars.com/api/?name=JU`}
-             message="สวัสดี"
-           />
+          <ChatRoom title="Junior">
+            <ChatMessageOther
+              name="Junior"
+              avatar={`https://ui-avatars.com/api/?name=JU`}
+              message="สวัสดี"
+            />
             <ChatMessageMe
-             name="Doctor"
-             avatar={`https://ui-avatars.com/api/?name= DA`}
-             message="หวัดดีคนไข้"
-           />
-         </ChatRoom>
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
         )}
 
         {activeChannel === 3 && (
           <ChatRoom title="Atom">
-           
-          <ChatMessageOther
-            name="Atom"
-            avatar={`https://ui-avatars.com/api/?name=AT`}
-            message="สวัสดี"
-          />
-           <ChatMessageMe
-            name="Doctor"
-            avatar={`https://ui-avatars.com/api/?name= DA`}
-            message="หวัดดีคนไข้"
-          />
-        </ChatRoom>
+            <ChatMessageOther
+              name="Atom"
+              avatar={`https://ui-avatars.com/api/?name=AT`}
+              message="สวัสดี"
+            />
+            <ChatMessageMe
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
         )}
 
         {activeChannel === 4 && (
-         <ChatRoom title="Sorn">
-           
-         <ChatMessageOther
-           name="Sorn"
-           avatar={`https://ui-avatars.com/api/?name=SO`}
-           message="สวัสดี"
-         />
-          <ChatMessageMe
-           name="Doctor"
-           avatar={`https://ui-avatars.com/api/?name= DA`}
-           message="หวัดดีคนไข้"
-         />
-       </ChatRoom>
+          <ChatRoom title="Sorn">
+            <ChatMessageOther
+              name="Sorn"
+              avatar={`https://ui-avatars.com/api/?name=SO`}
+              message="สวัสดี"
+            />
+            <ChatMessageMe
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
         )}
 
         {activeChannel === 5 && (
           <ChatRoom title="Petch">
-           
-          <ChatMessageOther
-            name="Sorn"
-            avatar={`https://ui-avatars.com/api/?name=PE`}
-            message="สวัสดี"
-          />
-           <ChatMessageMe
-            name="Doctor"
-            avatar={`https://ui-avatars.com/api/?name= DA`}
-            message="หวัดดีคนไข้"
-          />
-        </ChatRoom>
+            <ChatMessageOther
+              name="Petch"
+              avatar={`https://ui-avatars.com/api/?name=PE`}
+              message="สวัสดี"
+            />
+            <ChatMessageMe
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
+        )}
+        {activeChannel === 6 && (
+          <ChatRoom title="Yok">
+            <ChatMessageOther
+              name="Yok"
+              avatar={`https://ui-avatars.com/api/?name=YO`}
+              message="สวัสดี"
+            />
+            <ChatMessageMe
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
+        )}
+        {activeChannel === 7 && (
+          <ChatRoom title="App">
+            <ChatMessageOther
+              name="App"
+              avatar={`https://ui-avatars.com/api/?name=AP`}
+              message="สวัสดี"
+            />
+            <ChatMessageMe
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
+        )}
+        {activeChannel === 8 && (
+          <ChatRoom title="Stang">
+            <ChatMessageOther
+              name="Sorn"
+              avatar={`https://ui-avatars.com/api/?name=ST`}
+              message="สวัสดี"
+            />
+            <ChatMessageMe
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
+        )}
+        {activeChannel === 9 && (
+          <ChatRoom title="Pleng">
+            <ChatMessageOther
+              name="Sorn"
+              avatar={`https://ui-avatars.com/api/?name=PE`}
+              message="สวัสดี"
+            />
+            <ChatMessageMe
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
+        )}
+        {activeChannel === 10 && (
+          <ChatRoom title="Khaowoat">
+            <ChatMessageOther
+              name="Sorn"
+              avatar={`https://ui-avatars.com/api/?name=KH`}
+              message="สวัสดี"
+            />
+            <ChatMessageMe
+              name="Doctor"
+              avatar={`https://ui-avatars.com/api/?name= DA`}
+              message="หวัดดีคนไข้"
+            />
+          </ChatRoom>
         )}
       </ChatLayout>
     </div>
