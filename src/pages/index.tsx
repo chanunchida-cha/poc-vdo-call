@@ -11,17 +11,17 @@ import User from "./chat/Doctor";
 interface Props {}
 
 function index({}: Props): ReactElement {
-  const statusLogin = useAppSelector((state) => state.loginSlice);
+  // const statusLogin = useAppSelector((state) => state.loginSlice);
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
   const dispatch = useAppDispatch();
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (statusLogin.status === false) {
-      router.push("/login");
-    }
-  }, [statusLogin]);
+  // useEffect(() => {
+  //   if (statusLogin.status === false) {
+  //     router.push("/login");
+  //   }
+  // }, [statusLogin]);
 
   return (
     // <div className="{inter.className}">

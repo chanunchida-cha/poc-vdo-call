@@ -3,6 +3,7 @@ import VoiceCall from "@/Model/Svg/VoiceCall.svg";
 import VDOCall from "@/Model/Svg/VDOCall.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
+import { callUser } from "@/stores/slice/videoCallSlice";
 interface Status {
   role: "user" | "pharmacy";
 }
@@ -17,7 +18,7 @@ export default function Navbar(Props: Status) {
       icon: <VoiceCall />,
       setOverlay: () => {
         console.log("Click Voice call");
-        return dispatch(setOverlayStatus());
+        return dispatch(callUser);
       },
     },
     {

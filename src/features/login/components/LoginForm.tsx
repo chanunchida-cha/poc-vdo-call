@@ -1,33 +1,40 @@
 import Image from "next/image";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 import LayoutLogin from "../layouts/LayoutLogin";
 import { useForm } from "react-hook-form";
 import { useAppSelector } from "@/stores/store";
 import { useDispatch } from "react-redux";
-import { onChangeLoginStatusState } from "@/stores/slice/loginSlice";
+
 import { useRouter } from "next/router";
+import { useLoginUserMutation } from "@/stores/service/loginService";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup
+  .object({
+    Email: yup.string().required(),
+    Password: yup.string().required(),
+  })
+  .required();
+type FormData = yup.InferType<typeof schema>;
 
 type Props = {};
 
 function LoginForm({}: Props) {
-  const statusLogin = useAppSelector((state) => state.loginSlice.status);
-  const dispath = useDispatch();
-  const router = useRouter();
-  console.log(statusLogin);
-
+  const [email, setEmail] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    dispath(onChangeLoginStatusState());
-    if (statusLogin === true) {
-      router.push("/");
-    }
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
+  const [loginUser,{data}] = useLoginUserMutation();
+  const onSubmit =async (item: FormData) => {
+    const response = await loginUser(item.Email);
+    console.log("response",response);
+
   };
-  console.log(errors);
 
   return (
     <>
@@ -41,11 +48,11 @@ function LoginForm({}: Props) {
           />
         }
         form={
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-6">
               <div className="mb-6">
                 <label
-                  htmlFor="username"
+                  htmlFor="Email"
                   className="mb-2 block text-sm font-medium text-primary "
                 >
                   Email
@@ -85,6 +92,7 @@ function LoginForm({}: Props) {
                 Sign in
               </button>
             </div>
+            <div></div>
           </form>
         }
       />
