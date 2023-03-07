@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import VoiceCall from "@/Model/Svg/VoiceCall.svg";
 import VDOCall from "@/Model/Svg/VDOCall.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
@@ -11,7 +11,7 @@ interface Status {
 export default function Navbar(Props: Status) {
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
   const dispatch = useAppDispatch();
-
+  const [isOnline, setIsOnline] = useState(true);
   const callButton = [
     {
       title: "สนทนาด้วยเสียง",
@@ -46,16 +46,32 @@ export default function Navbar(Props: Status) {
                 />
               </div>
             </div>
-            <div className="basis-[20rem] mx-2 flex flex-col  ">
+            <div className="mx-2 flex basis-[20rem] flex-col  ">
               <div className=" flex justify-start pb-[0.3rem] font-semibold text-white">
-              ธีรพัฒน์ หงส์วรพิพัฒน์
+                ธีรพัฒน์ หงส์วรพิพัฒน์
               </div>
 
               {Props.role === "pharmacy" && (
                 <div className="flex">
-                  <div className=" flex h-[1rem] w-[4rem]  items-center justify-between  rounded-full bg-white px-2 ">
-                    <div className="text-[0.8rem] text-primary">online</div>
-                    <div className="h-[0.6rem] w-[0.6rem] rounded-full bg-status-online"></div>
+                  <div
+                    className=" relative flex h-[1rem] w-[3.5rem]  cursor-pointer items-center rounded-full bg-white"
+                    onClick={() => setIsOnline(!isOnline)}
+                  >
+                    <div
+                      className={`${
+                        isOnline
+                          ? "left-[0.2rem] text-[#264E35]"
+                          : "left-[1.3rem] text-red-700"
+                      } transitio absolute -top-[0.1rem] text-[12px] font-semibold duration-[400ms] `}
+                    >
+                      {isOnline ? "Online" : "Busy"}
+                    </div>
+
+                    <div
+                      className={`h-[1rem] w-[1rem] rounded-full bg-status-online ${
+                        isOnline ? "ml-[2.5rem]" : "bg-red-600"
+                      }  transitio duration-[400ms]`}
+                    ></div>
                   </div>
                 </div>
               )}

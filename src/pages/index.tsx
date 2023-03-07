@@ -30,6 +30,13 @@ function index({}: Props): ReactElement {
     <>
       <User />
       <OverlayCalling />
+      <label class="flex cursor-pointer select-none items-center">
+        <div class="relative">
+          <input type="checkbox" class="sr-only" />
+          <div class="box block h-8 w-14 rounded-full bg-primary"></div>
+          <div class="dot absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition"></div>
+        </div>
+      </label>
     </>
   );
 }
