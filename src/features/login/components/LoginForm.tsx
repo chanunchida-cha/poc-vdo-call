@@ -60,20 +60,17 @@ function LoginForm() {
       sessionStorage.setItem("firstname", res.firstName);
       setUser(res);
     } else {
-      // something
+      alert("Username or password is incorrect");
     }
   };
   const email =
     typeof window !== "undefined" ? sessionStorage.getItem("email") : null;
   useEffect(() => {
-    if (email) {
-      route.push("/");
-    }
+    email && route.push("/");
   }, [email]);
 
   useEffect(() => {
-    if (!data) return;
-    dispatch(setUserState(data));
+    data && dispatch(setUserState(data));
   }, [data]);
   // dispatch(setUserState(data!));
   // console.log("name from redux", userLogin.firstName);
