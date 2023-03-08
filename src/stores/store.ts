@@ -1,19 +1,22 @@
-import VideoCallSlice from "./slice/videoCallSlice";
+import LoginSlice from './slice/loginSlice';
 import { LoginApi } from "./service/loginService";
 import overlayStatusSlice from "./slice/overlayStatusSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { GetUser } from "./service/getUserService";
 
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
+  [GetUser.reducerPath]: GetUser.reducer,
+  userState: LoginSlice,
   overlayStatusSlice,
-  VideoCallSlice,
+ 
 };
 
 export const store = configureStore({
-  reducer,
+  reducer:reducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(LoginApi.middleware),
+    getDefaultMiddleware().concat(LoginApi.middleware,GetUser.middleware),
 });
 
 // export type of root state from reducers

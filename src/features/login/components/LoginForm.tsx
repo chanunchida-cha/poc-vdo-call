@@ -1,14 +1,15 @@
 import Image from "next/image";
-import React, { FormEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LayoutLogin from "../layouts/LayoutLogin";
 import { useForm } from "react-hook-form";
-import { useAppSelector } from "@/stores/store";
-import { useDispatch } from "react-redux";
-
+import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { useRouter } from "next/router";
 import { useLoginUserMutation } from "@/stores/service/loginService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useGetUserQuery } from "@/stores/service/getUserService";
+import { User } from "@/Model/interface/InterfaceUser";
+import { setUserState } from "@/stores/slice/loginSlice";
 
 const schema = yup
   .object({
@@ -21,7 +22,20 @@ type FormData = yup.InferType<typeof schema>;
 type Props = {};
 
 function LoginForm({}: Props) {
-  const [email, setEmail] = useState("");
+  const userLogin = useAppSelector((state) => state.userState);
+  const dispatch = useAppDispatch();
+  const [user, setUser] = useState<User>({
+    email: "",
+    firstName: "",
+    id: "",
+    lastName: "",
+    licenseNo: "",
+    password: "",
+    role: "",
+    sex: "",
+    _id: "",
+  });
+  const route = useRouter();
   const {
     register,
     handleSubmit,
@@ -29,12 +43,31 @@ function LoginForm({}: Props) {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
-  const [loginUser,{data}] = useLoginUserMutation();
-  const onSubmit =async (item: FormData) => {
-    const response = await loginUser(item.Email);
-    console.log("response",response);
 
+  const [loginUser] = useLoginUserMutation();
+  const onSubmit = async (item: FormData) => {
+    const result = await loginUser({
+      email: item.Email,
+      password: item.Password,
+    });
+
+    const res = "error" in result ? null : result.data;
+    sessionStorage.setItem("email", res!.email);
+    sessionStorage.setItem("firstname", res!.firstName);
+    await setUser(res!);
   };
+
+  useEffect(() => {
+    const email = sessionStorage.getItem("email");
+    if (email) {
+      route.push("/");
+    }
+  });
+
+  const { data, isLoading, error } = useGetUserQuery(user!.firstName);
+  console.log(data);
+  // dispatch(setUserState(data!));
+  // console.log("name from redux", userLogin.firstName);
 
   return (
     <>
