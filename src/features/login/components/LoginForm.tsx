@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import LayoutLogin from "../layouts/LayoutLogin";
@@ -8,7 +10,7 @@ import { useLoginUserMutation } from "@/stores/service/loginService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useGetUserQuery } from "@/stores/service/getUserService";
-import { User } from "@/Model/interface/InterfaceUser";
+import { type User } from "@/Model/interface/InterfaceUser";
 import { setUserState } from "@/stores/slice/loginSlice";
 
 const schema = yup
@@ -19,11 +21,11 @@ const schema = yup
   .required();
 type FormData = yup.InferType<typeof schema>;
 
-type Props = {};
-
-function LoginForm({}: Props) {
+function LoginForm() {
   const userLogin = useAppSelector((state) => state.userState);
   const dispatch = useAppDispatch();
+  const route = useRouter();
+
   const [user, setUser] = useState<User>({
     email: "",
     firstName: "",
@@ -35,7 +37,7 @@ function LoginForm({}: Props) {
     sex: "",
     _id: "",
   });
-  const route = useRouter();
+  const { data, isLoading, error } = useGetUserQuery(user.firstName);
   const {
     register,
     handleSubmit,
@@ -52,20 +54,27 @@ function LoginForm({}: Props) {
     });
 
     const res = "error" in result ? null : result.data;
-    sessionStorage.setItem("email", res!.email);
-    sessionStorage.setItem("firstname", res!.firstName);
-    await setUser(res!);
+    console.log(" res", res);
+    if (res) {
+      sessionStorage.setItem("email", res.email);
+      sessionStorage.setItem("firstname", res.firstName);
+      setUser(res);
+    } else {
+      // something
+    }
   };
-
+  const email =
+    typeof window !== "undefined" ? sessionStorage.getItem("email") : null;
   useEffect(() => {
-    const email = sessionStorage.getItem("email");
     if (email) {
       route.push("/");
     }
-  });
+  }, [email]);
 
-  const { data, isLoading, error } = useGetUserQuery(user!.firstName);
-  console.log(data);
+  useEffect(() => {
+    if (!data) return;
+    dispatch(setUserState(data));
+  }, [data]);
   // dispatch(setUserState(data!));
   // console.log("name from redux", userLogin.firstName);
 
