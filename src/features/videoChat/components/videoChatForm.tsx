@@ -15,9 +15,6 @@ function VideoChatForm({}: Props) {
   const [bgVDOCall, setBgVDOCall] = useState(openVDO);
 
   const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
-  const myVideo: any = useRef(null);
-  const userVideo = useRef();
-  const connectionRef = useRef();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -26,7 +23,7 @@ function VideoChatForm({}: Props) {
         try {
           dispatch(setStream(currentStream));
 
-          myVideo.current.srcObject = currentStream;
+          vidoCall.myVideo.current.srcObject = currentStream;
         } catch (err) {
           console.log(err);
         }
@@ -78,7 +75,7 @@ function VideoChatForm({}: Props) {
                 <video
                   playsInline
                   muted
-                  ref={myVideo}
+                  ref={vidoCall.userVideo}
                   autoPlay
                   className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6"
                 />
@@ -89,7 +86,7 @@ function VideoChatForm({}: Props) {
            <video
               playsInline
               muted
-              ref={myVideo}
+              ref={vidoCall.myVideo}
               autoPlay
               className=" absolute right-0 m-4 h-[9rem] w-[10rem] rounded-2xl bg-slate-600 sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
             />
