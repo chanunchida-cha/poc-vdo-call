@@ -1,22 +1,35 @@
+import { User } from "./../../Model/interface/InterfaceUser";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface StatusLogin{
-  status: boolean,
-  role: "user" | "pharmacy"|"admin"|"";
-
-}
-const statusLogin:StatusLogin={
-  status:false,
-  role:"",
-}
+const userState: User = {
+  email: "",
+  firstName: "",
+  id: "",
+  lastName: "",
+  licenseNo: "",
+  password: "",
+  role: "",
+  sex: "",
+  _id: "",
+};
 
 export const LoginSlice = createSlice({
-  name: "statusLogin",
-  initialState: statusLogin,
+  name: "userState",
+  initialState: userState,
   reducers: {
-    onChangeLoginStatusState: (state:StatusLogin) => {state.status = true},
+    setUserState: (state: User, action: PayloadAction<User>) => {
+      state.email = action.payload.email;
+      state.firstName = action.payload.firstName;
+      state.id = action.payload._id;
+      state.lastName = action.payload.lastName;
+      state.licenseNo = action.payload.licenseNo;
+      state.password = action.payload.password;
+      state.role = action.payload.role;
+      state.sex = action.payload.sex;
+      state._id = action.payload._id;
+    },
   },
 });
 
 export default LoginSlice.reducer;
-export const { onChangeLoginStatusState } = LoginSlice.actions;
+export const { setUserState } = LoginSlice.actions;

@@ -1,33 +1,71 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import Image from "next/image";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import LayoutLogin from "../layouts/LayoutLogin";
 import { useForm } from "react-hook-form";
-import { useAppSelector } from "@/stores/store";
-import { useDispatch } from "react-redux";
-import { onChangeLoginStatusState } from "@/stores/slice/loginSlice";
+import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { useRouter } from "next/router";
+import { useLazyLoginUserQuery } from "@/stores/service/loginService";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-type Props = {};
+import { type User } from "@/Model/interface/InterfaceUser";
+import { setUserState } from "@/stores/slice/loginSlice";
 
-function LoginForm({}: Props) {
-  const statusLogin = useAppSelector((state) => state.loginSlice.status);
-  const dispath = useDispatch();
-  const router = useRouter();
-  console.log(statusLogin);
+const schema = yup
+  .object({
+    Email: yup.string().required(),
+    Password: yup.string().required(),
+  })
+  .required();
+type FormData = yup.InferType<typeof schema>;
+
+function LoginForm() {
+  const userLogin = useAppSelector((state) => state.userState);
+  const dispatch = useAppDispatch();
+  const route = useRouter();
+
+  const [user, setUser] = useState<User>({
+    email: "",
+    firstName: "",
+    id: "",
+    lastName: "",
+    licenseNo: "",
+    password: "",
+    role: "",
+    sex: "",
+    _id: "",
+  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    dispath(onChangeLoginStatusState());
-    if (statusLogin === true) {
-      router.push("/");
-    }
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
+
+  const [trigger, { data, isLoading, error }] = useLazyLoginUserQuery();
+  const onSubmit = async (item: FormData) => {
+    await trigger({
+      email: item.Email,
+      password: item.Password,
+    });
   };
-  console.log(errors);
+
+  useEffect(() => {
+    if (data !== undefined && !isLoading) {
+      sessionStorage.setItem("email", data.email);
+      sessionStorage.setItem("firstname", data.firstName);
+      dispatch(setUserState(data));
+      const loginSuccess = sessionStorage.getItem("email");
+      loginSuccess && route.push("/");
+    } else if (error) {
+      alert("Username or password is incorrect");
+    }
+  }, [data, error]);
+  
 
   return (
     <>
@@ -41,11 +79,15 @@ function LoginForm({}: Props) {
           />
         }
         form={
-          <form onSubmit={onSubmit}>
+          <form
+            onSubmit={(event: FormEvent<HTMLFormElement>) => {
+              event.preventDefault();
+            }}
+          >
             <div className="mb-6">
               <div className="mb-6">
                 <label
-                  htmlFor="username"
+                  htmlFor="Email"
                   className="mb-2 block text-sm font-medium text-primary "
                 >
                   Email
@@ -80,11 +122,13 @@ function LoginForm({}: Props) {
             <div className="flex justify-center">
               <button
                 type="submit"
+                onClick={handleSubmit(onSubmit)}
                 className=" rounded-full bg-button-login  py-[0.3rem] px-[1.5rem] text-center text-[0.8rem]  font-medium text-white "
               >
                 Sign in
               </button>
             </div>
+            <div></div>
           </form>
         }
       />
