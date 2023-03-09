@@ -31,31 +31,28 @@ function VideoChatForm({}: Props) {
     <>
       <ChatUi
         video={
-          <div className="relative h-screen flex-1 basis-1/2  rounded-2xl  md:mx-4 md:my-4   ">
+          <div className="relative h-screen flex-1 basis-1/2  rounded-2xl  lg:mx-4 lg:my-4   ">
             <div className="absolute  h-3/4 w-full md:h-full">
-              {/* <div className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6 "></div> */}
-
               {stream && (
                 <video
                   playsInline
                   muted
                   ref={myVideo}
                   autoPlay
-                  className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6"
+                  className=" h-screen w-full bg-black object-cover  drop-shadow-xl lg:h-5/6 lg:rounded-3xl"
                 />
               )}
-              {/* <div className=" h-full w-full bg-black  object-cover drop-shadow-xl md:rounded-3xl "></div> */}
             </div>
             <div className=" absolute right-0 m-4 h-[8rem] w-[12rem] rounded-2xl bg-slate-600 sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"></div>
 
-            <div className="absolute bottom-0 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around lg:bottom-[10rem]  ">
+            <div className="absolute bottom-20 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around md:bottom-[4rem] lg:bottom-[10rem]  ">
               <ToggleCallMuteDeclined onClickVDO={setOpenVDO} />
             </div>
           </div>
         }
         chat={
-          <div className="hidden  h-screen  w-screen flex-1 basis-1/5 flex-col sm:m-4 sm:mx-1 sm:block  md:my-4 lg:pr-4">
-            <div className=" h-3/4 w-full flex-col justify-center rounded-2xl bg-white drop-shadow-xl  ">
+          <div className="hidden  h-screen  w-screen flex-1 basis-1/5 flex-col sm:m-4 sm:mx-1 md:my-4  lg:block lg:pr-4 2xl:block">
+            <div className=" max-h-fit w-full flex-col justify-center rounded-2xl bg-white drop-shadow-xl lg:h-4/6 ">
               <p className=" mx-6 pt-6 text-start text-2xl text-primary">
                 Yok Park
               </p>
@@ -86,7 +83,6 @@ function VideoChatForm({}: Props) {
                 <div className="flex justify-end p-4"></div>
               </div>
             </div>
-
             <div className="auto-col-max grid grid-flow-col grid-cols-4 py-4 ">
               <div className=" auto-col-max col-span-3 grid  grid-flow-col grid-cols-4 justify-evenly rounded-xl bg-input-massage p-2 ">
                 <div className=" col-span-1 h-full  place-self-center py-3 ">
