@@ -21,7 +21,7 @@ function User({}: Props): ReactElement {
           <ChatChannel
             name="Jacky"
             avatar={`https://ui-avatars.com/api/?name= JA`}
-            message="ไม่สบายทำดี"
+            message="ไม่สบายทำไงดี"
             isActive={activeChannel == 0}
             onClick={() => setActiveChannel(0)}
           />
