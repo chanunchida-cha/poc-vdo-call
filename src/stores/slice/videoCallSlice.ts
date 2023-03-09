@@ -1,10 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { useRef } from "react";
-
-const myVideo: any = useRef(null);
-const userVideo = useRef();
-const connectionRef = useRef();
-
 const initialState = {
   callAccepted: false,
   callEnded: false,
@@ -12,9 +7,9 @@ const initialState = {
   name: "",
   calls: [],
   me: "",
-  myVideo,
-  userVideo,
-  connectionRef,
+  myVideo: undefined,
+  userVideo: undefined,
+  connectionRef: undefined,
 };
 
 export const videoCallSlice = createSlice({
@@ -38,6 +33,15 @@ export const videoCallSlice = createSlice({
     },
     setMe: (state, action) => {
       state.me = action.payload;
+    },
+    setMyVideoRef: (state) => {
+      state.myVideo = useRef(null) as any;
+    },
+    setUserVideoRef: (state) => {
+      state.userVideo = useRef(null) as any;
+    },
+    setConnectionRef: (state) => {
+      state.connectionRef = useRef(null) as any;
     },
   },
 });

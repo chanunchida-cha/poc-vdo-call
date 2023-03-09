@@ -14,8 +14,10 @@ function VideoChatForm({}: Props) {
   const [openVDO, setOpenVDO] = useState(true);
   const [bgVDOCall, setBgVDOCall] = useState(openVDO);
 
-
   const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
+  const myVideo: any = useRef(null);
+  const userVideo = useRef();
+  const connectionRef = useRef();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -24,7 +26,7 @@ function VideoChatForm({}: Props) {
         try {
           dispatch(setStream(currentStream));
 
-          vidoCall.myVideo.current.srcObject = currentStream;
+          myVideo.current.srcObject = currentStream;
         } catch (err) {
           console.log(err);
         }
@@ -33,15 +35,12 @@ function VideoChatForm({}: Props) {
     socket.on("me", (id) => {
       dispatch(setMe(id));
       console.log(id);
-      socket.emit("readyToCall", {
-        name,
-      });
     });
 
     socket.on("callTimeout", ({ message }) => {
       console.log(message);
     });
-  }, []);
+  }, [vidoCall.name]);
 
   useEffect(() => {
     socket.on("callUser", ({ from, name: string, signal }) => {
@@ -79,14 +78,22 @@ function VideoChatForm({}: Props) {
                 <video
                   playsInline
                   muted
-                  ref={vidoCall.myVideo}
+                  ref={myVideo}
                   autoPlay
                   className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6"
                 />
               )}
               {/* <div className=" h-full w-full bg-black  object-cover drop-shadow-xl md:rounded-3xl "></div> */}
             </div>
-            <div className=" absolute right-0 m-4 h-[8rem] w-[12rem] rounded-2xl bg-slate-600 sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"></div>
+           <div>
+           <video
+              playsInline
+              muted
+              ref={myVideo}
+              autoPlay
+              className=" absolute right-0 m-4 h-[9rem] w-[10rem] rounded-2xl bg-slate-600 sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
+            />
+           </div>
 
             <div className="absolute bottom-0 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around lg:bottom-[10rem]  ">
               <ToggleCallMuteDeclined onClickVDO={setOpenVDO} />
