@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
 import User from "./chat/Doctor";
 import { io } from "socket.io-client";
+import VideoChatForm from "@/features/videoChat/components/videoChatForm";
 interface Props {}
 
 function index({}: Props): ReactElement {
@@ -16,9 +17,9 @@ function index({}: Props): ReactElement {
 
   return (
     <>
-      {/* <User />/ */}
+      <User />
       <OverlayCalling />
-      <VideoChatForm />
+      {/* <VideoChatForm /> */}
     </>
   );
 }

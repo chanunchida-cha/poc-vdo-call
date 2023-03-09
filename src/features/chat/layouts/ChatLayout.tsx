@@ -17,7 +17,7 @@ function ChatLayout({children}: Props): ReactElement {
                 {children}
             </div>
            
-               <div className="flex sm:hidden flex-row justify-between items-center px-4 py-2 space-x-4 bg-secondary-light h-14">
+               <div className="flex lg:hidden flex-row justify-between items-center px-4 py-2 space-x-4 bg-secondary-light h-14">
                 <div className="flex-shrink-0 flex flex-row justify-between items-center space-x-4 w-full">
                     <div className="w-1/2">
                         <button className="w-full h-full flex justify-center items-center rounded-full" onClick={() => setIsChat(true)}>
