@@ -22,7 +22,6 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 function LoginForm() {
-  const userLogin = useAppSelector((state) => state.userState);
   const dispatch = useAppDispatch();
   const route = useRouter();
 
