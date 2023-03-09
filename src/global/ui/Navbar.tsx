@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 import { useRouter } from "next/router";
 import { useGetUserQuery } from "@/stores/service/getUserService";
+import { RiLogoutBoxRLine } from "react-icons/ri";
+
 
 interface Status {
   role: "user" | "pharmacy";
@@ -86,8 +88,8 @@ export default function Navbar(Props: Status) {
                       </div>
 
                       <div
-                        className={`h-[1rem] w-[1rem] rounded-full bg-status-online ${
-                          isOnline ? "ml-[2.5rem]" : "bg-red-600"
+                        className={`h-[1rem] w-[1rem] rounded-full  ${
+                          isOnline ? "ml-[2.5rem] bg-status-online" : "bg-red-600"
                         }  transitio duration-[400ms]`}
                       ></div>
                     </div>
@@ -117,13 +119,14 @@ export default function Navbar(Props: Status) {
                 } flex w-full   flex-row items-center justify-end sm:px-5`}
               >
                 <div
-                  className="mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[8rem]"
+                  className="mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[9rem]"
                   onClick={() => {
                     logout();
                     router.push("/");
                   }}
                 >
-                  <div className=" hidden sm:flex">ออกจากระบบ</div>
+                  <div className="mr-3 hidden sm:flex">ออกจากระบบ</div>
+                        <div><RiLogoutBoxRLine/></div>
                 </div>
               </div>
             </div>
