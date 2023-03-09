@@ -2,30 +2,70 @@ import React from "react";
 import ChatUi from "../layouts/ChatUi";
 import { useEffect, useRef, useState } from "react";
 import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
+import { io } from "socket.io-client";
+import { useAppDispatch, useAppSelector } from "@/stores/store";
+import { setCalls, setMe, setStream } from "@/stores/slice/videoCallSlice";
 
 type Props = {};
 
 function VideoChatForm({}: Props) {
-  const [stream, setStream] = useState<MediaStream>();
-  const myVideo: any = useRef(null);
+  const dispatch = useAppDispatch();
+  const vidoCall = useAppSelector((state) => state.videoCall);
   const [openVDO, setOpenVDO] = useState(true);
   const [bgVDOCall, setBgVDOCall] = useState(openVDO);
 
+
+  const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
+
   useEffect(() => {
-    const stream = async () => {
-      const currentStream = await navigator.mediaDevices.getUserMedia({
-        video: openVDO,
-        audio: true,
+    navigator.mediaDevices
+      .getUserMedia({ video: openVDO, audio: true })
+      .then((currentStream) => {
+        try {
+          dispatch(setStream(currentStream));
+
+          vidoCall.myVideo.current.srcObject = currentStream;
+        } catch (err) {
+          console.log(err);
+        }
       });
-      try {
-        setStream(currentStream);
-        myVideo.current.srcObject = currentStream;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    stream();
-  }, [openVDO, bgVDOCall]);
+
+    socket.on("me", (id) => {
+      dispatch(setMe(id));
+      console.log(id);
+      socket.emit("readyToCall", {
+        name,
+      });
+    });
+
+    socket.on("callTimeout", ({ message }) => {
+      console.log(message);
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on("callUser", ({ from, name: string, signal }) => {
+      dispatch(
+        setCalls([
+          ...vidoCall.calls,
+          { isReceivingCall: true, from, name: string, signal },
+        ])
+      );
+    });
+    socket.on("rejectCallByCalling", ({ from, message }) => {
+      let newCall = vidoCall.calls.filter(
+        (call: {
+          isReceivingCall: boolean;
+          from: any;
+          name: string;
+          signal: any;
+        }) => {
+          return call.from !== from;
+        }
+      );
+      setCalls(newCall);
+    });
+  }, [vidoCall.calls]);
 
   return (
     <>
@@ -35,11 +75,11 @@ function VideoChatForm({}: Props) {
             <div className="absolute  h-3/4 w-full md:h-full">
               {/* <div className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6 "></div> */}
 
-              {stream && (
+              {vidoCall.stream && (
                 <video
                   playsInline
                   muted
-                  ref={myVideo}
+                  ref={vidoCall.myVideo}
                   autoPlay
                   className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6"
                 />

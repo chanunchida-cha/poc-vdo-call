@@ -4,11 +4,13 @@ import overlayStatusSlice from "./slice/overlayStatusSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { GetUser } from "./service/getUserService";
+import videoCallSlice from "./slice/videoCallSlice";
 
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
   [GetUser.reducerPath]: GetUser.reducer,
   userState: LoginSlice,
+  videoCall: videoCallSlice,
   overlayStatusSlice,
 };
 
