@@ -28,8 +28,9 @@ function index({}: Props): ReactElement {
     // <div className="{inter.className}">history</div>
     // <>{<VideoChatForm />}</>
     <>
-      <User />
+      {/* <User />/ */}
       <OverlayCalling />
+      <VideoChatForm />
     </>
   );
 }
