@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import LayoutLogin from "../layouts/LayoutLogin";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { useRouter } from "next/router";
-import { useLoginUserMutation } from "@/stores/service/loginService";
+import { useLazyLoginUserQuery } from "@/stores/service/loginService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useGetUserQuery } from "@/stores/service/getUserService";
+
 import { type User } from "@/Model/interface/InterfaceUser";
 import { setUserState } from "@/stores/slice/loginSlice";
 
@@ -37,7 +37,7 @@ function LoginForm() {
     sex: "",
     _id: "",
   });
-  const { data, isLoading, error } = useGetUserQuery(user.firstName);
+
   const {
     register,
     handleSubmit,
@@ -46,34 +46,26 @@ function LoginForm() {
     resolver: yupResolver(schema),
   });
 
-  const [loginUser] = useLoginUserMutation();
+  const [trigger, { data, isLoading, error }] = useLazyLoginUserQuery();
   const onSubmit = async (item: FormData) => {
-    const result = await loginUser({
+    await trigger({
       email: item.Email,
       password: item.Password,
     });
+  };
 
-    const res = "error" in result ? null : result.data;
-    console.log(" res", res);
-    if (res) {
-      sessionStorage.setItem("email", res.email);
-      sessionStorage.setItem("firstname", res.firstName);
-      setUser(res);
-    } else {
+  useEffect(() => {
+    if (data !== undefined && !isLoading) {
+      sessionStorage.setItem("email", data.email);
+      sessionStorage.setItem("firstname", data.firstName);
+      dispatch(setUserState(data));
+      const loginSuccess = sessionStorage.getItem("email");
+      loginSuccess && route.push("/");
+    } else if (error) {
       alert("Username or password is incorrect");
     }
-  };
-  const email =
-    typeof window !== "undefined" ? sessionStorage.getItem("email") : null;
-  useEffect(() => {
-    email && route.push("/");
-  }, [email]);
-
-  useEffect(() => {
-    data && dispatch(setUserState(data));
-  }, [data]);
-  // dispatch(setUserState(data!));
-  // console.log("name from redux", userLogin.firstName);
+  }, [data, error]);
+  
 
   return (
     <>
@@ -87,7 +79,11 @@ function LoginForm() {
           />
         }
         form={
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={(event: FormEvent<HTMLFormElement>) => {
+              event.preventDefault();
+            }}
+          >
             <div className="mb-6">
               <div className="mb-6">
                 <label
@@ -126,6 +122,7 @@ function LoginForm() {
             <div className="flex justify-center">
               <button
                 type="submit"
+                onClick={handleSubmit(onSubmit)}
                 className=" rounded-full bg-button-login  py-[0.3rem] px-[1.5rem] text-center text-[0.8rem]  font-medium text-white "
               >
                 Sign in

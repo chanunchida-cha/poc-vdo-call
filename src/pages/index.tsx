@@ -7,17 +7,13 @@ import { io } from "socket.io-client";
 interface Props {}
 
 function index({}: Props): ReactElement {
-
-
   const router = useRouter();
+  const email =
+    typeof window !== "undefined" ? sessionStorage.getItem("email") : null;
   useEffect(() => {
-    const email = sessionStorage.getItem("email");
-    if (!email) {
-      router.push("/login");
-    }
-  });
+    !email && router.push("/login");
+  }, [email]);
 
-  
   return (
     <>
       <User />

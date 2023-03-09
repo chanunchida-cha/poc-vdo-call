@@ -4,6 +4,7 @@ import VDOCall from "@/Model/Svg/VDOCall.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 import { useRouter } from "next/router";
+import { useGetUserQuery } from "@/stores/service/getUserService";
 
 interface Status {
   role: "user" | "pharmacy";
@@ -12,12 +13,15 @@ interface Status {
 export default function Navbar(Props: Status) {
   const dispatch = useAppDispatch();
   const [isOnline, setIsOnline] = useState(true);
-  const [email, setEmail] = useState<string>();
+
   const router = useRouter();
-  useEffect(() => {
-    const email = sessionStorage.getItem("email");
-    setEmail(email!);
-  });
+  const email =
+    typeof window !== "undefined" ? sessionStorage.getItem("email") : null;
+  const firstname =
+    typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
+  const { data, isLoading, error } = useGetUserQuery(firstname!);
+
+  console.log(data);
 
   const callButton = [
     {
@@ -46,7 +50,7 @@ export default function Navbar(Props: Status) {
   return (
     <>
       <div className="border-borderNav fixed z-10 flex h-[3.8rem] w-full flex-row items-center justify-between border-b bg-primary px-2 sm:justify-start">
-        {email && (
+        {data?.email && (
           <div className="flex h-full  w-full items-center">
             <div className="flex w-full flex-row items-center">
               <div className="basis-[2.5rem]">
@@ -62,10 +66,10 @@ export default function Navbar(Props: Status) {
               </div>
               <div className="mx-2 flex basis-[15rem] flex-col  ">
                 <div className=" flex justify-start pb-[0.3rem] font-semibold text-white">
-                  ธีรพัฒน์ หงส์วรพิพัฒน์
+                  {data.firstName}
                 </div>
 
-                {Props.role === "pharmacy" && (
+                {data.role === "pharmacy" && (
                   <div className="flex">
                     <div
                       className=" relative flex h-[1rem] w-[3.5rem]  cursor-pointer items-center rounded-full bg-white"
@@ -91,26 +95,33 @@ export default function Navbar(Props: Status) {
                 )}
               </div>
 
-              <div className="flex w-full  flex-row items-center sm:px-5">
-                {callButton.map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="mr-2 flex h-[2rem] w-[4rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[11rem]"
-                      onClick={item.setOverlay}
-                    >
-                      <div className="mr-3 hidden sm:flex">{item.title}</div>
-                      <div>{item.icon}</div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex w-full basis-[10rem]  flex-row items-center justify-end sm:px-5">
-                <div className="mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[8rem]"
-                onClick={()=>{
-                  logout()
-                  router.push("/")
-                }}
+              {data.role === "user" && (
+                <div className="flex w-full  flex-row items-center sm:px-5">
+                  {callButton.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="mr-2 flex h-[2rem] w-[4rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[11rem]"
+                        onClick={item.setOverlay}
+                      >
+                        <div className="mr-3 hidden sm:flex">{item.title}</div>
+                        <div>{item.icon}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              <div
+                className={`${
+                  data.role === "user" ? "basis-[10rem]" : null
+                } flex w-full   flex-row items-center justify-end sm:px-5`}
+              >
+                <div
+                  className="mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[8rem]"
+                  onClick={() => {
+                    logout();
+                    router.push("/");
+                  }}
                 >
                   <div className=" hidden sm:flex">ออกจากระบบ</div>
                 </div>

@@ -12,7 +12,7 @@ export const LoginApi = createApi({
     baseUrl: `${process.env.NEXT_PUBLIC_SERVER}`,
   }),
   endpoints: (builder) => ({
-    loginUser: builder.mutation<User, { email: string; password: string }>({
+    loginUser: builder.query<User, { email: string; password: string }>({
       query: ({ email, password }) => ({
         url: `/user/${email}/${password}`,
         method: "GET",
@@ -22,4 +22,4 @@ export const LoginApi = createApi({
   }),
 });
 
-export const { useLoginUserMutation } = LoginApi;
+export const {useLazyLoginUserQuery } = LoginApi;
