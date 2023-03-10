@@ -21,12 +21,9 @@ function VideoChatForm({}: Props) {
   const firstname =
     typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
   const { data, isLoading, error } = useGetUserQuery(firstname!);
-  console.log(data, "eieie");
 
-  const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
   const myVideoRef: any = useRef(vidoCall.myVideo);
   const userVideo = useRef(vidoCall.userVideo);
-
 
   async function liveSteam() {
     const currentStream = await navigator.mediaDevices.getUserMedia({
@@ -44,22 +41,14 @@ function VideoChatForm({}: Props) {
 
   useEffect(() => {
     liveSteam();
-    socket.on("me", (id) => {
+    vidoCall.socket.on("me", (id) => {
       dispatch(setMe(id));
-      if (data?.role === "pharmacy") {
-        socket.emit("readyToCall", {
-          firstname,
-        });
-        console.log("ready");
-      }
-      console.log(id);
     });
 
-    socket.on("callTimeout", ({ message }) => {
+    vidoCall.socket.on("callTimeout", ({ message }) => {
       console.log(message);
     });
-  }, [openVDO]);
-
+  }, []);
 
   console.log(vidoCall.stream);
 

@@ -25,16 +25,17 @@ function index({}: Props): ReactElement {
   const firstname =
     typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
   const { data, isLoading, error } = useGetUserQuery(firstname!);
-
+  const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
 
   
 
   return (
     <>
-      {
+      {/* {
         vidoCall.callAccepted && !vidoCall.callEnded ? <VideoChatForm/> : <User/>
-      }
+      } */}
       <OverlayCalling />
+      <VideoChatForm/>
       
     </>
   );

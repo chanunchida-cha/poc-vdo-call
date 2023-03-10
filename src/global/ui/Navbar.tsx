@@ -24,25 +24,24 @@ export default function Navbar(Props: Status) {
   const firstname =
     typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
   const { data, isLoading, error } = useGetUserQuery(firstname!);
-  const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
-  const logOut = () => {
-    socket.emit("logout");
-  };
+
   const vidoCall = useAppSelector((state) => state.videoCall);
   const connectionRef: any = useRef(vidoCall.connectionRef);
   const userVideo: any = useRef(vidoCall.userVideo);
-
+  const logOut = () => {
+    vidoCall.socket.emit("logout");
+  };
   useEffect(() => {
     console.log("ทำงาน");
-    socket.on("callUser", ({ from, name: firstname, signal }) => {
+    vidoCall.socket.on("callUser", ({ from, name: firstname, signal }) => {
       console.log("on");
 
       dispatch(setCalls({ from, firstname, signal }));
     });
-    socket.on("callFail", ({ message }) => {
+    vidoCall.socket.on("callFail", ({ message }) => {
       console.log(message);
     });
-    socket.on("rejectCallByCalling", ({ from, message }) => {
+    vidoCall.socket.on("rejectCallByCalling", ({ from, message }) => {
       let newCall = vidoCall.calls.filter(
         (call: {
           isReceivingCall: boolean;
@@ -66,8 +65,7 @@ export default function Navbar(Props: Status) {
     });
 
     peer.on("signal", (item) => {
-      console.log("peer work");
-      socket.emit("callUser", {
+      vidoCall.socket.emit("callUser", {
         //userToCall: id,
         signal: item,
         name: firstname,
@@ -80,7 +78,7 @@ export default function Navbar(Props: Status) {
       userVideo.current.srcObject = currentStream;
     });
 
-    socket.on("callAccepted", (signal) => {
+    vidoCall.socket.on("callAccepted", (signal) => {
       setCallAccepted(true);
 
       peer.signal(signal);

@@ -1,3 +1,4 @@
+import { io, Socket } from "socket.io-client";
 import { createSlice } from "@reduxjs/toolkit";
 import { useRef } from "react";
 
@@ -7,6 +8,7 @@ interface Call {
   name: string;
   signal: any;
 }
+
 interface InitialState {
   callAccepted: boolean;
   callEnded: boolean;
@@ -18,6 +20,7 @@ interface InitialState {
   userVideo: null;
   connectionRef: null;
   openCamera: boolean;
+  socket: Socket;
 }
 
 const initialState: InitialState = {
@@ -31,6 +34,7 @@ const initialState: InitialState = {
   userVideo: null,
   connectionRef: null,
   openCamera: true,
+  socket: io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`),
 };
 
 export const videoCallSlice = createSlice({
@@ -51,8 +55,7 @@ export const videoCallSlice = createSlice({
     },
     setCalls: (state, action) => {
       const { from, name, signal } = action.payload;
-      state.calls.push({from,name,signal,isReceivingCall:true})
-      
+      state.calls.push({ from, name, signal, isReceivingCall: true });
     },
     setMe: (state, action) => {
       state.me = action.payload;

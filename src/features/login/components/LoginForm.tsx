@@ -40,7 +40,7 @@ function LoginForm() {
       password: item.Password,
     });
   };
-
+  const vidoCall = useAppSelector((state) => state.videoCall);
   useEffect(() => {
     if (data !== undefined && !isLoading) {
       sessionStorage.setItem("email", data.email);
@@ -53,10 +53,9 @@ function LoginForm() {
     }
   }, [data, error]);
 
-  const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
   useEffect(() => {
     if (data?.role === "pharmacy") {
-      socket.emit("readyToCall", {
+      vidoCall.socket.emit("readyToCall", {
         user_pk: data.id,
         name: data.firstName,
       });
