@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import VoiceCall from "@/Model/Svg/VoiceCall.svg";
 import VDOCall from "@/Model/Svg/VDOCall.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
@@ -6,7 +6,9 @@ import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 import { useRouter } from "next/router";
 import { useGetUserQuery } from "@/stores/service/getUserService";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-
+import { io } from "socket.io-client";
+import { setCallAccepted, setCalls } from "@/stores/slice/videoCallSlice";
+import Peer from "simple-peer";
 
 interface Status {
   role: "user" | "pharmacy";
@@ -22,24 +24,86 @@ export default function Navbar(Props: Status) {
   const firstname =
     typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
   const { data, isLoading, error } = useGetUserQuery(firstname!);
+  const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
+  const logOut = () => {
+    socket.emit("logout");
+  };
+  const vidoCall = useAppSelector((state) => state.videoCall);
+  const connectionRef: any = useRef(vidoCall.connectionRef);
+  const userVideo: any = useRef(vidoCall.userVideo);
 
-  console.log(data);
+  useEffect(() => {
+    console.log("ทำงาน");
+    socket.on("callUser", ({ from, name: firstname, signal }) => {
+      console.log("on");
+
+      dispatch(setCalls({ from, firstname, signal }));
+    });
+    socket.on("callFail", ({ message }) => {
+      console.log(message);
+    });
+    socket.on("rejectCallByCalling", ({ from, message }) => {
+      let newCall = vidoCall.calls.filter(
+        (call: {
+          isReceivingCall: boolean;
+          from: any;
+          name: string;
+          signal: any;
+        }) => {
+          return call.from !== from;
+        }
+      );
+      setCalls(newCall);
+    });
+    console.log(vidoCall.calls);
+  }, [vidoCall.calls]);
+
+  const callUser = () => {
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: vidoCall.stream,
+    });
+
+    peer.on("signal", (item) => {
+      console.log("peer work");
+      socket.emit("callUser", {
+        //userToCall: id,
+        signal: item,
+        name: firstname,
+        user_pk: data?.id,
+        to: "",
+      });
+    });
+
+    peer.on("stream", (currentStream) => {
+      userVideo.current.srcObject = currentStream;
+    });
+
+    socket.on("callAccepted", (signal) => {
+      setCallAccepted(true);
+
+      peer.signal(signal);
+    });
+
+    connectionRef.current = peer;
+  };
 
   const callButton = [
     {
       title: "สนทนาด้วยเสียง",
       icon: <VoiceCall />,
       setOverlay: () => {
-        console.log("Click Vdo call");
-        return dispatch(setOverlayStatus());
+        console.log("กด");
+
+        callUser();
       },
     },
     {
       title: "วิดีโอคอล",
       icon: <VDOCall />,
       setOverlay: () => {
-        console.log("Click Vdo call");
-        return dispatch(setOverlayStatus());
+        callUser();
       },
     },
   ];
@@ -89,7 +153,9 @@ export default function Navbar(Props: Status) {
 
                       <div
                         className={`h-[1rem] w-[1rem] rounded-full  ${
-                          isOnline ? "ml-[2.5rem] bg-status-online" : "bg-red-600"
+                          isOnline
+                            ? "ml-[2.5rem] bg-status-online"
+                            : "bg-red-600"
                         }  transitio duration-[400ms]`}
                       ></div>
                     </div>
@@ -104,7 +170,7 @@ export default function Navbar(Props: Status) {
                       <div
                         key={index}
                         className="mr-2 flex h-[2rem] w-[4rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[11rem]"
-                        onClick={item.setOverlay}
+                        onClick={callUser}
                       >
                         <div className="mr-3 hidden sm:flex">{item.title}</div>
                         <div>{item.icon}</div>
@@ -122,11 +188,14 @@ export default function Navbar(Props: Status) {
                   className="mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[9rem]"
                   onClick={() => {
                     logout();
+                    logOut();
                     router.push("/");
                   }}
                 >
                   <div className="mr-3 hidden sm:flex">ออกจากระบบ</div>
-                        <div><RiLogoutBoxRLine/></div>
+                  <div>
+                    <RiLogoutBoxRLine />
+                  </div>
                 </div>
               </div>
             </div>

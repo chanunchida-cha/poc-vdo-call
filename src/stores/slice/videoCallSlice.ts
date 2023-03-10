@@ -1,15 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { useRef } from "react";
-const initialState = {
+
+interface Call {
+  isReceivingCall: boolean;
+  from: string;
+  name: string;
+  signal: any;
+}
+interface InitialState {
+  callAccepted: boolean;
+  callEnded: boolean;
+  stream: MediaStream | undefined;
+  name: string;
+  calls: Call[];
+  me: string;
+  myVideo: null;
+  userVideo: null;
+  connectionRef: null;
+  openCamera: boolean;
+}
+
+const initialState: InitialState = {
   callAccepted: false,
   callEnded: false,
-  stream: null,
+  stream: undefined,
   name: "",
   calls: [],
   me: "",
-  myVideo: undefined,
-  userVideo: undefined,
-  connectionRef: undefined,
+  myVideo: null,
+  userVideo: null,
+  connectionRef: null,
+  openCamera: true,
 };
 
 export const videoCallSlice = createSlice({
@@ -29,19 +50,24 @@ export const videoCallSlice = createSlice({
       state.name = action.payload;
     },
     setCalls: (state, action) => {
-      state.calls = action.payload;
+      const { from, name, signal } = action.payload;
+      state.calls.push({from,name,signal,isReceivingCall:true})
+      
     },
     setMe: (state, action) => {
       state.me = action.payload;
     },
-    setMyVideoRef: (state) => {
-      state.myVideo = useRef(null) as any;
+    setMyVideoRef: (state, action) => {
+      state.myVideo = action.payload;
     },
-    setUserVideoRef: (state) => {
-      state.userVideo = useRef(null) as any;
+    setUserVideoRef: (state, action) => {
+      state.userVideo = action.payload;
     },
-    setConnectionRef: (state) => {
-      state.connectionRef = useRef(null) as any;
+    setConnectionRef: (state, action) => {
+      state.connectionRef = action.payload;
+    },
+    setOpenCamera: (state, action) => {
+      state.openCamera = !action.payload;
     },
   },
 });
@@ -54,4 +80,8 @@ export const {
   setName,
   setCalls,
   setMe,
+  setMyVideoRef,
+  setUserVideoRef,
+  setConnectionRef,
+  setOpenCamera,
 } = videoCallSlice.actions;

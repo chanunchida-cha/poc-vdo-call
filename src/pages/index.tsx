@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import OverlayCalling from "@/features/Overlay-Calling/components/OverlayCalling";
 import { useRouter } from "next/router";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import User from "./chat/Doctor";
-import { io } from "socket.io-client";
 import VideoChatForm from "@/features/videoChat/components/videoChatForm";
+import { useAppDispatch, useAppSelector } from "@/stores/store";
+import { useGetUserQuery } from "@/stores/service/getUserService";
+import { io } from "socket.io-client";
+import { setCalls, setMe, setStream } from "@/stores/slice/videoCallSlice";
 interface Props {}
 
 function index({}: Props): ReactElement {
@@ -15,11 +18,24 @@ function index({}: Props): ReactElement {
     !email && router.push("/login");
   }, [email]);
 
+  //----------------------------------------------
+  const dispatch = useAppDispatch();
+  const vidoCall = useAppSelector((state) => state.videoCall);
+
+  const firstname =
+    typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
+  const { data, isLoading, error } = useGetUserQuery(firstname!);
+
+
+  
+
   return (
     <>
-      {/* <User />/ */}
+      {
+        vidoCall.callAccepted && !vidoCall.callEnded ? <VideoChatForm/> : <User/>
+      }
       <OverlayCalling />
-      <VideoChatForm />
+      
     </>
   );
 }

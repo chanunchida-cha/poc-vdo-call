@@ -12,6 +12,7 @@ import * as yup from "yup";
 
 import { type User } from "@/Model/interface/InterfaceUser";
 import { setUserState } from "@/stores/slice/loginSlice";
+import { io } from "socket.io-client";
 
 const schema = yup
   .object({
@@ -24,19 +25,6 @@ type FormData = yup.InferType<typeof schema>;
 function LoginForm() {
   const dispatch = useAppDispatch();
   const route = useRouter();
-
-  const [user, setUser] = useState<User>({
-    email: "",
-    firstName: "",
-    id: "",
-    lastName: "",
-    licenseNo: "",
-    password: "",
-    role: "",
-    sex: "",
-    _id: "",
-  });
-
   const {
     register,
     handleSubmit,
@@ -64,7 +52,17 @@ function LoginForm() {
       alert("Username or password is incorrect");
     }
   }, [data, error]);
-  
+
+  const socket = io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`);
+  useEffect(() => {
+    if (data?.role === "pharmacy") {
+      socket.emit("readyToCall", {
+        user_pk: data.id,
+        name: data.firstName,
+      });
+      console.log("pharmacy");
+    }
+  }, [data?.role]);
 
   return (
     <>
