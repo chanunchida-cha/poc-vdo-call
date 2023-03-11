@@ -1,3 +1,7 @@
+import {
+  GetAllHistory,
+  GetHistoryByPatientId,
+} from "./service/getHistoryService";
 import LoginSlice from "./slice/loginSlice";
 import { LoginApi } from "./service/loginService";
 import overlayStatusSlice from "./slice/overlayStatusSlice";
@@ -9,6 +13,8 @@ import videoCallSlice from "./slice/videoCallSlice";
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
   [GetUser.reducerPath]: GetUser.reducer,
+  [GetAllHistory.reducerPath]: GetAllHistory.reducer,
+  [GetHistoryByPatientId.reducerPath]: GetHistoryByPatientId.reducer,
   userState: LoginSlice,
   videoCall: videoCallSlice,
   overlayStatusSlice,
