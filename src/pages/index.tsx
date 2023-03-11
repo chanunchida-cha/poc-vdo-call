@@ -1,34 +1,37 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import OverlayCalling from "@/features/Overlay-Calling/components/OverlayCalling";
+import OverlayCalling from "@/features/overlayCalling/components/OverlayCalling";
 import { useRouter } from "next/router";
 import React, { type ReactElement, useEffect, useRef, useState } from "react";
-import User from "./chat/Doctor";
 import VideoChatForm from "@/features/videoChat/components/videoChatForm";
-import { useAppDispatch, useAppSelector } from "@/stores/store";
+import { useAppSelector } from "@/stores/store";
 import { useGetUserQuery } from "@/stores/service/getUserService";
-import { io } from "socket.io-client";
-import { setCalls, setMe, setStream } from "@/stores/slice/videoCallSlice";
-import OverlayUserCalling from "@/features/Overlay-Calling/components/OverlayUserCalling";
+import { type User } from "@/models/interface/InterfaceUser";
+import DoctorChat from "./chat/DoctorChat";
+import UserChat from "./chat/UserChat";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
-interface Props {}
 
-function index({}: Props): ReactElement {
+interface Props {
+  user: User;
+}
+
+function index(props: Props) {
+  const { user } = props;
+  const vidoCall = useAppSelector((state) => state.videoCall);
   // const router = useRouter();
-
-  // const vidoCall = useAppSelector((state) => state.videoCall);
-  // const firstname =
-  //   typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
-  // const { data, isLoading, error } = useGetUserQuery(firstname!);
+  const { data, isLoading, error } = useGetUserQuery(user.firstName!);
+  console.log("users", user.firstName);
 
   return (
     <>
-      {/* {vidoCall.calling && !vidoCall.callAccepted ? (
+      {vidoCall.calling && !vidoCall.callAccepted ? (
         <VideoChatForm />
       ) : data?.role === "pharmacy" && vidoCall.callAccepted ? (
         <VideoChatForm />
+      ) : data?.role === "pharmacy" ? (
+        <DoctorChat />
       ) : (
-        <User />
-      )} */}
+        <UserChat />
+      )}
 
       <OverlayCalling />
     </>

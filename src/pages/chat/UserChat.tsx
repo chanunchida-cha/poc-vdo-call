@@ -10,7 +10,7 @@ import {
 
 interface Props {}
 
-function User({}: Props): ReactElement {
+function UserChat({}: Props): ReactElement {
   const [allChannels, setAllChannels] = useState(null);
   const [activeChannel, setActiveChannel] = useState(0);
 
@@ -168,4 +168,4 @@ function User({}: Props): ReactElement {
   );
 }
 
-export default User;
+export default UserChat;
