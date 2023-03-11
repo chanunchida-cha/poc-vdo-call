@@ -20,17 +20,25 @@ function UserChat({ user }: Props): ReactElement {
   const { data, isLoading, error } = useGetHistoryByPatientIdQuery(user.id);
   console.log("history", data);
 
+
   return (
     <div>
       <ChatLayout>
         <ChatHistory>
+      {
+       data?.map((history)=>{
+        return(
           <ChatChannel
-            name="Doctor No.1"
-            avatar={`https://ui-avatars.com/api/?name= D1`}
-            message="ไม่สบายทำดี"
-            isActive={activeChannel == 0}
-            onClick={() => setActiveChannel(0)}
-          />
+          name={history.pharmacyName}
+          avatar={`https://ui-avatars.com/api/?name= ${history.pharmacyName.charAt(0)}`}
+          message="ไม่สบายทำดี"
+          isActive={activeChannel == 0}
+          onClick={() => setActiveChannel(0)}
+        />
+        )
+
+       })
+      }
         </ChatHistory>
 
        
