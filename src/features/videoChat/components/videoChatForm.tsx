@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import ChatUi from "../layouts/ChatUi";
-import { useEffect, useRef, useState } from "react";
 import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
-import { io } from "socket.io-client";
+
 import { useAppDispatch, useAppSelector } from "@/stores/store";
-import {
-  setCalls,
-  setMe,
-  setMyVideoRef,
-  setStream,
-} from "@/stores/slice/videoCallSlice";
-import { useGetUserQuery } from "@/stores/service/getUserService";
+import { getMedia, startCapture } from "@/stores/slice/media/mediaSlice";
 
 type Props = {};
 
 function VideoChatForm({}: Props) {
+  const dispatch = useAppDispatch();
+  const mySteam = useAppSelector((state) => state.media.stream);
+  const myVideoRef: any = useRef(mySteam);
+
+  useEffect(() => {
+    dispatch(startCapture());
+  }, [mySteam]);
   return (
     <>
       <ChatUi
@@ -23,19 +23,18 @@ function VideoChatForm({}: Props) {
             <div className="absolute  h-3/4 w-full md:h-full">
               {/* <div className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6 "></div> */}
 
-              {vidoCall.stream && (
-                <video
-                  playsInline
-                  muted
-                  ref={myVideoRef}
-                  autoPlay
-                  className=" h-screen w-full bg-black object-cover  drop-shadow-xl lg:h-5/6 lg:rounded-3xl"
-                />
-              )}
+              <video
+                playsInline
+                muted
+                ref={myVideoRef}
+                autoPlay
+                className=" h-screen w-full bg-black object-cover  drop-shadow-xl lg:h-5/6 lg:rounded-3xl"
+              />
+
               {/* <div className=" h-full w-full bg-black  object-cover drop-shadow-xl md:rounded-3xl "></div> */}
             </div>
 
-            {vidoCall.callAccepted && !vidoCall.callEnded && (
+            {/* {vidoCall.callAccepted && !vidoCall.callEnded && (
               <video
                 playsInline
                 muted
@@ -43,7 +42,7 @@ function VideoChatForm({}: Props) {
                 autoPlay
                 className="absolute right-0 m-4 h-[8rem] w-[12rem] rounded-2xl bg-slate-600 sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
               />
-            )}
+            )} */}
             <div className="absolute bottom-20 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around md:bottom-[4rem] lg:bottom-[10rem]  ">
               <ToggleCallMuteDeclined />
             </div>
