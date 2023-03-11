@@ -27,7 +27,7 @@ function VideoChatForm({}: Props) {
 
   async function liveSteam() {
     const currentStream = await navigator.mediaDevices.getUserMedia({
-      video: openVDO,
+      video: vidoCall.openUserCamera,
       audio: true,
     });
 
@@ -48,9 +48,9 @@ function VideoChatForm({}: Props) {
     vidoCall.socket.on("callTimeout", ({ message }) => {
       console.log(message);
     });
-  }, []);
+  }, [vidoCall.openUserCamera]);
 
-  console.log(vidoCall.stream);
+
 
   return (
     <>
@@ -72,7 +72,7 @@ function VideoChatForm({}: Props) {
               {/* <div className=" h-full w-full bg-black  object-cover drop-shadow-xl md:rounded-3xl "></div> */}
             </div>
 
-            {vidoCall.stream && (
+            {vidoCall.callAccepted && !vidoCall.callEnded && (
               <video
                 playsInline
                 muted
@@ -82,7 +82,7 @@ function VideoChatForm({}: Props) {
               />
             )}
             <div className="absolute bottom-20 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around md:bottom-[4rem] lg:bottom-[10rem]  ">
-              <ToggleCallMuteDeclined onClickVDO={setOpenVDO} />
+              <ToggleCallMuteDeclined />
             </div>
           </div>
         }

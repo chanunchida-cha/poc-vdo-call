@@ -7,7 +7,11 @@ import { useRouter } from "next/router";
 import { useGetUserQuery } from "@/stores/service/getUserService";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { io } from "socket.io-client";
-import { setCallAccepted, setCalls } from "@/stores/slice/videoCallSlice";
+import {
+  setCallAccepted,
+  setCalling,
+  setCalls,
+} from "@/stores/slice/videoCallSlice";
 import Peer from "simple-peer";
 
 interface Status {
@@ -32,11 +36,9 @@ export default function Navbar(Props: Status) {
     vidoCall.socket.emit("logout");
   };
   useEffect(() => {
-    console.log("ทำงาน");
     vidoCall.socket.on("callUser", ({ from, name: firstname, signal }) => {
       console.log("on");
-
-      dispatch(setCalls({ from, firstname, signal }));
+      dispatch(setCalls({ from,name:firstname, signal }));
     });
     vidoCall.socket.on("callFail", ({ message }) => {
       console.log(message);
@@ -58,6 +60,7 @@ export default function Navbar(Props: Status) {
   }, [vidoCall.calls]);
 
   const callUser = () => {
+    dispatch(setCalling({ status: true }));
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -110,6 +113,7 @@ export default function Navbar(Props: Status) {
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("firstname");
   };
+  console.log("vidoCall.calls", vidoCall.calls);
 
   return (
     <>
@@ -167,7 +171,7 @@ export default function Navbar(Props: Status) {
                     return (
                       <div
                         key={index}
-                        className="mr-2 flex h-[2rem] w-[4rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[11rem]"
+                        className="mr-2 flex h-[2rem] w-[4rem] cursor-pointer flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[11rem]"
                         onClick={callUser}
                       >
                         <div className="mr-3 hidden sm:flex">{item.title}</div>

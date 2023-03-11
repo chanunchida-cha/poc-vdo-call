@@ -62,6 +62,8 @@ function LoginForm() {
       console.log("pharmacy");
     }
   }, [data?.role]);
+  console.log(vidoCall.stream);
+  
 
   return (
     <>

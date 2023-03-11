@@ -12,6 +12,7 @@ interface Call {
 interface InitialState {
   callAccepted: boolean;
   callEnded: boolean;
+  calling: boolean;
   stream: MediaStream | undefined;
   name: string;
   calls: Call[];
@@ -19,12 +20,14 @@ interface InitialState {
   myVideo: null;
   userVideo: null;
   connectionRef: null;
-  openCamera: boolean;
+  openUserCamera: boolean;
+  openPharmacyCamera: boolean;
   socket: Socket;
 }
 
 const initialState: InitialState = {
   callAccepted: false,
+  calling: false,
   callEnded: false,
   stream: undefined,
   name: "",
@@ -33,7 +36,8 @@ const initialState: InitialState = {
   myVideo: null,
   userVideo: null,
   connectionRef: null,
-  openCamera: true,
+  openUserCamera: true,
+  openPharmacyCamera: true,
   socket: io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`),
 };
 
@@ -46,6 +50,9 @@ export const videoCallSlice = createSlice({
     },
     setCallEnded: (state, action) => {
       state.callEnded = action.payload;
+    },
+    setCalling: (state, action) => {
+      state.calling = action.payload;
     },
     setStream: (state, action) => {
       state.stream = action.payload;
@@ -69,8 +76,11 @@ export const videoCallSlice = createSlice({
     setConnectionRef: (state, action) => {
       state.connectionRef = action.payload;
     },
-    setOpenCamera: (state, action) => {
-      state.openCamera = !action.payload;
+    setOpenUserCamera: (state, action) => {
+      state.openUserCamera = action.payload;
+    },
+    setPharmacyCamera: (state, action) => {
+      state.openPharmacyCamera = action.payload;
     },
   },
 });
@@ -79,6 +89,7 @@ export default videoCallSlice.reducer;
 export const {
   setCallAccepted,
   setCallEnded,
+  setCalling,
   setStream,
   setName,
   setCalls,
@@ -86,5 +97,6 @@ export const {
   setMyVideoRef,
   setUserVideoRef,
   setConnectionRef,
-  setOpenCamera,
+  setOpenUserCamera,
+  setPharmacyCamera,
 } = videoCallSlice.actions;
