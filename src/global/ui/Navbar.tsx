@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import VoiceCall from "@/Model/Svg/VoiceCall.svg";
-import VDOCall from "@/Model/Svg/VDOCall.svg";
+import VoiceCall from "@/models/Svg/VoiceCall.svg";
+import VDOCall from "@/models/Svg/VDOCall.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 import { useRouter } from "next/router";
 import { useGetUserQuery } from "@/stores/service/getUserService";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+import Cookie from "cookie-universal";
 import { io } from "socket.io-client";
 import {
   setCallAccepted,
@@ -13,51 +14,23 @@ import {
   setCalls,
 } from "@/stores/slice/videoCallSlice";
 import Peer from "simple-peer";
+import { User } from "@/models/interface/InterfaceUser";
 
 interface Status {
   role: "user" | "pharmacy";
 }
 
-export default function Navbar(Props: Status) {
+export default function Navbar(props: Status) {
   const dispatch = useAppDispatch();
   const [isOnline, setIsOnline] = useState(true);
-
   const router = useRouter();
-  const email =
-    typeof window !== "undefined" ? sessionStorage.getItem("email") : null;
-  const firstname =
-    typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
+  const cookies = Cookie();
+  const firstname = cookies.get("firstname");
   const { data, isLoading, error } = useGetUserQuery(firstname!);
 
   const vidoCall = useAppSelector((state) => state.videoCall);
   const connectionRef: any = useRef(vidoCall.connectionRef);
   const userVideo: any = useRef(vidoCall.userVideo);
-  const logOut = () => {
-    vidoCall.socket.emit("logout");
-  };
-  useEffect(() => {
-    vidoCall.socket.on("callUser", ({ from, name: firstname, signal }) => {
-      console.log("on");
-      dispatch(setCalls({ from,name:firstname, signal }));
-    });
-    vidoCall.socket.on("callFail", ({ message }) => {
-      console.log(message);
-    });
-    vidoCall.socket.on("rejectCallByCalling", ({ from, message }) => {
-      let newCall = vidoCall.calls.filter(
-        (call: {
-          isReceivingCall: boolean;
-          from: any;
-          name: string;
-          signal: any;
-        }) => {
-          return call.from !== from;
-        }
-      );
-      setCalls(newCall);
-    });
-    console.log(vidoCall.calls);
-  }, [vidoCall.calls]);
 
   const callUser = () => {
     dispatch(setCalling({ status: true }));
@@ -110,8 +83,9 @@ export default function Navbar(Props: Status) {
   ];
 
   const logout = () => {
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("firstname");
+    vidoCall.socket.emit("logout");
+    cookies.removeAll();
+    router.push("/login");
   };
   console.log("vidoCall.calls", vidoCall.calls);
 
@@ -190,8 +164,6 @@ export default function Navbar(Props: Status) {
                   className="mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[9rem]"
                   onClick={() => {
                     logout();
-                    logOut();
-                    router.push("/");
                   }}
                 >
                   <div className="mr-3 hidden sm:flex">ออกจากระบบ</div>

@@ -1,10 +1,8 @@
-import { User } from "./../../Model/interface/InterfaceUser";
+import { type User } from "../../models/interface/InterfaceUser";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-
-
 interface Response {
-  data:User
+  data: User;
 }
 export const LoginApi = createApi({
   reducerPath: "LoginApi",
@@ -22,4 +20,4 @@ export const LoginApi = createApi({
   }),
 });
 
-export const {useLazyLoginUserQuery } = LoginApi;
+export const { useLazyLoginUserQuery } = LoginApi;
