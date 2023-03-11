@@ -15,42 +15,7 @@ import { useGetUserQuery } from "@/stores/service/getUserService";
 type Props = {};
 
 function VideoChatForm({}: Props) {
-  const dispatch = useAppDispatch();
-  const vidoCall = useAppSelector((state) => state.videoCall);
-  const [openVDO, setOpenVDO] = useState(true);
-  const firstname =
-    typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
-  const { data, isLoading, error } = useGetUserQuery(firstname!);
-
-  const myVideoRef: any = useRef(vidoCall.myVideo);
-  const userVideo = useRef(vidoCall.userVideo);
-
-  async function liveSteam() {
-    const currentStream = await navigator.mediaDevices.getUserMedia({
-      video: vidoCall.openUserCamera,
-      audio: true,
-    });
-
-    try {
-      dispatch(setStream(currentStream));
-      myVideoRef.current.srcObject = currentStream;
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  useEffect(() => {
-    liveSteam();
-    vidoCall.socket.on("me", (id) => {
-      dispatch(setMe(id));
-    });
-
-    vidoCall.socket.on("callTimeout", ({ message }) => {
-      console.log(message);
-    });
-  }, [vidoCall.openUserCamera]);
-
-
+ 
 
   return (
     <>
