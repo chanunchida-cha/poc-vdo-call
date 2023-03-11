@@ -27,5 +27,20 @@ export const GetHistoryByPatientId = createApi({
   }),
 });
 
+export const GetHistoryById = createApi({
+  reducerPath: "getHistoryById",
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${process.env.NEXT_PUBLIC_SERVER}`,
+  }),
+  endpoints: (builder) => ({
+    getHistoryById: builder.query<History, void>({
+      query: (history_id) => ({
+        url: `/history/get/${history_id}`,
+      }),
+    }),
+  }),
+});
+
 export const { useGetAllHistoryQuery } = GetAllHistory;
 export const { useGetHistoryByPatientIdQuery } = GetHistoryByPatientId;
+export const { useGetHistoryByIdQuery } = GetHistoryById;
