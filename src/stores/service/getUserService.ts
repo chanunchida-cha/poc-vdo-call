@@ -1,4 +1,4 @@
-import { User } from "./../../Model/interface/InterfaceUser";
+import { type User } from "../../models/interface/InterfaceUser";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const GetUser = createApi({

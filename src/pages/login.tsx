@@ -1,9 +1,9 @@
 import LoginForm from "@/features/login/components/LoginForm";
 import React, { ReactElement } from "react";
 
-interface Props {}
 
-function login({}: Props): ReactElement {
+
+function login() {
   return (
     <div>
       <LoginForm />

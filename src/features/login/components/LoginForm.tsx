@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import Image from "next/image";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { type FormEvent, useEffect, useState } from "react";
 import LayoutLogin from "../layouts/LayoutLogin";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
@@ -10,9 +10,10 @@ import { useLazyLoginUserQuery } from "@/stores/service/loginService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { type User } from "@/Model/interface/InterfaceUser";
+import { type User } from "@/models/interface/InterfaceUser";
 import { setUserState } from "@/stores/slice/loginSlice";
 import { io } from "socket.io-client";
+import { useSetUserStorage } from "@/hooks/useSetUserStorage";
 
 const schema = yup
   .object({
@@ -23,8 +24,12 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 function LoginForm() {
+ 
   const dispatch = useAppDispatch();
   const route = useRouter();
+  const [trigger, { data, isLoading, error }] = useLazyLoginUserQuery();
+  const vidoCall = useAppSelector((state) => state.videoCall);
+
   const {
     register,
     handleSubmit,
@@ -33,26 +38,14 @@ function LoginForm() {
     resolver: yupResolver(schema),
   });
 
-  const [trigger, { data, isLoading, error }] = useLazyLoginUserQuery();
   const onSubmit = async (item: FormData) => {
     await trigger({
       email: item.Email,
       password: item.Password,
     });
   };
-  const vidoCall = useAppSelector((state) => state.videoCall);
-  useEffect(() => {
-    if (data !== undefined && !isLoading) {
-      sessionStorage.setItem("email", data.email);
-      sessionStorage.setItem("firstname", data.firstName);
-      dispatch(setUserState(data));
-      const loginSuccess = sessionStorage.getItem("email");
-      loginSuccess && route.push("/");
-    } else if (error) {
-      alert("Username or password is incorrect");
-    }
-  }, [data, error]);
-
+// ------ UseEffect and Hook -------
+  useSetUserStorage(data, error);
   useEffect(() => {
     if (data?.role === "pharmacy") {
       vidoCall.socket.emit("readyToCall", {
@@ -62,8 +55,9 @@ function LoginForm() {
       console.log("pharmacy");
     }
   }, [data?.role]);
+
+  // ------------------------------
   console.log(vidoCall.stream);
-  
 
   return (
     <>
