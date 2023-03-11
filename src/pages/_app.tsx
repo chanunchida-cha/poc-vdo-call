@@ -1,6 +1,6 @@
 import { type AppType } from "next/dist/shared/lib/utils";
 import "@/styles/globals.css";
-import Layout from "@/global/layouts/Layout";
+import Layout from "@/shared-components/layouts/Layout";
 // pages/_app.js
 import { Prompt } from "@next/font/google";
 import { Provider } from "react-redux";

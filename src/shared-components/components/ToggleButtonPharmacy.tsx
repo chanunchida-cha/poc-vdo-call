@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import MuteIcon from "@/Model/Svg/Mute.svg";
 import UnMuteIcon from "@/Model/Svg/UnMute.svg";
 import DeclinedCallIcon from "@/Model/Svg/DeclinedCall.svg";
-import ToggleIcon from "@/global/components/ToggleIcon";
+import ToggleIcon from "@/shared-components/components/ToggleIcon";
 import VDOIcon from "@/Model/Svg/VDO.svg";
 import UnVDOIcon from "@/Model/Svg/UnVDO.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
@@ -26,8 +26,8 @@ interface Call {
 }
 interface Props {
   onClickVDO?: (status: boolean) => void;
-  
-  callAccept:()=>void
+
+  callAccept: () => void;
 }
 
 export default function ToggleButtonPharmacy({ callAccept }: Props) {
@@ -40,8 +40,6 @@ export default function ToggleButtonPharmacy({ callAccept }: Props) {
 
   const [onMute, setMute] = useState(false);
   const [onVDO, setVDO] = useState(false);
-
-
 
   return (
     <div className="mb-[4rem] flex justify-center ">
@@ -59,7 +57,7 @@ export default function ToggleButtonPharmacy({ callAccept }: Props) {
       </div>
       <div className="flex cursor-pointer items-center justify-center rounded-full  bg-primary-light text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
         {statusOverlay ? (
-          <div onClick={() => callAccept() }>
+          <div onClick={() => callAccept()}>
             <SlCallIn className="hover:brightness-[0.75] " />
           </div>
         ) : (

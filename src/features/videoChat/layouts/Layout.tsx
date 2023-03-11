@@ -1,4 +1,4 @@
-import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
+import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
 import React, { useEffect, useRef, useState } from "react";
 
 type Props = {};
@@ -48,7 +48,7 @@ function Layout({}: Props) {
               />
             </div>
             <div className="absolute bottom-0 left-0 right-0 m-auto flex  h-20 w-full  items-center justify-center  ">
-              <ToggleCallMuteDeclined  onClickVDO={setOpenCamera}  />
+              <ToggleCallMuteDeclined onClickVDO={setOpenCamera} />
             </div>
           </div>
         </div>
