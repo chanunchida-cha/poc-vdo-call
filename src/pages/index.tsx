@@ -30,7 +30,7 @@ function index(props: Props) {
       ) : data?.role === "pharmacy" ? (
         <DoctorChat />
       ) : (
-        <UserChat />
+        <UserChat user={user}  />
       )}
 
       <OverlayCalling />

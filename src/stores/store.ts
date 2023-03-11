@@ -10,6 +10,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { GetUser } from "./service/getUserService";
 import videoCallSlice from "./slice/videoCallSlice";
+import { GetChatLogByRoomId } from "./service/getLogChatService";
 
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -17,6 +18,7 @@ const reducer = {
   [GetAllHistory.reducerPath]: GetAllHistory.reducer,
   [GetHistoryByPatientId.reducerPath]: GetHistoryByPatientId.reducer,
   [GetHistoryById.reducerPath]: GetHistoryById.reducer,
+  [GetChatLogByRoomId.reducerPath]: GetChatLogByRoomId.reducer,
   userState: LoginSlice,
   videoCall: videoCallSlice,
   overlayStatusSlice,
@@ -30,7 +32,8 @@ export const store = configureStore({
       GetUser.middleware,
       GetAllHistory.middleware,
       GetHistoryByPatientId.middleware,
-      GetHistoryById.middleware
+      GetHistoryById.middleware,
+      GetChatLogByRoomId.middleware
     ),
 });
 

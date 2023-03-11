@@ -1,9 +1,7 @@
 import { type User } from "../../models/interface/InterfaceUser";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-interface Response {
-  data: User;
-}
+
 export const LoginApi = createApi({
   reducerPath: "LoginApi",
   baseQuery: fetchBaseQuery({

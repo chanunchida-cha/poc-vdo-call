@@ -43,4 +43,4 @@ export const GetHistoryById = createApi({
 
 export const { useGetAllHistoryQuery } = GetAllHistory;
 export const { useGetHistoryByPatientIdQuery } = GetHistoryByPatientId;
-export const { useGetHistoryByIdQuery } = GetHistoryById;
+export const { useLazyGetHistoryByIdQuery } = GetHistoryById;
