@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MuteIcon from "@/Model/Svg/Mute.svg";
 import UnMuteIcon from "@/Model/Svg/UnMute.svg";
 import DeclinedCallIcon from "@/Model/Svg/DeclinedCall.svg";
-import ToggleIcon from "@/global/components/ToggleIcon";
+import ToggleIcon from "@/shared-components/components/ToggleIcon";
 import VDOIcon from "@/Model/Svg/VDO.svg";
 import UnVDOIcon from "@/Model/Svg/UnVDO.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";

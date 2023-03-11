@@ -1,6 +1,10 @@
-import ToggleButtonPharmacy from "@/global/components/ToggleButtonPharmacy";
-import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
-import { setMe, setOpenUserCamera, setStream } from "@/stores/slice/videoCallSlice";
+import ToggleButtonPharmacy from "@/shared-components/components/ToggleButtonPharmacy";
+import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
+import {
+  setMe,
+  setOpenUserCamera,
+  setStream,
+} from "@/stores/slice/videoCallSlice";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { useEffect, useRef, useState } from "react";
 
@@ -32,11 +36,10 @@ export default function OverlayUserCalling() {
     vidoCall.socket.on("callTimeout", ({ message }) => {
       console.log(message);
     });
-  },[vidoCall.openUserCamera,vidoCall.calling]);
+  }, [vidoCall.openUserCamera, vidoCall.calling]);
   console.log("calling", vidoCall.stream);
 
   console.log(vidoCall.openUserCamera);
-  
 
   return (
     <>

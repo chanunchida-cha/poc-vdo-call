@@ -1,7 +1,7 @@
 import React from "react";
 import ChatUi from "../layouts/ChatUi";
 import { useEffect, useRef, useState } from "react";
-import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
+import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import {
@@ -15,8 +15,6 @@ import { useGetUserQuery } from "@/stores/service/getUserService";
 type Props = {};
 
 function VideoChatForm({}: Props) {
- 
-
   return (
     <>
       <ChatUi

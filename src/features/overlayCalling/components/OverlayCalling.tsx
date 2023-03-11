@@ -1,5 +1,5 @@
-import ToggleButtonPharmacy from "@/global/components/ToggleButtonPharmacy";
-import ToggleCallMuteDeclined from "@/global/components/ToggleCallMuteDeclined";
+import ToggleButtonPharmacy from "@/shared-components/components/ToggleButtonPharmacy";
+import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
 import { useGetUserQuery } from "@/stores/service/getUserService";
 import { setCallAccepted } from "@/stores/slice/videoCallSlice";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
@@ -49,7 +49,6 @@ export default function OverlayCalling() {
     connectionRef.current = peer;
   };
 
-
   return (
     <>
       {vidoCall.calls.map((call: Call) => {
@@ -73,7 +72,11 @@ export default function OverlayCalling() {
                       Calling...
                     </div>
                   </div>
-                  <ToggleButtonPharmacy callAccept={()=>{answerCall(call)}} />
+                  <ToggleButtonPharmacy
+                    callAccept={() => {
+                      answerCall(call);
+                    }}
+                  />
                 </div>
               </div>
             )}

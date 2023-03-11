@@ -1,6 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { createSlice } from "@reduxjs/toolkit";
 import { useRef } from "react";
+import { serviceName } from "@/models/const/routeName";
 
 interface Call {
   isReceivingCall: boolean;
@@ -38,7 +39,7 @@ const initialState: InitialState = {
   connectionRef: null,
   openUserCamera: true,
   openPharmacyCamera: true,
-  socket: io(`${process.env.NEXT_PUBLIC_SERVER}/chat_test`),
+  socket: io(`${serviceName.path.chat}`),
 };
 
 export const videoCallSlice = createSlice({
