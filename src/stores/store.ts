@@ -1,3 +1,4 @@
+import { GetAllHistory, GetHistoryByPatientId } from './service/historyServies';
 import LoginSlice from "./slice/loginSlice";
 import { LoginApi } from "./service/loginService";
 import overlayStatusSlice from "./slice/overlayStatusSlice";
@@ -9,6 +10,8 @@ import videoCallSlice from "./slice/videoCallSlice";
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
   [GetUser.reducerPath]: GetUser.reducer,
+  [GetAllHistory.reducerPath ]:GetAllHistory.reducer,
+  [GetHistoryByPatientId.reducerPath]:GetHistoryByPatientId.reducer,
   userState: LoginSlice,
   videoCall: videoCallSlice,
   overlayStatusSlice,
@@ -17,7 +20,7 @@ const reducer = {
 export const store = configureStore({
   reducer: reducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(LoginApi.middleware, GetUser.middleware),
+    getDefaultMiddleware().concat(LoginApi.middleware, GetUser.middleware,GetAllHistory.middleware,GetHistoryByPatientId.middleware),
 });
 
 // export type of root state from reducers
