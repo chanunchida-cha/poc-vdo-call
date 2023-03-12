@@ -5,14 +5,14 @@ import React, { ReactElement } from 'react'
 interface Props {
     name: string
     avatar: string
-    message: string
     newMessage?: number
     isActive?: boolean
+  
     onClick: () => void
 }
 
 
-function ChatChannel({name, avatar, message, newMessage, isActive, onClick}: Props): ReactElement {
+function ChatChannel({name, avatar,  newMessage, isActive, onClick}: Props): ReactElement {
     return (
         <div className={`
             cursor-pointer
@@ -24,7 +24,7 @@ function ChatChannel({name, avatar, message, newMessage, isActive, onClick}: Pro
         >
             <div className={`
                 flex flex-row justify-between items-center px-4 py-2 space-x-4
-                ${isActive
+                ${isActive 
                     ? ''
                     : 'border-b-2 border-gray-200'
                 }
@@ -37,7 +37,7 @@ function ChatChannel({name, avatar, message, newMessage, isActive, onClick}: Pro
                 <div className="flex flex-row justify-between">
                     <div className="flex flex-col justify-center">
                         <p className="text-md font-semibold text-primary-light">{name}</p>
-                        <p className="text-sm text-gray-500">{message}</p>
+
                     </div>
                 </div>
             </div>

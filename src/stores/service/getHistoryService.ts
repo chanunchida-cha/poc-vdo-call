@@ -33,7 +33,7 @@ export const GetHistoryById = createApi({
     baseUrl: `${process.env.NEXT_PUBLIC_SERVER}`,
   }),
   endpoints: (builder) => ({
-    getHistoryById: builder.query<History, void>({
+    getHistoryById: builder.query<History, string>({
       query: (history_id) => ({
         url: `/history/get/${history_id}`,
       }),
@@ -41,6 +41,6 @@ export const GetHistoryById = createApi({
   }),
 });
 
-export const { useGetAllHistoryQuery } = GetAllHistory;
-export const { useGetHistoryByPatientIdQuery } = GetHistoryByPatientId;
+export const { useLazyGetAllHistoryQuery } = GetAllHistory;
+export const { useLazyGetHistoryByPatientIdQuery } = GetHistoryByPatientId;
 export const { useLazyGetHistoryByIdQuery } = GetHistoryById;

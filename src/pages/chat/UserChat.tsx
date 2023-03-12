@@ -7,46 +7,66 @@ import {
   ChatMessageMe,
   ChatMessageOther,
 } from "@/features/chat/components/ChatMessage";
-import { useGetHistoryByPatientIdQuery } from "@/stores/service/getHistoryService";
+import {
+  useLazyGetHistoryByPatientIdQuery,
+  useLazyGetHistoryByIdQuery,
+} from "@/stores/service/getHistoryService";
 import { type User } from "@/models/interface/InterfaceUser";
 import ChatByRoomId from "./ChatByRoomId";
+import index from "..";
 interface Props {
   user: User;
 }
 
 function UserChat({ user }: Props): ReactElement {
   const [activeChannel, setActiveChannel] = useState(0);
+  const [historyId, sethistoryId] = useState<string>("");
+  const [
+    getAllhistorys,
+    { data: historys, isLoading: loadingHistory, error: errorHistory },
+  ] = useLazyGetHistoryByPatientIdQuery();
 
-  const { data, isLoading, error } = useGetHistoryByPatientIdQuery(user.id);
-  console.log("history", data);
+  const [getHistory, { data: history, isLoading, error }] =
+    useLazyGetHistoryByIdQuery();
 
+  useEffect(() => {
+    const getAllHistory = async () => {
+      const response = await getAllhistorys(user.id);
+      sethistoryId(response?.data?.[0]?._id!);
+    };
+    getAllHistory();
+  }, []);
+
+  useEffect(() => {
+    const getHistoryById = async () => {
+      await getHistory(historyId);
+    };
+    getHistoryById();
+  }, [historyId]);
 
   return (
     <div>
       <ChatLayout>
         <ChatHistory>
-      {
-       data?.map((history)=>{
-        return(
-          <ChatChannel
-          name={history.pharmacyName}
-          avatar={`https://ui-avatars.com/api/?name= ${history.pharmacyName.charAt(0)}`}
-          message="ไม่สบายทำดี"
-          isActive={activeChannel == 0}
-          onClick={() => setActiveChannel(0)}
-        />
-        )
-
-       })
-      }
+          {historys?.map((history, index) => {
+            return (
+              <ChatChannel
+                key={history._id}
+                name={history.pharmacyName}
+                avatar={`https://ui-avatars.com/api/?name= ${history.pharmacyName.charAt(
+                  0
+                )}`}
+                isActive={activeChannel === index}
+                onClick={() => {
+                  setActiveChannel(index);
+                  sethistoryId(history._id);
+                }}
+              />
+            );
+          })}
         </ChatHistory>
 
-       
-        <ChatByRoomId/>
-       
-
-      
-       
+        <ChatByRoomId roomId={history?.roomID!} userLogin={user.firstName} />
       </ChatLayout>
     </div>
   );
