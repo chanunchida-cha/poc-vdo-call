@@ -94,7 +94,7 @@ export const doctorRejectCalling = createAsyncThunk(
 
 export const acceptCall = createAsyncThunk(
   "socketMedia/acceptCall",
-  async (info, { getState, dispatch }) => {
+  async (info:Call, { getState, dispatch }) => {
     dispatch(setCallAccepted(true));
     const stream = getState().mediaStream;
     const peer = new Peer({ initiator: false, trickle: false, stream });

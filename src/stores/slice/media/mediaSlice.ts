@@ -7,7 +7,7 @@ export const startMediaStream = createAsyncThunk(
     const { microphone } = store.getState().toggleMedia;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: microphone,
+        audio: true,
         video: true,
       });
       return stream;

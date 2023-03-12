@@ -9,6 +9,7 @@ import {
 } from "@/stores/slice/media/socketMediaSlice";
 import { User } from "@/models/interface/InterfaceUser";
 import { setCalls } from "@/stores/slice/videoCallSlice";
+import { sendChat } from "@/stores/slice/chat/chatSlice";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
@@ -28,21 +29,21 @@ function VideoChatForm({ user }: Props) {
   const yourVideoRef: any = useRef(null);
   const vidoCall = useAppSelector((state) => state.videoCall);
   const yourStream = useAppSelector((state) => state.socketMedia.yourStream);
-  const socket = useAppSelector((state) => state.socketMedia.socket);
-  const [calls, setcalls] = useState<Call[]>([])
+  const [text, setText] = useState("");
 
   useEffect(() => {
     if (mediaStream) {
       myVideoRef.current.srcObject = mediaStream;
       dispatch(callToDoctor());
       dispatch(getNotification());
-      
     }
     if (yourStream) {
       yourVideoRef.current.srcObject = yourStream;
     }
-  }, [mediaStream]);
+  }, [mediaStream, yourStream]);
 
+  console.log("myvideo", myVideoRef);
+  console.log("yourVideoRef", yourVideoRef);
 
   return (
     <>
@@ -127,9 +128,22 @@ function VideoChatForm({ user }: Props) {
                   className="col-span-6 m-2   h-auto w-auto rounded-3xl bg-white py-3 px-2 drop-shadow-xl "
                   id="exampleFormControlInput1"
                   placeholder="Imput massage"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
                 />
               </div>
-              <div className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage">
+              <div
+                className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage"
+                onClick={() => {
+                  dispatch(
+                    sendChat({
+                      user_pk: user?.id,
+                      name: user?.firstName,
+                      massage: text,
+                    })
+                  );
+                }}
+              >
                 <img
                   className=" mx-2 h-[1.5rem] w-[1.5rem]  "
                   src="/assets/images/send.png"
