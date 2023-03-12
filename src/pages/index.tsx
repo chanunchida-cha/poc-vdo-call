@@ -28,11 +28,10 @@ function index(props: Props) {
       ) : data?.role === "pharmacy" && vidoCall.callAccepted ? (
         <VideoChatForm />
       ) : data?.role === "pharmacy" ? (
-        <DoctorChat />
+        <DoctorChat user={user} />
       ) : (
-        <UserChat user={user}  />
+        <UserChat user={user} />
       )}
-     
 
       <OverlayCalling />
     </>
