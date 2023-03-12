@@ -24,6 +24,7 @@ interface InitialState {
   openUserCamera: boolean;
   openPharmacyCamera: boolean;
   socket: Socket;
+  mySocketID: string;
 }
 
 const initialState: InitialState = {
@@ -40,6 +41,7 @@ const initialState: InitialState = {
   openUserCamera: true,
   openPharmacyCamera: true,
   socket: io(`${serviceName.path.chat}`),
+  mySocketID: "",
 };
 
 export const videoCallSlice = createSlice({
@@ -83,6 +85,11 @@ export const videoCallSlice = createSlice({
     setPharmacyCamera: (state, action) => {
       state.openPharmacyCamera = action.payload;
     },
+    setMyConnect: (state) => {
+      state.socket.on("connected", (id) => {
+        state.mySocketID = id;
+      });
+    },
   },
 });
 
@@ -100,4 +107,5 @@ export const {
   setConnectionRef,
   setOpenUserCamera,
   setPharmacyCamera,
+  setMyConnect,
 } = videoCallSlice.actions;

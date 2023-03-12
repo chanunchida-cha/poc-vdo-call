@@ -11,6 +11,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { GetUser } from "./service/getUserService";
 import videoCallSlice from "./slice/videoCallSlice";
 import { GetChatLogByRoomId } from "./service/getLogChatService";
+import mediaSlice from "./slice/media/mediaSlice";
 
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -21,6 +22,7 @@ const reducer = {
   [GetChatLogByRoomId.reducerPath]: GetChatLogByRoomId.reducer,
   userState: LoginSlice,
   videoCall: videoCallSlice,
+  mediaStream: mediaSlice,
   overlayStatusSlice,
 };
 
