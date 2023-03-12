@@ -11,10 +11,12 @@ function VideoChatForm({}: Props) {
   const dispatch = useAppDispatch();
   const mediaStream = useAppSelector((state) => state.mediaStream);
   const myVideoRef: any = useRef(null);
+  const microphone = useAppSelector((state) => state.toggleMedia.microphone);
 
   useEffect(() => {
     mediaStream && (myVideoRef.current.srcObject = mediaStream);
-  }, [mediaStream]);
+    mediaStream && console.log("microphone", microphone);
+  }, [mediaStream, microphone]);
   return (
     <>
       <ChatUi

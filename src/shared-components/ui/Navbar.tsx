@@ -16,6 +16,7 @@ import {
 import Peer from "simple-peer";
 import { User } from "@/models/interface/InterfaceUser";
 import { startMediaStream } from "@/stores/slice/media/mediaSlice";
+import { toggleMicrophone } from "@/stores/slice/media/toggleMediaSlice";
 
 interface Status {
   role: "user" | "pharmacy";
@@ -36,6 +37,7 @@ export default function Navbar(props: Status) {
   const callUser = () => {
     dispatch(setCalling({ status: true }));
     dispatch(startMediaStream());
+    dispatch(toggleMicrophone())
     const peer = new Peer({
       initiator: true,
       trickle: false,

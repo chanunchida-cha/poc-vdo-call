@@ -12,6 +12,7 @@ import { GetUser } from "./service/getUserService";
 import videoCallSlice from "./slice/videoCallSlice";
 import { GetChatLogByRoomId } from "./service/getLogChatService";
 import mediaSlice from "./slice/media/mediaSlice";
+import toggleMediaSlice from "./slice/media/toggleMediaSlice";
 
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -23,6 +24,7 @@ const reducer = {
   userState: LoginSlice,
   videoCall: videoCallSlice,
   mediaStream: mediaSlice,
+  toggleMedia: toggleMediaSlice,
   overlayStatusSlice,
 };
 

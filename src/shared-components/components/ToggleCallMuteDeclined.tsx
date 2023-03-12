@@ -11,6 +11,7 @@ import { SlCallEnd } from "react-icons/sl";
 import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
 import { IoVideocam, IoVideocamOff } from "react-icons/io5";
 import { setOpenUserCamera } from "@/stores/slice/videoCallSlice";
+import { stopMediaStream } from "@/stores/slice/media/mediaSlice";
 
 interface Status {}
 export default function ToggleCallMuteDeclined(Props: Status) {
@@ -33,7 +34,12 @@ export default function ToggleCallMuteDeclined(Props: Status) {
           />
         </div>
       </div>
-      <div className="flex cursor-pointer items-center justify-center rounded-full  bg-red-600 text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
+      <div
+        onClick={() => {
+          dispatch(stopMediaStream());
+        }}
+        className="flex cursor-pointer items-center justify-center rounded-full  bg-red-600 text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl"
+      >
         {statusOverlay ? (
           <div onClick={() => dispatch(setOverlayStatus())}>
             <SlCallEnd className="hover:brightness-[0.75] " />

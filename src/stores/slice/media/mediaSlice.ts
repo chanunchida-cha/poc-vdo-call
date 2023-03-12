@@ -1,27 +1,13 @@
+import { store } from "@/stores/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-// interface MediaState {
-//   stream: MediaStream | null;
-//   error: Error | null;
-//   microphone: boolean;
-//   video: boolean;
-//   myVideo: null;
-// }
-
-// const initialState: MediaState = {
-//   stream: null,
-//   error: null,
-//   microphone: true,
-//   video: true,
-//   myVideo: null,
-// };
 
 export const startMediaStream = createAsyncThunk(
   "mediaStream/startMediaStream",
-  async () => {
+  async (_, { getState }) => {
+    const { microphone } = store.getState().toggleMedia;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
+        audio: microphone,
         video: true,
       });
       return stream;
@@ -31,14 +17,31 @@ export const startMediaStream = createAsyncThunk(
   }
 );
 
+export const stopMediaStream = createAsyncThunk(
+  "mediaStream/stopMediaStream",
+  async (stream) => {
+    try {
+      if (stream) {
+        stream.getTracks().forEach((track: any) => track.stop());
+      }
+    } catch (error) {
+      throw new Error("Failed to stop media stream");
+    }
+  }
+);
+
 const mediaSlice = createSlice({
   name: "mediaStream",
   initialState: null,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(startMediaStream.fulfilled, (state, action) => {
-      return action.payload;
-    });
+    builder
+      .addCase(startMediaStream.fulfilled, (state, action) => {
+        return action.payload;
+      })
+      .addCase(stopMediaStream.fulfilled, (state, action) => {
+        return null;
+      });
   },
 });
 
