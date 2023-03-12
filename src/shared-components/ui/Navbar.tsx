@@ -31,15 +31,10 @@ export default function Navbar(props: Status) {
   const firstname = cookies.get("firstname");
   const { data, isLoading, error } = useGetUserQuery(firstname!);
 
-  const vidoCall = useAppSelector((state) => state.videoCall);
-  const connectionRef: any = useRef(vidoCall.connectionRef);
-  const userVideo: any = useRef(vidoCall.userVideo);
-
   const callUser = () => {
     dispatch(setCalling({ status: true }));
     dispatch(startMediaStream());
     dispatch(toggleMicrophone());
-    dispatch(callToDoctor());
   };
 
   const callButton = [
@@ -62,11 +57,9 @@ export default function Navbar(props: Status) {
   ];
 
   const logout = () => {
-    vidoCall.socket.emit("logout");
     cookies.removeAll();
     router.push("/login");
   };
-  console.log("vidoCall.calls", vidoCall.calls);
 
   useEffect(() => {
     if (isOnline === false) {

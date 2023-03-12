@@ -10,11 +10,7 @@ import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 import { SlCallEnd, SlCallIn } from "react-icons/sl";
 import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
 import { IoVideocam, IoVideocamOff } from "react-icons/io5";
-import {
-  setCallAccepted,
-  setOpenUserCamera,
-  setPharmacyCamera,
-} from "@/stores/slice/videoCallSlice";
+
 import Peer from "simple-peer";
 import { useGetUserQuery } from "@/stores/service/getUserService";
 
@@ -33,10 +29,7 @@ interface Props {
 export default function ToggleButtonPharmacy({ callAccept }: Props) {
   const dispatch = useAppDispatch();
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
-  const vidoCall = useAppSelector((state) => state.videoCall);
-  const firstname =
-    typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
-  const { data, isLoading, error } = useGetUserQuery(firstname!);
+
 
   const [onMute, setMute] = useState(false);
   const [onVDO, setVDO] = useState(false);
@@ -82,7 +75,7 @@ export default function ToggleButtonPharmacy({ callAccept }: Props) {
           className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
           onClick={() => {
             setVDO(!onVDO);
-            dispatch(setPharmacyCamera(!vidoCall.openPharmacyCamera));
+           
           }}
         >
           <ToggleIcon

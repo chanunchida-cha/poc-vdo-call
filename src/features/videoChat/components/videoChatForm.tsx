@@ -4,6 +4,7 @@ import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMut
 
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { startMediaStream } from "@/stores/slice/media/mediaSlice";
+import { callToDoctor } from "@/stores/slice/media/socketMediaSlice";
 
 type Props = {};
 
@@ -15,7 +16,7 @@ function VideoChatForm({}: Props) {
 
   useEffect(() => {
     mediaStream && (myVideoRef.current.srcObject = mediaStream);
-    mediaStream && console.log("microphone", microphone);
+    mediaStream &&  dispatch(callToDoctor());
   }, [mediaStream, microphone]);
   return (
     <>

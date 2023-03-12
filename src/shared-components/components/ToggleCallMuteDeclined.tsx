@@ -16,7 +16,6 @@ import { stopMediaStream } from "@/stores/slice/media/mediaSlice";
 interface Status {}
 export default function ToggleCallMuteDeclined(Props: Status) {
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
-  const vidoCall = useAppSelector((state) => state.videoCall);
   const dispatch = useAppDispatch();
   const [onMute, setMute] = useState(false);
   const [onVDO, setVDO] = useState(false);
@@ -55,7 +54,6 @@ export default function ToggleCallMuteDeclined(Props: Status) {
           className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
           onClick={() => {
             setVDO(!onVDO);
-            dispatch(setOpenUserCamera(!vidoCall.openUserCamera));
           }}
         >
           <ToggleIcon

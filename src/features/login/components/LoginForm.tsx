@@ -28,7 +28,7 @@ function LoginForm() {
   const dispatch = useAppDispatch();
   const route = useRouter();
   const [trigger, { data, isLoading, error }] = useLazyLoginUserQuery();
-  const vidoCall = useAppSelector((state) => state.videoCall);
+  
 
   const {
     register,
@@ -53,7 +53,7 @@ function LoginForm() {
   }, [data?.role]);
 
   // ------------------------------
-  console.log(vidoCall.stream);
+ 
 
   return (
     <>
