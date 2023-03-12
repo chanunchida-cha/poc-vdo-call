@@ -3,12 +3,20 @@ import { io, Socket } from "socket.io-client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Peer from "simple-peer";
 
+type Call={
+  isReceivingCall: boolean;
+  from: string;
+  name: string;
+  signal: any;
+}
+
 type InitialState = {
   socket: Socket;
   mySocketID: string;
   yourStream: MediaStream | null;
   callAccepted: boolean;
   connectionRef: any;
+  calls: Call[];
 };
 
 const initialState: InitialState = {
@@ -17,6 +25,7 @@ const initialState: InitialState = {
   callAccepted: false,
   connectionRef: null,
   socket: io(`${serviceName.path.chat}`),
+  calls: [],
 };
 
 export const callToDoctor = createAsyncThunk(
