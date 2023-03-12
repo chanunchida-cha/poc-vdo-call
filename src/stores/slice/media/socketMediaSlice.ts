@@ -7,13 +7,17 @@ import { store } from "@/stores/store";
 type InitialState = {
   socket: Socket;
   mySocketID: string;
+  yourStream: MediaStream | null;
+  callAccepted: boolean;
+  connectionRef: any;
 };
-
-type TStream = {};
 
 const initialState: InitialState = {
   socket: io(`${serviceName.path.chat}`),
   mySocketID: "",
+  yourStream: null,
+  callAccepted: false,
+  connectionRef: null,
 };
 
 const socketMediaSlice = createSlice({
@@ -43,6 +47,14 @@ const socketMediaSlice = createSlice({
             user_pk: "test",
             to: "",
           });
+        });
+        peer.on("stream", (currentStream) => {
+          stat.yourStream = currentStream;
+        });
+
+        stat.socket.on("callAccepted", (signal) => {
+          stat.callAccepted = true;
+          peer.signal(signal);
         });
       }
     },
