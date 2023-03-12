@@ -2,21 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import VoiceCall from "@/models/Svg/VoiceCall.svg";
 import VDOCall from "@/models/Svg/VDOCall.svg";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
-import { setOverlayStatus } from "@/stores/slice/overlayStatusSlice";
 import { useRouter } from "next/router";
 import { useGetUserQuery } from "@/stores/service/getUserService";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import Cookie from "cookie-universal";
-import { io } from "socket.io-client";
-import {
-  setCallAccepted,
-  setCalling,
-  setCalls,
-} from "@/stores/slice/videoCallSlice";
+import { setCallAccepted, setCalling } from "@/stores/slice/videoCallSlice";
 import Peer from "simple-peer";
-import { User } from "@/models/interface/InterfaceUser";
 import { startMediaStream } from "@/stores/slice/media/mediaSlice";
 import { toggleMicrophone } from "@/stores/slice/media/toggleMediaSlice";
+import {
+  setDoctorBusy,
+  setDoctorReady,
+} from "@/stores/slice/media/socketMediaSlice";
 
 interface Status {
   role: "user" | "pharmacy";
@@ -37,7 +34,7 @@ export default function Navbar(props: Status) {
   const callUser = () => {
     dispatch(setCalling({ status: true }));
     dispatch(startMediaStream());
-    dispatch(toggleMicrophone())
+    dispatch(toggleMicrophone());
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -92,6 +89,14 @@ export default function Navbar(props: Status) {
     router.push("/login");
   };
   console.log("vidoCall.calls", vidoCall.calls);
+
+  useEffect(() => {
+    if (isOnline === false) {
+      dispatch(setDoctorBusy({ user_pk: data?.id, name: data?.firstName }));
+    } else if (isOnline === true) {
+      dispatch(setDoctorReady({ user_pk: data?.id, name: data?.firstName }));
+    }
+  }, [isOnline]);
 
   return (
     <>
