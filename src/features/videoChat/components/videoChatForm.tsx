@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatUi from "../layouts/ChatUi";
 import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
 
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { startMediaStream } from "@/stores/slice/media/mediaSlice";
+import { IoChevronBackCircle } from "react-icons/io5";
 
 type Props = {};
 
@@ -13,10 +14,35 @@ function VideoChatForm({}: Props) {
   const myVideoRef: any = useRef(null);
   const microphone = useAppSelector((state) => state.toggleMedia.microphone);
 
+  const [onChat, setOnChat] = useState(false);
+
   useEffect(() => {
     mediaStream && (myVideoRef.current.srcObject = mediaStream);
     mediaStream && console.log("microphone", microphone);
   }, [mediaStream, microphone]);
+
+  const queryToMatch = "(min-width: 650px)";
+  const [matches, setMatches] = useState(
+    window.matchMedia(queryToMatch).matches
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia(queryToMatch);
+    // If there is a change update the match
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    // Add the listener to update the state
+    const listener = () => {
+      setMatches(media.matches);
+      setOnChat(false);
+    };
+    media.addEventListener("change", listener);
+    return () => media.addEventListener("change", listener);
+  }, [matches, queryToMatch, onChat]);
+  // console.log("matches", matches);
+  // console.log("onChat", onChat);
+
   return (
     <>
       <ChatUi
@@ -47,12 +73,12 @@ function VideoChatForm({}: Props) {
               />
             )} */}
             <div className="absolute bottom-20 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around md:bottom-[4rem] lg:bottom-[10rem]  ">
-              <ToggleCallMuteDeclined />
+              <ToggleCallMuteDeclined setOnChat={setOnChat} />
             </div>
           </div>
         }
         chat={
-          <div className="hidden  h-screen  w-screen flex-1 basis-1/5 flex-col sm:m-4 sm:mx-1 md:my-4  lg:block lg:pr-4 2xl:block">
+          <div className="h-screen w-screen flex-1 basis-1/5 flex-col sm:m-4 sm:mx-1 md:my-4 lg:block lg:pr-4 2xl:block">
             <div className=" max-h-fit w-full flex-col justify-center rounded-2xl bg-white drop-shadow-xl lg:h-3/4 ">
               <p className=" mx-6 pt-6 text-start text-2xl text-primary">
                 Yok Park
@@ -118,7 +144,82 @@ function VideoChatForm({}: Props) {
               </div>
             </div>
           </div>
+          // )
         }
+        chatMobile={
+          <div className="h-screen w-screen bg-white">
+            <div className="h-screen">
+              <div className="mt-[4rem] h-[80%] w-full rounded-2xl bg-white drop-shadow-xl">
+                <div className="mx-6 flex items-center pb-2 pt-2">
+                  <button
+                    className="text-4xl text-gray-500"
+                    onClick={() => setOnChat(false)}
+                  >
+                    <IoChevronBackCircle />
+                  </button>
+                  <span className="ml-3 text-2xl text-primary">Yok Park</span>
+                </div>
+
+                <div className=" mx-6 h-px bg-primary"></div>
+                <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
+                  <div className=" flex flex-row  items-end justify-start space-x-2 p-4 ">
+                    <img
+                      src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
+                      alt="image"
+                      className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
+                    />
+
+                    <p className=" text-strat sm:text-strat mx-4 flex items-center rounded-tr-2xl rounded-br-2xl rounded-tl-2xl  bg-slate-200 p-4 before:content-[attr(before)]">
+                      เราจะได้พบกันอีกไหม
+                    </p>
+                  </div>
+                  <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
+                    <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
+                      โอ้ว อย่าเลยอย่าพบชั้น!!!
+                    </p>
+                    <img
+                      src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
+                      alt="image"
+                      className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="auto-col-max grid grid-flow-col grid-cols-4 py-4 ">
+                <div className="auto-col-max col-span-3 grid  grid-flow-col grid-cols-5 justify-evenly rounded-xl bg-input-massage p-2 ">
+                  <input
+                    type="text"
+                    className="col-span-4 m-2  h-[2rem] rounded-3xl bg-white py-3 px-2 drop-shadow-xl "
+                    id="exampleFormControlInput1"
+                    placeholder="Imput massage"
+                  />
+                  <div className="col-span-1 h-full place-self-center py-3">
+                    <img
+                      src="/assets/images/attach-file.png"
+                      alt="attach"
+                      className="h-[1.5rem] w-[1.5rem]  "
+                    />
+                  </div>
+                  <div className=" col-span-1 h-full place-self-center py-3">
+                    <img
+                      src="/assets/images/smile.png"
+                      alt="smile"
+                      className=" h-[1.5rem] w-[1.5rem]  "
+                    />
+                  </div>
+                </div>
+                <div className="col-span-1 mx-1 grid h-full items-center justify-items-center rounded-xl bg-input-massage">
+                  <img
+                    className=" mx-2 h-[1.5rem] w-[1.5rem]  "
+                    src="/assets/images/send.png"
+                    alt="send"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        onChat={onChat}
       ></ChatUi>
     </>
   );
