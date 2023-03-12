@@ -3,9 +3,8 @@ import { io, Socket } from "socket.io-client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Peer from "simple-peer";
 
-const socket: Socket = io(`${serviceName.path.chat}`);
-
 type InitialState = {
+  socket: Socket;
   mySocketID: string;
   yourStream: MediaStream | null;
   callAccepted: boolean;
@@ -17,12 +16,14 @@ const initialState: InitialState = {
   yourStream: null,
   callAccepted: false,
   connectionRef: null,
+  socket: io(`${serviceName.path.chat}`),
 };
 
 export const callToDoctor = createAsyncThunk(
   "socketMedia/callToDoctor",
   async (_, { getState, dispatch }) => {
     const stream = getState().mediaStream;
+    const { socket } = getState().socketMedia;
     console.log("hello2", stream);
     if (stream !== null) {
       console.log("hello");
@@ -53,15 +54,15 @@ const socketMediaSlice = createSlice({
   initialState,
   reducers: {
     getSocketID: (state) => {
-      socket.on("me", (id) => {
+      state.socket.on("me", (id) => {
         state.mySocketID = id;
       });
     },
     setDoctorReady: (state, action) => {
-      socket.emit("readyToCall", action.payload);
+      state.socket.emit("readyToCall", action.payload);
     },
     setDoctorBusy: (state, action) => {
-      socket.emit("notReadyToCall", action.payload);
+      state.socket.emit("notReadyToCall", action.payload);
     },
     setYourStream: (state, action) => {
       state.yourStream = action.payload;
@@ -69,29 +70,7 @@ const socketMediaSlice = createSlice({
     setCallAccepted: (state, action) => {
       state.callAccepted = action.payload;
     },
-    // callToDoctor: (state, action) => {
-    //   const stream = action.payload;
-    //   if (stream !== null) {
-    //     const peer = new Peer({ initiator: true, trickle: false, stream });
-    //     const name = action.payload;
-    //     peer.on("signal", (data) => {
-    //       socket.emit("callUser", {
-    //         signal: data,
-    //         name,
-    //         user_pk: "test",
-    //         to: "",
-    //       });
-    //     });
-    //     peer.on("stream", (currentStream) => {
-    //       state.yourStream = currentStream;
-    //     });
 
-    //     socket.on("callAccepted", (signal) => {
-    //       state.callAccepted = true;
-    //       peer.signal(signal);
-    //     });
-    //   }
-    // },
   },
   extraReducers: (builder) => {
     builder.addCase(callToDoctor.fulfilled, (state, action) => {
