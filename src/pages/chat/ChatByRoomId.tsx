@@ -9,27 +9,35 @@ import React, { ReactElement } from "react";
 interface Props {
   roomId: string;
   userLogin: string;
+  phamacyName: string
 }
 
-function ChatByRoomId({ roomId }: Props) {
+function ChatByRoomId({ roomId, userLogin , phamacyName }: Props) {
   const { data, isLoading, error } = useGetChatLogByRoomIdQuery(roomId);
   console.log(data);
 
   return (
-    <ChatRoom title="Doctor No.1">
+    <ChatRoom title={phamacyName} data={data}>
       {data?.chat.map((chatLog) => {
         return (
           <>
-            <ChatMessageMe
-              name="Jacket"
-              avatar={`https://ui-avatars.com/api/?name= Jacket2`}
-              message="ไม่สบายทำไงดี"
-            />
-            <ChatMessageOther
-              name="Doctor No.1"
-              avatar={`https://ui-avatars.com/api/?name=D1`}
-              message="ทำใจ"
-            />
+            {chatLog.name === userLogin ? (
+              <ChatMessageMe
+                name={chatLog.name}
+                avatar={`https://ui-avatars.com/api/?name= ${chatLog.name.charAt(
+                  0
+                )}`}
+                message={chatLog.text}
+              />
+            ) : (
+              <ChatMessageOther
+                name={chatLog.name}
+                avatar={`https://ui-avatars.com/api/?name= ${chatLog.name.charAt(
+                  0
+                )}`}
+                message={chatLog.text}
+              />
+            )}
           </>
         );
       })}

@@ -21,6 +21,7 @@ interface Props {
 function UserChat({ user }: Props): ReactElement {
   const [activeChannel, setActiveChannel] = useState(0);
   const [historyId, sethistoryId] = useState<string>("");
+  const [pharmacyName, setPharmacyName] = useState<string>("")
   const [
     getAllhistorys,
     { data: historys, isLoading: loadingHistory, error: errorHistory },
@@ -33,6 +34,7 @@ function UserChat({ user }: Props): ReactElement {
     const getAllHistory = async () => {
       const response = await getAllhistorys(user.id);
       sethistoryId(response?.data?.[0]?._id!);
+      setPharmacyName(response?.data?.[0]?.pharmacyName!)
     };
     getAllHistory();
   }, []);
@@ -60,13 +62,14 @@ function UserChat({ user }: Props): ReactElement {
                 onClick={() => {
                   setActiveChannel(index);
                   sethistoryId(history._id);
+                  setPharmacyName(history.pharmacyName)
                 }}
               />
             );
           })}
         </ChatHistory>
 
-        <ChatByRoomId roomId={history?.roomID!} userLogin={user.firstName} />
+        <ChatByRoomId roomId={history?.roomID!} userLogin={user.firstName} phamacyName={pharmacyName} />
       </ChatLayout>
     </div>
   );

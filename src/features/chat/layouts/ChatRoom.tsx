@@ -1,20 +1,37 @@
-import React, { ReactElement } from 'react'
+import { Chat, ChatHistory } from "@/models/interface/interfaceChatHistory";
+import React, { ReactElement } from "react";
 
-function ChatRoom({children, title}: any): ReactElement {
-
-    
-    return (
-        <div className="flex-1 h-full overflow-hidden mt-14 lg:mt-0 flex flex-col bg-white lg:rounded-[2rem] shadow-lg ">
-            <div className="p-4 pb-0">
-                <div className="border-b-2 border-primary pb-2">
-                    <h1 className="text-md sm:text-xl font-bold text-primary">{title}</h1>
-                </div>
-            </div>
-            <div className="flex-1 overflow-y-auto overflow-x-hidden">
-                {children}
-            </div>
-        </div>
-    )
+interface Props {
+  children: React.ReactNode;
+  title: string;
+  data: ChatHistory | undefined;
 }
 
-export default ChatRoom
+function ChatRoom({ children, title, data }: Props) {
+  console.log(data);
+
+  if (data === null) {
+    return (
+      <div className="mt-14 p-4 flex h-full flex-1 flex-col overflow-hidden bg-white shadow-lg lg:mt-0 lg:rounded-[2rem] ">
+        ** ยังไม่มีประวัติการสนทนา **
+      </div>
+    );
+  } else {
+    return (
+      <div className="mt-14 flex h-full flex-1 flex-col overflow-hidden bg-white shadow-lg lg:mt-0 lg:rounded-[2rem] ">
+        <div className="p-4 pb-0">
+          <div className="border-b-2 border-primary pb-2">
+            <h1 className="text-md font-bold text-primary sm:text-xl">
+              {title}
+            </h1>
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          {children}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default ChatRoom;
