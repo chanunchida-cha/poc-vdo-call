@@ -11,6 +11,7 @@ import Peer from "simple-peer";
 import { startMediaStream } from "@/stores/slice/media/mediaSlice";
 import { toggleMicrophone } from "@/stores/slice/media/toggleMediaSlice";
 import {
+  callToDoctor,
   setDoctorBusy,
   setDoctorReady,
 } from "@/stores/slice/media/socketMediaSlice";
@@ -21,6 +22,9 @@ interface Status {
 
 export default function Navbar(props: Status) {
   const dispatch = useAppDispatch();
+  const stream = useAppSelector((state) => {
+    state.mediaStream;
+  });
   const [isOnline, setIsOnline] = useState(true);
   const router = useRouter();
   const cookies = Cookie();
@@ -35,33 +39,7 @@ export default function Navbar(props: Status) {
     dispatch(setCalling({ status: true }));
     dispatch(startMediaStream());
     dispatch(toggleMicrophone());
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: vidoCall.stream,
-    });
-
-    peer.on("signal", (item) => {
-      vidoCall.socket.emit("callUser", {
-        //userToCall: id,
-        signal: item,
-        name: firstname,
-        user_pk: data?.id,
-        to: "",
-      });
-    });
-
-    peer.on("stream", (currentStream) => {
-      userVideo.current.srcObject = currentStream;
-    });
-
-    vidoCall.socket.on("callAccepted", (signal) => {
-      setCallAccepted(true);
-
-      peer.signal(signal);
-    });
-
-    connectionRef.current = peer;
+    dispatch(callToDoctor());
   };
 
   const callButton = [
