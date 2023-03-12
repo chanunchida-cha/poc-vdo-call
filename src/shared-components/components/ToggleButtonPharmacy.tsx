@@ -13,6 +13,7 @@ import { IoVideocam, IoVideocamOff } from "react-icons/io5";
 
 import Peer from "simple-peer";
 import { useGetUserQuery } from "@/stores/service/getUserService";
+import { acceptCall } from "@/stores/slice/media/socketMediaSlice";
 
 interface Call {
   isReceivingCall: boolean;
@@ -23,10 +24,10 @@ interface Call {
 interface Props {
   onClickVDO?: (status: boolean) => void;
 
-  callAccept?: () => void;
+  call: Call;
 }
 
-export default function ToggleButtonPharmacy({ callAccept }: Props) {
+export default function ToggleButtonPharmacy({ call }: Props) {
   const dispatch = useAppDispatch();
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
 
@@ -49,11 +50,19 @@ export default function ToggleButtonPharmacy({ callAccept }: Props) {
       </div>
       <div className="flex cursor-pointer items-center justify-center rounded-full  bg-primary-light text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
         {statusOverlay ? (
-          <div>
+          <div
+            onClick={() => {
+              dispatch(acceptCall(call));
+            }}
+          >
             <SlCallIn className="hover:brightness-[0.75] " />
           </div>
         ) : (
-          <div>
+          <div
+            onClick={() => {
+              dispatch(acceptCall(call));
+            }}
+          >
             <SlCallIn className="hover:brightness-[0.75] " />
           </div>
         )}

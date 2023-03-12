@@ -3,7 +3,7 @@ import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMut
 import { useGetUserQuery } from "@/stores/service/getUserService";
 import { setCallAccepted } from "@/stores/slice/videoCallSlice";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Peer from "simple-peer";
 
 interface Call {
@@ -17,12 +17,22 @@ export default function OverlayCalling() {
   const vidoCall = useAppSelector((state) => state.videoCall);
   const socketMedia = useAppSelector((state) => state.socketMedia);
   const dispatch = useAppDispatch();
-  const firstname =
-    typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
+  const socket = useAppSelector((state) => state.socketMedia.socket);
+  const [calls, setCalls] = useState<Call[]>([]);
+
+  useEffect(() => {
+    socket.on("callUser", ({ from, name: callerName, signal }) => {
+      console.log("ทำงาน");
+      setCalls([
+        ...calls,
+        { isReceivingCall: true, from, name: callerName, signal },
+      ]);
+    });
+  }, [calls]);
 
   return (
     <>
-      {socketMedia.calls.map((call: Call) => {
+      {calls.map((call: Call) => {
         return (
           <div key={call.from}>
             {call.isReceivingCall && !vidoCall.callAccepted && (
@@ -41,7 +51,7 @@ export default function OverlayCalling() {
                       Calling...
                     </div>
                   </div>
-                  <ToggleButtonPharmacy />
+                  <ToggleButtonPharmacy call={call} />
                 </div>
               </div>
             )}

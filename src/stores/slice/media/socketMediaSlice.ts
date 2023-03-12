@@ -11,13 +11,6 @@ interface Call {
   signal: any;
 }
 
-type Call = {
-  isReceivingCall: boolean;
-  from: string;
-  name: string;
-  signal: any;
-};
-
 type InitialState = {
   socket: Socket;
   mySocketID: string;
@@ -101,8 +94,8 @@ export const doctorRejectCalling = createAsyncThunk(
 
 export const acceptCall = createAsyncThunk(
   "socketMedia/acceptCall",
-  async (info, { getState }) => {
-    initialState.callAccepted = true;
+  async (info, { getState, dispatch }) => {
+    dispatch(setCallAccepted(true));
     const stream = getState().mediaStream;
     const peer = new Peer({ initiator: false, trickle: false, stream });
 
@@ -111,11 +104,12 @@ export const acceptCall = createAsyncThunk(
     });
 
     peer.on("stream", (currentStream) => {
-      initialState.yourStream = currentStream;
+      dispatch(setYourStream(currentStream));
     });
 
     peer.signal(info.signal);
     initialState.connectionRef = peer;
+    console.log("ทำงาน");
   }
 );
 

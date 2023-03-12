@@ -40,6 +40,7 @@ export default function Navbar(props: Status) {
     dispatch(setCalling({ status: true }));
     dispatch(startMediaStream());
     dispatch(toggleMicrophone());
+    
   };
 
   const callButton = [

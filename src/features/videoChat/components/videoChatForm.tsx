@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatUi from "../layouts/ChatUi";
 import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
@@ -15,6 +15,12 @@ type Props = {
   user?: User;
 };
 
+interface Call {
+  isReceivingCall: boolean;
+  from: string;
+  name: string;
+  signal: any;
+}
 function VideoChatForm({ user }: Props) {
   const dispatch = useAppDispatch();
   const mediaStream = useAppSelector((state) => state.mediaStream);
@@ -23,6 +29,7 @@ function VideoChatForm({ user }: Props) {
   const vidoCall = useAppSelector((state) => state.videoCall);
   const yourStream = useAppSelector((state) => state.socketMedia.yourStream);
   const socket = useAppSelector((state) => state.socketMedia.socket);
+  const [calls, setcalls] = useState<Call[]>([])
 
   useEffect(() => {
     if (mediaStream) {
@@ -35,6 +42,8 @@ function VideoChatForm({ user }: Props) {
       yourVideoRef.current.srcObject = yourStream;
     }
   }, [mediaStream]);
+
+
   return (
     <>
       <ChatUi
