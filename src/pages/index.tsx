@@ -31,8 +31,8 @@ function index(props: Props) {
         <DoctorChat user={user} />
       ) : (
         <UserChat user={user} />
-      )}
-
+      )} */}
+      <VideoChatForm />
       <OverlayCalling />
     </>
   );

@@ -11,6 +11,13 @@ interface Call {
   signal: any;
 }
 
+type Call={
+  isReceivingCall: boolean;
+  from: string;
+  name: string;
+  signal: any;
+}
+
 type InitialState = {
   socket: Socket;
   mySocketID: string;

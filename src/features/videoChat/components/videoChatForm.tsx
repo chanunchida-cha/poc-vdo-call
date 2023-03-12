@@ -94,33 +94,27 @@ function VideoChatForm({ user }: Props) {
               </div>
             </div>
 
-            <div className="auto-col-max grid grid-flow-col grid-cols-4 py-4 ">
-              <div className=" auto-col-max col-span-3 grid  grid-flow-col grid-cols-4 justify-evenly rounded-xl bg-input-massage p-2 ">
-                <div className=" col-span-1 h-full  place-self-center py-3 ">
+            <div className="auto-col-max grid grid-flow-col grid-cols-10 py-4 ">
+              <div className=" auto-col-max col-span-9 grid  grid-flow-col grid-cols-7 justify-evenly rounded-xl bg-input-massage p-2 ">
+                <div className=" col-span-1 h-full flex items-center justify-center  ">
                   <img
                     src="/assets/images/attach-file.png"
                     alt="attach"
-                    className="h-10 w-10  "
+                    className="h-7 w-7  "
                   />
                 </div>
 
                 <input
                   type="text"
-                  className="col-span-3 m-2   h-auto w-auto rounded-3xl bg-white py-3 px-2 drop-shadow-xl "
+                  className="col-span-6 m-2   h-auto w-auto rounded-3xl bg-white py-3 px-2 drop-shadow-xl "
                   id="exampleFormControlInput1"
                   placeholder="Imput massage"
                 />
-                <div className=" col-span-1 h-full  py-3">
-                  <img
-                    src="/assets/images/smile.png"
-                    alt="smile"
-                    className=" h-10 w-10  "
-                  />
-                </div>
+              
               </div>
-              <div className="col-span-1 mx-1 grid h-full items-center justify-items-center rounded-xl bg-input-massage">
+              <div className="col-span-1 mx-1 grid h-full items-center justify-items-center rounded-xl bg-input-massage cursor-pointer">
                 <img
-                  className=" mx-2 h-[3rem] w-[3rem]  "
+                  className=" mx-2 h-[1.5rem] w-[1.5rem]  "
                   src="/assets/images/send.png"
                   alt="send"
                 />

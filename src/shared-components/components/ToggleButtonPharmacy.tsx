@@ -23,13 +23,12 @@ interface Call {
 interface Props {
   onClickVDO?: (status: boolean) => void;
 
-  callAccept: () => void;
+  callAccept?: () => void;
 }
 
 export default function ToggleButtonPharmacy({ callAccept }: Props) {
   const dispatch = useAppDispatch();
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
-
 
   const [onMute, setMute] = useState(false);
   const [onVDO, setVDO] = useState(false);
@@ -50,11 +49,11 @@ export default function ToggleButtonPharmacy({ callAccept }: Props) {
       </div>
       <div className="flex cursor-pointer items-center justify-center rounded-full  bg-primary-light text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
         {statusOverlay ? (
-          <div onClick={() => callAccept()}>
+          <div>
             <SlCallIn className="hover:brightness-[0.75] " />
           </div>
         ) : (
-          <div onClick={() => callAccept()}>
+          <div>
             <SlCallIn className="hover:brightness-[0.75] " />
           </div>
         )}
@@ -75,7 +74,6 @@ export default function ToggleButtonPharmacy({ callAccept }: Props) {
           className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
           onClick={() => {
             setVDO(!onVDO);
-           
           }}
         >
           <ToggleIcon

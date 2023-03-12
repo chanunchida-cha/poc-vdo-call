@@ -141,12 +141,12 @@ export default function Navbar(props: Status) {
                 } flex w-full   flex-row items-center justify-end sm:px-5`}
               >
                 <div
-                  className="mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[9rem]"
+                  className="cursor-pointer mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[9rem]"
                   onClick={() => {
                     logout();
                   }}
                 >
-                  <div className="mr-3 hidden sm:flex">ออกจากระบบ</div>
+                  <div className="mr-3 hidden sm:flex ">ออกจากระบบ</div>
                   <div>
                     <RiLogoutBoxRLine />
                   </div>
