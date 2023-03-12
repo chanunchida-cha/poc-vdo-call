@@ -13,8 +13,13 @@ interface ServerProps {
 
 const getServerSideProps = async ({ req, res }: ServerProps) => {
   // ADD YOUR CUSTOM `getServerSideProps` code here
-  const data = req.cookies.user;
-  const user = JSON.parse(data!);
+  let user;
+  try {
+    const data = req.cookies.user;
+    user = JSON.parse(data!);
+  } catch (error) {
+    console.log(error);
+  }
   if (user) {
     return { props: { user: user } };
   } else {
