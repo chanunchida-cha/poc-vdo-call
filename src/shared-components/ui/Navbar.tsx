@@ -6,12 +6,17 @@ import { useRouter } from "next/router";
 import { useGetUserQuery } from "@/stores/service/getUserService";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import Cookie from "cookie-universal";
-import { setCallAccepted, setCalling } from "@/stores/slice/videoCallSlice";
+import {
+  setCallAccepted,
+  setCalling,
+  setCalls,
+} from "@/stores/slice/videoCallSlice";
 import Peer from "simple-peer";
 import { startMediaStream } from "@/stores/slice/media/mediaSlice";
 import { toggleMicrophone } from "@/stores/slice/media/toggleMediaSlice";
 import {
   callToDoctor,
+  getNotification,
   setDoctorBusy,
   setDoctorReady,
 } from "@/stores/slice/media/socketMediaSlice";
@@ -141,7 +146,7 @@ export default function Navbar(props: Status) {
                 } flex w-full   flex-row items-center justify-end sm:px-5`}
               >
                 <div
-                  className="cursor-pointer mr-2 flex h-[2rem] w-[3rem] flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[9rem]"
+                  className="mr-2 flex h-[2rem] w-[3rem] cursor-pointer flex-row items-center justify-center rounded-full bg-call-button px-3 text-white sm:w-[9rem]"
                   onClick={() => {
                     logout();
                   }}

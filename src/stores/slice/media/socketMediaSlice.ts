@@ -11,12 +11,12 @@ interface Call {
   signal: any;
 }
 
-type Call={
+type Call = {
   isReceivingCall: boolean;
   from: string;
   name: string;
   signal: any;
-}
+};
 
 type InitialState = {
   socket: Socket;
@@ -37,13 +37,22 @@ const initialState: InitialState = {
 };
 
 const socket = initialState.socket;
+
+export const setDoctorsReady = createAsyncThunk(
+  "socketMedia/setDoctorsReady",
+  async (payload, {}) => {
+    socket.emit("readyToCall", payload);
+  }
+);
+
 export const callToDoctor = createAsyncThunk(
   "socketMedia/callToDoctor",
-  async (name, { getState, dispatch }) => {
+  async (_, { getState, dispatch }) => {
     const stream = getState().mediaStream;
     if (stream !== null) {
       console.log("hello");
       const peer = new Peer({ initiator: true, trickle: false, stream });
+      const name = "user";
       peer.on("signal", (data) => {
         socket.emit("callUser", {
           signal: data,
@@ -56,21 +65,25 @@ export const callToDoctor = createAsyncThunk(
         dispatch(setYourStream(currentStream));
       });
 
-      socket.on("callAccepted", (signal: any) => {
+      socket.on("callAccepted", (signal) => {
         dispatch(setCallAccepted(true));
         peer.signal(signal);
       });
-      initialState.connectionRef = peer;
+      //   initialState.connectionRef = peer;
     }
   }
 );
 
 export const getNotification = createAsyncThunk(
   "socketMedia/getNotification",
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     socket.on("callUser", ({ from, name, signal }) => {
-      initialState.calls.push({ isReceivingCall: true, from, name, signal });
+      dispatch(
+        setCallNotification({ isReceivingCall: true, from, name, signal })
+      );
     });
+    const { calls } = getState().socketMedia;
+    console.log("initialState.calls", calls);
   }
 );
 
@@ -128,14 +141,22 @@ const socketMediaSlice = createSlice({
     setYourStream: (state, action) => {
       state.yourStream = action.payload;
     },
+    setCallNotification: (state, action) => {
+      const { from, name, signal } = action.payload;
+      state.calls.push({ from, name, signal, isReceivingCall: true });
+      console.log("call set", state.calls);
+    },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(setDoctorsReady.fulfilled, (state, action) => {
+        return console.log("work ready");
+      })
       .addCase(callToDoctor.fulfilled, (state, action) => {
         return console.log("work callToDoctor");
       })
       .addCase(getNotification.fulfilled, (state, action) => {
-        return console.log("work getNotification");
+        return console.log("work getNotification", state.calls);
       })
       .addCase(doctorRejectCalling.fulfilled, (state, action) => {
         return console.log("work doctorRejectCalling");
@@ -144,5 +165,9 @@ const socketMediaSlice = createSlice({
 });
 
 export default socketMediaSlice.reducer;
-export const { setDoctorReady, setDoctorBusy, setYourStream } =
-  socketMediaSlice.actions;
+export const {
+  setDoctorReady,
+  setDoctorBusy,
+  setYourStream,
+  setCallNotification,
+} = socketMediaSlice.actions;

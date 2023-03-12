@@ -15,15 +15,14 @@ interface Call {
 
 export default function OverlayCalling() {
   const vidoCall = useAppSelector((state) => state.videoCall);
+  const socketMedia = useAppSelector((state) => state.socketMedia);
   const dispatch = useAppDispatch();
   const firstname =
     typeof window !== "undefined" ? sessionStorage.getItem("firstname") : null;
 
   return (
     <>
-      {vidoCall.calls.map((call: Call) => {
-        console.log(call);
-
+      {socketMedia.calls.map((call: Call) => {
         return (
           <div key={call.from}>
             {call.isReceivingCall && !vidoCall.callAccepted && (

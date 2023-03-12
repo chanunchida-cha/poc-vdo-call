@@ -14,7 +14,10 @@ import { type User } from "@/models/interface/InterfaceUser";
 import { setUserState } from "@/stores/slice/loginSlice";
 import { io } from "socket.io-client";
 import { useSetUserStorage } from "@/hooks/useSetUserStorage";
-import { setDoctorReady } from "@/stores/slice/media/socketMediaSlice";
+import {
+  setDoctorReady,
+  setDoctorsReady,
+} from "@/stores/slice/media/socketMediaSlice";
 
 const schema = yup
   .object({
@@ -28,7 +31,6 @@ function LoginForm() {
   const dispatch = useAppDispatch();
   const route = useRouter();
   const [trigger, { data, isLoading, error }] = useLazyLoginUserQuery();
-  
 
   const {
     register,
@@ -48,12 +50,13 @@ function LoginForm() {
   useSetUserStorage(data, error);
   useEffect(() => {
     if (data?.role === "pharmacy") {
-      dispatch(setDoctorReady({ user_pk: data.id, name: data.firstName }));
+      // dispatch(setDoctorReady({ user_pk: data.id, name: data.firstName }));
+      const payload = { user_pk: data.id, name: data.firstName };
+      dispatch(setDoctorsReady(payload));
     }
   }, [data?.role]);
 
   // ------------------------------
- 
 
   return (
     <>

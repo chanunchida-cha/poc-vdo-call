@@ -1,14 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import ChatUi from "../layouts/ChatUi";
 import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
-
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { startMediaStream } from "@/stores/slice/media/mediaSlice";
-import { callToDoctor } from "@/stores/slice/media/socketMediaSlice";
+import {
+  callToDoctor,
+  getNotification,
+} from "@/stores/slice/media/socketMediaSlice";
 import { User } from "@/models/interface/InterfaceUser";
+import { setCalls } from "@/stores/slice/videoCallSlice";
+export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
-  user: User;
+  user?: User;
 };
 
 function VideoChatForm({ user }: Props) {
@@ -18,11 +22,16 @@ function VideoChatForm({ user }: Props) {
   const yourVideoRef: any = useRef(null);
   const vidoCall = useAppSelector((state) => state.videoCall);
   const yourStream = useAppSelector((state) => state.socketMedia.yourStream);
+  const socket = useAppSelector((state) => state.socketMedia.socket);
 
   useEffect(() => {
     if (mediaStream) {
       myVideoRef.current.srcObject = mediaStream;
-      dispatch(callToDoctor(user.firstName!));
+      dispatch(callToDoctor());
+      dispatch(getNotification());
+      
+    }
+    if (yourStream) {
       yourVideoRef.current.srcObject = yourStream;
     }
   }, [mediaStream]);
@@ -96,7 +105,7 @@ function VideoChatForm({ user }: Props) {
 
             <div className="auto-col-max grid grid-flow-col grid-cols-10 py-4 ">
               <div className=" auto-col-max col-span-9 grid  grid-flow-col grid-cols-7 justify-evenly rounded-xl bg-input-massage p-2 ">
-                <div className=" col-span-1 h-full flex items-center justify-center  ">
+                <div className=" col-span-1 flex h-full items-center justify-center  ">
                   <img
                     src="/assets/images/attach-file.png"
                     alt="attach"
@@ -110,9 +119,8 @@ function VideoChatForm({ user }: Props) {
                   id="exampleFormControlInput1"
                   placeholder="Imput massage"
                 />
-              
               </div>
-              <div className="col-span-1 mx-1 grid h-full items-center justify-items-center rounded-xl bg-input-massage cursor-pointer">
+              <div className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage">
                 <img
                   className=" mx-2 h-[1.5rem] w-[1.5rem]  "
                   src="/assets/images/send.png"
