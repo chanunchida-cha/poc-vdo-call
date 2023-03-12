@@ -1,68 +1,46 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface MediaState {
-  stream: MediaStream | null;
-  error: Error | null;
-  microphone: boolean;
-  video: boolean;
-  myVideo: null;
-}
+// interface MediaState {
+//   stream: MediaStream | null;
+//   error: Error | null;
+//   microphone: boolean;
+//   video: boolean;
+//   myVideo: null;
+// }
 
-const initialState: MediaState = {
-  stream: null,
-  error: null,
-  microphone: true,
-  video: true,
-  myVideo: null,
-};
+// const initialState: MediaState = {
+//   stream: null,
+//   error: null,
+//   microphone: true,
+//   video: true,
+//   myVideo: null,
+// };
 
-const mediaSetting = (constraints: any) => {
-  navigator.mediaDevices
-    .getUserMedia(constraints)
-    .then((stream) => {
-      return console.log("stream", stream);
-    })
-    .catch((error: any) => {
-      //   state.error = error;
-      alert(error);
-      throw new error();
-    });
-};
+export const startMediaStream = createAsyncThunk(
+  "mediaStream/startMediaStream",
+  async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      return stream;
+    } catch (error) {
+      throw new Error("Failed to start media stream");
+    }
+  }
+);
 
 const mediaSlice = createSlice({
-  name: "media",
-  initialState,
-  reducers: {
-    startCapture: (state) => {
-      const constraints = { video: state.video, audio: state.microphone };
-      const stream = mediaSetting(constraints);
-      //   state.stream = stream;
-    },
-    stopCapture: (state) => {
-      state.stream?.getTracks().forEach((track) => track.stop());
-      state.stream = null;
-    },
-    setToggleMicrophone: (state) => {
-      state.microphone = !state;
-      const constraints = { audio: state.microphone };
-      mediaSetting(state, constraints);
-    },
-    setToggleVideo: (state) => {
-      state.video = !state;
-      const constraints = { video: state.video };
-      mediaSetting(state, constraints);
-    },
-    setMyVDORef: (state, action) => {
-      state.myVideo = action.payload;
-    },
+  name: "mediaStream",
+  initialState: null,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(startMediaStream.fulfilled, (state, action) => {
+      return action.payload;
+    });
   },
 });
 
-export const {
-  startCapture,
-  stopCapture,
-  setToggleMicrophone,
-  setToggleVideo,
-  setMyVDORef,
-} = mediaSlice.actions;
+export const {} = mediaSlice.actions;
 export default mediaSlice.reducer;

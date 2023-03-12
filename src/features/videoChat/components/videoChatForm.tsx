@@ -3,18 +3,18 @@ import ChatUi from "../layouts/ChatUi";
 import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
 
 import { useAppDispatch, useAppSelector } from "@/stores/store";
-import { getMedia, startCapture } from "@/stores/slice/media/mediaSlice";
+import { startMediaStream } from "@/stores/slice/media/mediaSlice";
 
 type Props = {};
 
 function VideoChatForm({}: Props) {
   const dispatch = useAppDispatch();
-  const mySteam = useAppSelector((state) => state.media.stream);
-  const myVideoRef: any = useRef(mySteam);
+  const mediaStream = useAppSelector((state) => state.mediaStream);
+  const myVideoRef: any = useRef(null);
 
   useEffect(() => {
-    dispatch(startCapture());
-  }, [mySteam]);
+    mediaStream && (myVideoRef.current.srcObject = mediaStream);
+  }, [mediaStream]);
   return (
     <>
       <ChatUi
@@ -22,14 +22,15 @@ function VideoChatForm({}: Props) {
           <div className="relative h-screen flex-1 basis-1/2  rounded-2xl  lg:mx-4 lg:my-4   ">
             <div className="absolute  h-3/4 w-full md:h-full">
               {/* <div className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6 "></div> */}
-
-              <video
-                playsInline
-                muted
-                ref={myVideoRef}
-                autoPlay
-                className=" h-screen w-full bg-black object-cover  drop-shadow-xl lg:h-5/6 lg:rounded-3xl"
-              />
+              {mediaStream && (
+                <video
+                  playsInline
+                  muted
+                  ref={myVideoRef}
+                  autoPlay
+                  className=" h-screen w-full bg-black object-cover  drop-shadow-xl lg:h-5/6 lg:rounded-3xl"
+                />
+              )}
 
               {/* <div className=" h-full w-full bg-black  object-cover drop-shadow-xl md:rounded-3xl "></div> */}
             </div>
