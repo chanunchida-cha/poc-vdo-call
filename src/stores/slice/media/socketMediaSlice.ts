@@ -28,6 +28,9 @@ const socketMediaSlice = createSlice({
     setDoctorReady: (state, action) => {
       state.socket.emit("readyToCall", action.payload);
     },
+    setDoctorBusy: (state, action) => {
+      state.socket.emit("notReadyToCall", action.payload);
+    },
     callToDoctor: (stat, action) => {
       const stream = store.getState().mediaStream;
       if (stream !== null) {
@@ -47,4 +50,4 @@ const socketMediaSlice = createSlice({
 });
 
 export default socketMediaSlice.reducer;
-export const {} = socketMediaSlice.actions;
+export const {getSocketID,setDoctorReady,setDoctorBusy,callToDoctor } = socketMediaSlice.actions;
