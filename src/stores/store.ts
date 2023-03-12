@@ -12,7 +12,7 @@ const reducer = {
   [GetUser.reducerPath]: GetUser.reducer,
   userState: LoginSlice,
   videoCall: videoCallSlice,
-  media: mediaSlice,
+  mediaStream: mediaSlice,
   overlayStatusSlice,
 };
 
