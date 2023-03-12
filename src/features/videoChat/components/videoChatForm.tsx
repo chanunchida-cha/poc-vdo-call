@@ -5,19 +5,27 @@ import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMut
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { startMediaStream } from "@/stores/slice/media/mediaSlice";
 import { callToDoctor } from "@/stores/slice/media/socketMediaSlice";
+import { User } from "@/models/interface/InterfaceUser";
 
-type Props = {};
+type Props = {
+  user: User;
+};
 
-function VideoChatForm({}: Props) {
+function VideoChatForm({ user }: Props) {
   const dispatch = useAppDispatch();
   const mediaStream = useAppSelector((state) => state.mediaStream);
   const myVideoRef: any = useRef(null);
-  const microphone = useAppSelector((state) => state.toggleMedia.microphone);
+  const yourVideoRef: any = useRef(null);
+  const vidoCall = useAppSelector((state) => state.videoCall);
+  const yourStream = useAppSelector((state) => state.socketMedia.yourStream);
 
   useEffect(() => {
-    mediaStream && (myVideoRef.current.srcObject = mediaStream);
-    mediaStream &&  dispatch(callToDoctor());
-  }, [mediaStream, microphone]);
+    if (mediaStream) {
+      myVideoRef.current.srcObject = mediaStream;
+      dispatch(callToDoctor(user.firstName!));
+      yourVideoRef.current.srcObject = yourStream;
+    }
+  }, [mediaStream]);
   return (
     <>
       <ChatUi
@@ -38,15 +46,15 @@ function VideoChatForm({}: Props) {
               {/* <div className=" h-full w-full bg-black  object-cover drop-shadow-xl md:rounded-3xl "></div> */}
             </div>
 
-            {/* {vidoCall.callAccepted && !vidoCall.callEnded && (
+            {vidoCall.callAccepted && !vidoCall.callEnded && (
               <video
                 playsInline
                 muted
-                ref={userVideo}
+                ref={yourVideoRef}
                 autoPlay
                 className="absolute right-0 m-4 h-[8rem] w-[12rem] rounded-2xl bg-slate-600 sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
               />
-            )} */}
+            )}
             <div className="absolute bottom-20 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around md:bottom-[4rem] lg:bottom-[10rem]  ">
               <ToggleCallMuteDeclined />
             </div>

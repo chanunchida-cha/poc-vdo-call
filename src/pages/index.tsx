@@ -24,9 +24,9 @@ function index(props: Props) {
   return (
     <>
       {vidoCall.calling && !vidoCall.callAccepted ? (
-        <VideoChatForm />
+        <VideoChatForm user={user} />
       ) : data?.role === "pharmacy" && vidoCall.callAccepted ? (
-        <VideoChatForm />
+        <VideoChatForm user={user} />
       ) : data?.role === "pharmacy" ? (
         <DoctorChat user={user} />
       ) : (
