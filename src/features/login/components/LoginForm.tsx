@@ -14,6 +14,7 @@ import { type User } from "@/models/interface/InterfaceUser";
 import { setUserState } from "@/stores/slice/loginSlice";
 import { io } from "socket.io-client";
 import { useSetUserStorage } from "@/hooks/useSetUserStorage";
+import { setDoctorReady } from "@/stores/slice/media/socketMediaSlice";
 
 const schema = yup
   .object({
@@ -24,7 +25,6 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 function LoginForm() {
- 
   const dispatch = useAppDispatch();
   const route = useRouter();
   const [trigger, { data, isLoading, error }] = useLazyLoginUserQuery();
@@ -44,15 +44,11 @@ function LoginForm() {
       password: item.Password,
     });
   };
-// ------ UseEffect and Hook -------
+  // ------ UseEffect and Hook -------
   useSetUserStorage(data, error);
   useEffect(() => {
     if (data?.role === "pharmacy") {
-      vidoCall.socket.emit("readyToCall", {
-        user_pk: data.id,
-        name: data.firstName,
-      });
-      console.log("pharmacy");
+      dispatch(setDoctorReady({ user_pk: data.id, name: data.firstName }));
     }
   }, [data?.role]);
 

@@ -50,4 +50,5 @@ const socketMediaSlice = createSlice({
 });
 
 export default socketMediaSlice.reducer;
-export const {getSocketID,setDoctorReady,setDoctorBusy,callToDoctor } = socketMediaSlice.actions;
+export const { getSocketID, setDoctorReady, setDoctorBusy, callToDoctor } =
+  socketMediaSlice.actions;
