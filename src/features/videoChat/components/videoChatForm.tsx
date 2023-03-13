@@ -9,6 +9,7 @@ import {
 } from "@/stores/slice/media/socketMediaSlice";
 import { User } from "@/models/interface/InterfaceUser";
 import { setCalls } from "@/stores/slice/videoCallSlice";
+import { sendChat } from "@/stores/slice/chat/chatSlice";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
@@ -50,20 +51,12 @@ function VideoChatForm({ user }: Props) {
     }
   }, [yourStream]);
 
-  const sendChat = () => {
-    socket.emit("sendChat", {
-      user_pk: user?.id!,
-      name: user?.firstName!,
-      message: text,
-    });
-    setText("");
-  };
-
-  socket.on("sendChat", (data) => {
-    console.log(data);
-    setChat([...chat, data]);
+useEffect(() => {
+  socket.on("sendChat", ({ user_pk, name, message }) => {
+    setChat([...chat, { user_pk, name, message }]);
   });
 
+}, [chat])
   console.log("chat", chat);
 
   return (
@@ -111,17 +104,16 @@ function VideoChatForm({ user }: Props) {
                 return (
                   <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
                     {text.name === user?.firstName ? (
-                       <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
-                       <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
-                         {text.message}
-                       </p>
-                       <img
-                         src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
-                         alt="image"
-                         className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
-                       />
-                     </div>
-                      
+                      <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
+                        <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
+                          {text.message}
+                        </p>
+                        <img
+                          src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
+                          alt="image"
+                          className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
+                        />
+                      </div>
                     ) : (
                       <div className=" flex flex-row  items-end justify-start space-x-2 p-4 ">
                         <img
@@ -134,7 +126,6 @@ function VideoChatForm({ user }: Props) {
                           {text.message}
                         </p>
                       </div>
-                     
                     )}
 
                     <div className="flex justify-end p-4"></div>
@@ -164,7 +155,16 @@ function VideoChatForm({ user }: Props) {
               </div>
               <div
                 className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage"
-                onClick={sendChat}
+                onClick={() => {
+                  dispatch(
+                    sendChat({
+                      user_pk: user?.id!,
+                      name: user?.firstName!,
+                      message: text,
+                    })
+                  );
+                  setText("");
+                }}
               >
                 <img
                   className=" mx-2 h-[1.5rem] w-[1.5rem]  "
