@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import ChatUi from "../layouts/ChatUi";
 import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
@@ -9,7 +9,6 @@ import {
 } from "@/stores/slice/media/socketMediaSlice";
 import { User } from "@/models/interface/InterfaceUser";
 import { setCalls } from "@/stores/slice/videoCallSlice";
-import { sendChat } from "@/stores/slice/chat/chatSlice";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
@@ -25,11 +24,15 @@ interface Call {
 function VideoChatForm({ user }: Props) {
   const dispatch = useAppDispatch();
   const mediaStream = useAppSelector((state) => state.mediaStream);
+  const yourStream = useAppSelector((state) => state.socketMedia.yourStream);
   const myVideoRef: any = useRef(null);
   const yourVideoRef: any = useRef(null);
   const vidoCall = useAppSelector((state) => state.videoCall);
-  const yourStream = useAppSelector((state) => state.socketMedia.yourStream);
   const [text, setText] = useState("");
+  const socket = useAppSelector((state) => state.socketMedia.socket);
+  const [chat, setChat] = useState<
+    { user_pk: string; name: string; massage: string }[]
+  >([]);
 
   useEffect(() => {
     if (mediaStream) {
@@ -37,13 +40,30 @@ function VideoChatForm({ user }: Props) {
       dispatch(callToDoctor());
       dispatch(getNotification());
     }
+  }, [mediaStream]);
+  useEffect(() => {
     if (yourStream) {
       yourVideoRef.current.srcObject = yourStream;
     }
-  }, [mediaStream, yourStream]);
+  }, [yourStream]);
 
-  console.log("myvideo", myVideoRef);
-  console.log("yourVideoRef", yourVideoRef);
+  const sendChat = () => {
+    socket.emit("sendChat", {
+      user_pk: user?.id!,
+      name: user?.firstName!,
+      massage: text,
+    });
+    setText("");
+  };
+
+  socket.on("sendChat", (data) => {
+    console.log(data);
+    
+    setChat([...chat, data]);
+  });
+
+  console.log("chat",chat);
+  
 
   return (
     <>
@@ -65,7 +85,7 @@ function VideoChatForm({ user }: Props) {
               {/* <div className=" h-full w-full bg-black  object-cover drop-shadow-xl md:rounded-3xl "></div> */}
             </div>
 
-            {vidoCall.callAccepted && !vidoCall.callEnded && (
+            {vidoCall.callAccepted && (
               <video
                 playsInline
                 muted
@@ -86,31 +106,38 @@ function VideoChatForm({ user }: Props) {
                 Yok Park
               </p>
               <div className=" mx-6 h-px bg-primary"></div>
-              <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
-                <div className=" flex flex-row  items-end justify-start space-x-2 p-4 ">
-                  <img
-                    src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
-                    alt="image"
-                    className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
-                  />
+              {chat.map((text) => {
+                return (
+                  <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
+                    {text.user_pk === user?.id ? (
+                      <div className=" flex flex-row  items-end justify-start space-x-2 p-4 ">
+                        <img
+                          src={`https://ui-avatars.com/api/?name= ${user?.firstName}`}
+                          alt="image"
+                          className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
+                        />
 
-                  <p className=" text-strat sm:text-strat mx-4 flex items-center rounded-tr-2xl rounded-br-2xl rounded-tl-2xl  bg-slate-200 p-4 before:content-[attr(before)]">
-                    เราจะได้พบกันอีกไหม
-                  </p>
-                </div>
-                <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
-                  <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
-                    โอ้ว อย่าเลยอย่าพบชั้น!!!
-                  </p>
-                  <img
-                    src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
-                    alt="image"
-                    className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
-                  />
-                </div>
+                        <p className=" text-strat sm:text-strat mx-4 flex items-center rounded-tr-2xl rounded-br-2xl rounded-tl-2xl  bg-slate-200 p-4 before:content-[attr(before)]">
+                          {text.massage}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
+                        <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
+                          {text.massage}
+                        </p>
+                        <img
+                          src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
+                          alt="image"
+                          className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
+                        />
+                      </div>
+                    )}
 
-                <div className="flex justify-end p-4"></div>
-              </div>
+                    <div className="flex justify-end p-4"></div>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="auto-col-max grid grid-flow-col grid-cols-10 py-4 ">
@@ -134,15 +161,7 @@ function VideoChatForm({ user }: Props) {
               </div>
               <div
                 className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage"
-                onClick={() => {
-                  dispatch(
-                    sendChat({
-                      user_pk: user?.id,
-                      name: user?.firstName,
-                      massage: text,
-                    })
-                  );
-                }}
+                onClick={sendChat}
               >
                 <img
                   className=" mx-2 h-[1.5rem] w-[1.5rem]  "

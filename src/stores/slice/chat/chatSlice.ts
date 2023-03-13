@@ -1,4 +1,4 @@
-import { Chat } from "@/models/interface/interfaceChatHistory";
+
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Chat = {

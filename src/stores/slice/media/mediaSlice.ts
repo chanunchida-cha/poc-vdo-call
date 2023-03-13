@@ -19,7 +19,7 @@ export const startMediaStream = createAsyncThunk(
 
 export const stopMediaStream = createAsyncThunk(
   "mediaStream/stopMediaStream",
-  async (stream) => {
+  async (stream:MediaStream) => {
     try {
       if (stream) {
         stream.getTracks().forEach((track: any) => track.stop());
