@@ -14,6 +14,7 @@ import { GetChatLogByRoomId } from "./service/getLogChatService";
 import mediaSlice from "./slice/media/mediaSlice";
 import toggleMediaSlice from "./slice/media/toggleMediaSlice";
 import socketMediaSlice from "./slice/media/socketMediaSlice";
+import chatSlice from "./slice/chat/chatSlice";
 
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -27,6 +28,7 @@ const reducer = {
   mediaStream: mediaSlice,
   toggleMedia: toggleMediaSlice,
   socketMedia: socketMediaSlice,
+  sendChat:chatSlice,
   overlayStatusSlice,
 };
 

@@ -1,11 +1,12 @@
-
+import { Socket } from "socket.io-client";
+import { store } from "@/stores/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Chat = {
+interface Chat {
   user_pk: string;
   name: string;
   message: string;
-};
+}
 
 type InitialState = {
   chat: Chat[];
@@ -15,19 +16,29 @@ const initialState: InitialState = {
   chat: [],
 };
 
+export const sendChat = createAsyncThunk(
+  "sendChat/sendChat",
+  async (info: Chat, { getState, dispatch }) => {
+    const { user_pk, name, message } = info;
+    const { socket } = getState().socketMedia;
+    socket.emit("sendChat", { user_pk, name, message });
+  }
+);
+
 const chatSlice = createSlice({
-  name: "chat",
+  name: "sendChat",
   initialState,
   reducers: {
-    sendChat: (state, action) => {
-      const { socket } = getState().socketMedia;
-      socket.emit("sendChat", action.payload);
-      socket.on("sendChat", (data: Chat) => {
-        initialState.chat.push(data);
-      });
+    setChat: (state, action) => {
+      state.chat.push(action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(sendChat.fulfilled, (state, action) => {
+      return console.log("work send chat");
+    });
   },
 });
 
 export default chatSlice.reducer;
-export const { sendChat } = chatSlice.actions;
+export const { setChat } = chatSlice.actions;

@@ -9,6 +9,7 @@ import {
 } from "@/stores/slice/media/socketMediaSlice";
 import { User } from "@/models/interface/InterfaceUser";
 import { setCalls } from "@/stores/slice/videoCallSlice";
+import { sendChat } from "@/stores/slice/chat/chatSlice";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
@@ -49,20 +50,12 @@ function VideoChatForm({ user }: Props) {
     console.log("yourStream", yourStream);
   });
 
-  const sendChat = () => {
-    socket.emit("sendChat", {
-      user_pk: user?.id!,
-      name: user?.firstName!,
-      message: text,
-    });
-    setText("");
-  };
-
-  socket.on("sendChat", (data) => {
-    console.log(data);
-    setChat([...chat, data]);
+useEffect(() => {
+  socket.on("sendChat", ({ user_pk, name, message }) => {
+    setChat([...chat, { user_pk, name, message }]);
   });
 
+}, [chat])
   console.log("chat", chat);
 
   return (
@@ -161,7 +154,16 @@ function VideoChatForm({ user }: Props) {
               </div>
               <div
                 className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage"
-                onClick={sendChat}
+                onClick={() => {
+                  dispatch(
+                    sendChat({
+                      user_pk: user?.id!,
+                      name: user?.firstName!,
+                      message: text,
+                    })
+                  );
+                  setText("");
+                }}
               >
                 <img
                   className=" mx-2 h-[1.5rem] w-[1.5rem]  "
