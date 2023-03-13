@@ -6,6 +6,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Peer from "simple-peer";
 import { setCallAccepted, setCallEnded } from "../videoCallSlice";
 import { GetUser } from "@/stores/service/getUserService";
+import { startMediaStream } from "./mediaSlice";
 
 interface Call {
   isReceivingCall: boolean;
@@ -53,18 +54,20 @@ export const callToDoctor = createAsyncThunk(
       peer.on("signal", (data) => {
         socket.emit("callUser", {
           signal: data,
+          from: user?.firstName,
           name: user?.firstName,
           user_pk: user?.id,
-          from: user?.firstName,
         });
-      });
-      peer.on("stream", (currentStream) => {
-        dispatch(setYourStream(currentStream));
       });
 
       socket.on("callAccepted", (signal) => {
         dispatch(setCallAccepted(true));
         peer.signal(signal);
+      });
+
+      peer.on("stream", (currentStream) => {
+        if (!currentStream) return alert("not have yourStream");
+        dispatch(setYourStream(currentStream));
       });
       //   initialState.connectionRef = peer;
     }
@@ -100,6 +103,7 @@ export const acceptCall = createAsyncThunk(
   "socketMedia/acceptCall",
   async (info: Call, { getState, dispatch }) => {
     dispatch(setCallAccepted(true));
+    dispatch(startMediaStream());
     const stream = getState().mediaStream;
     const peer = new Peer({ initiator: false, trickle: false, stream });
 

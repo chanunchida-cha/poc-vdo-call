@@ -42,13 +42,12 @@ function VideoChatForm({ user }: Props) {
     }
   }, [mediaStream]);
 
-  console.log(user);
-
   useEffect(() => {
     if (yourStream) {
       yourVideoRef.current.srcObject = yourStream;
     }
-  }, [yourStream]);
+    console.log("yourStream", yourStream);
+  });
 
   const sendChat = () => {
     socket.emit("sendChat", {
@@ -111,17 +110,16 @@ function VideoChatForm({ user }: Props) {
                 return (
                   <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
                     {text.name === user?.firstName ? (
-                       <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
-                       <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
-                         {text.message}
-                       </p>
-                       <img
-                         src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
-                         alt="image"
-                         className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
-                       />
-                     </div>
-                      
+                      <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
+                        <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
+                          {text.message}
+                        </p>
+                        <img
+                          src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
+                          alt="image"
+                          className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
+                        />
+                      </div>
                     ) : (
                       <div className=" flex flex-row  items-end justify-start space-x-2 p-4 ">
                         <img
@@ -134,7 +132,6 @@ function VideoChatForm({ user }: Props) {
                           {text.message}
                         </p>
                       </div>
-                     
                     )}
 
                     <div className="flex justify-end p-4"></div>
