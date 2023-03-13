@@ -1,19 +1,24 @@
 import ToggleButtonPharmacy from "@/shared-components/components/ToggleButtonPharmacy";
-import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
-import { useGetUserQuery } from "@/stores/service/getUserService";
-import { setCallAccepted } from "@/stores/slice/videoCallSlice";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
-import { useEffect, useRef, useState } from "react";
-import Peer from "simple-peer";
+import { useEffect, useState } from "react";
+
+import { User } from "@/models/interface/InterfaceUser";
+
+export { default as getServerSideProps } from "@/utils/getServerSideProps";
+
+type Props = {
+  user?: User;
+};
 
 interface Call {
   isReceivingCall: boolean;
   from: string;
   name: string;
   signal: any;
+  user_pk: string;
 }
 
-export default function OverlayCalling() {
+export default function OverlayCalling({ user }: Props) {
   const vidoCall = useAppSelector((state) => state.videoCall);
   const socketMedia = useAppSelector((state) => state.socketMedia);
   const dispatch = useAppDispatch();
@@ -21,14 +26,16 @@ export default function OverlayCalling() {
   const [calls, setCalls] = useState<Call[]>([]);
 
   useEffect(() => {
-    socket.on("callUser", ({ from, name: callerName, signal }) => {
+    socket.on("callUser", ({ from, name, signal, user_pk }) => {
       console.log("ทำงาน");
       setCalls([
         ...calls,
-        { isReceivingCall: true, from, name: callerName, signal },
+        { isReceivingCall: true, from, name, signal, user_pk },
       ]);
     });
   }, [calls]);
+
+  console.log("calls", calls);
 
   return (
     <>

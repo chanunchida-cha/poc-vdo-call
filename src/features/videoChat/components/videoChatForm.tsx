@@ -12,7 +12,7 @@ import { setCalls } from "@/stores/slice/videoCallSlice";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
-  user?: User;
+  user: User;
 };
 
 interface Call {
@@ -31,16 +31,19 @@ function VideoChatForm({ user }: Props) {
   const [text, setText] = useState("");
   const socket = useAppSelector((state) => state.socketMedia.socket);
   const [chat, setChat] = useState<
-    { user_pk: string; name: string; massage: string }[]
+    { user_pk: string; name: string; message: string }[]
   >([]);
 
   useEffect(() => {
     if (mediaStream) {
       myVideoRef.current.srcObject = mediaStream;
-      dispatch(callToDoctor());
+      dispatch(callToDoctor(user!));
       dispatch(getNotification());
     }
   }, [mediaStream]);
+
+  console.log(user);
+
   useEffect(() => {
     if (yourStream) {
       yourVideoRef.current.srcObject = yourStream;
@@ -51,19 +54,17 @@ function VideoChatForm({ user }: Props) {
     socket.emit("sendChat", {
       user_pk: user?.id!,
       name: user?.firstName!,
-      massage: text,
+      message: text,
     });
     setText("");
   };
 
   socket.on("sendChat", (data) => {
     console.log(data);
-    
     setChat([...chat, data]);
   });
 
-  console.log("chat",chat);
-  
+  console.log("chat", chat);
 
   return (
     <>
@@ -109,7 +110,19 @@ function VideoChatForm({ user }: Props) {
               {chat.map((text) => {
                 return (
                   <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
-                    {text.user_pk === user?.id ? (
+                    {text.name === user?.firstName ? (
+                       <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
+                       <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
+                         {text.message}
+                       </p>
+                       <img
+                         src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
+                         alt="image"
+                         className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
+                       />
+                     </div>
+                      
+                    ) : (
                       <div className=" flex flex-row  items-end justify-start space-x-2 p-4 ">
                         <img
                           src={`https://ui-avatars.com/api/?name= ${user?.firstName}`}
@@ -118,20 +131,10 @@ function VideoChatForm({ user }: Props) {
                         />
 
                         <p className=" text-strat sm:text-strat mx-4 flex items-center rounded-tr-2xl rounded-br-2xl rounded-tl-2xl  bg-slate-200 p-4 before:content-[attr(before)]">
-                          {text.massage}
+                          {text.message}
                         </p>
                       </div>
-                    ) : (
-                      <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
-                        <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
-                          {text.massage}
-                        </p>
-                        <img
-                          src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
-                          alt="image"
-                          className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
-                        />
-                      </div>
+                     
                     )}
 
                     <div className="flex justify-end p-4"></div>

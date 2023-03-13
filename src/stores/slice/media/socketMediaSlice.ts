@@ -1,15 +1,18 @@
+import { useGetUserQuery } from "@/stores/service/getUserService";
+import { User } from "@/models/interface/InterfaceUser";
 import { serviceName } from "@/models/const/routeName";
 import { io, Socket } from "socket.io-client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Peer from "simple-peer";
 import { setCallAccepted, setCallEnded } from "../videoCallSlice";
-
+import { GetUser } from "@/stores/service/getUserService";
 
 interface Call {
   isReceivingCall: boolean;
   from: string;
   name: string;
   signal: any;
+  user_pk: string;
 }
 
 type InitialState = {
@@ -41,18 +44,18 @@ export const setDoctorsReady = createAsyncThunk(
 
 export const callToDoctor = createAsyncThunk(
   "socketMedia/callToDoctor",
-  async (_, { getState, dispatch }) => {
+  async (user: User, { getState, dispatch }) => {
     const stream = getState().mediaStream;
     if (stream !== null) {
       console.log("hello");
       const peer = new Peer({ initiator: true, trickle: false, stream });
-      const name = "user";
+
       peer.on("signal", (data) => {
         socket.emit("callUser", {
           signal: data,
-          name,
-          user_pk: "180a6482-6ef8-4d11-8db5-894b341bdf9d",
-          to: "",
+          name: user?.firstName,
+          user_pk: user?.id,
+          from: user?.firstName,
         });
       });
       peer.on("stream", (currentStream) => {
@@ -100,8 +103,13 @@ export const acceptCall = createAsyncThunk(
     const stream = getState().mediaStream;
     const peer = new Peer({ initiator: false, trickle: false, stream });
 
-    peer.on("signal", (data) => {
-      socket.emit("answerCall", { signal: data, to: info.from });
+    peer.on("signal", (item) => {
+      socket.emit("answerCall", {
+        signal: item,
+        user_pk: info.user_pk,
+        to: info.from,
+        name: info.name,
+      });
     });
 
     peer.on("stream", (currentStream) => {
@@ -137,8 +145,8 @@ const socketMediaSlice = createSlice({
       state.yourStream = action.payload;
     },
     setCallNotification: (state, action) => {
-      const { from, name, signal } = action.payload;
-      state.calls.push({ from, name, signal, isReceivingCall: true });
+      const { from, name, signal, user_pk } = action.payload;
+      state.calls.push({ from, name, signal, isReceivingCall: true, user_pk });
       console.log("call set", state.calls);
     },
   },

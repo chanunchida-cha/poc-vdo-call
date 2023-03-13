@@ -24,16 +24,16 @@ function index(props: Props) {
   return (
     <>
       {vidoCall.calling ? (
-        <VideoChatForm />
+        <VideoChatForm user={user} />
       ) : data?.role === "pharmacy" && vidoCall.callAccepted ? (
-        <VideoChatForm />
+        <VideoChatForm user={user} />
       ) : data?.role === "pharmacy" ? (
         <DoctorChat user={user} />
       ) : (
         <UserChat user={user} />
       )}
 
-      <OverlayCalling />
+      <OverlayCalling user={user} />
     </>
   );
 }

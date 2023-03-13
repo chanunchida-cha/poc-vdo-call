@@ -20,14 +20,21 @@ interface Call {
   from: string;
   name: string;
   signal: any;
+  user_pk:string
 }
 interface Props {
   onClickVDO?: (status: boolean) => void;
+  user?: User;
 
   call: Call;
 }
+import { User } from "@/models/interface/InterfaceUser";
 
-export default function ToggleButtonPharmacy({ call }: Props) {
+export { default as getServerSideProps } from "@/utils/getServerSideProps";
+
+
+
+export default function ToggleButtonPharmacy({ call ,user }: Props) {
   const dispatch = useAppDispatch();
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
 
