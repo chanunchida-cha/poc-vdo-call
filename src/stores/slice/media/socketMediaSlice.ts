@@ -56,6 +56,7 @@ export const callToDoctor = createAsyncThunk(
           name: user?.firstName,
           user_pk: user?.id,
           from: user?.firstName,
+          patientName: user?.firstName,
         });
       });
       peer.on("stream", (currentStream) => {
@@ -109,6 +110,7 @@ export const acceptCall = createAsyncThunk(
         user_pk: info.user_pk,
         to: info.from,
         name: info.name,
+        pharmacyName: info.name,
       });
     });
 
