@@ -20,11 +20,11 @@ interface Call {
   from: string;
   name: string;
   signal: any;
-  user_pk:string
+  user_pk: string;
 }
 interface Props {
   onClickVDO?: (status: boolean) => void;
-  user?: User;
+  user: User;
 
   call: Call;
 }
@@ -32,9 +32,7 @@ import { User } from "@/models/interface/InterfaceUser";
 
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
-
-
-export default function ToggleButtonPharmacy({ call ,user }: Props) {
+export default function ToggleButtonPharmacy({ call, user }: Props) {
   const dispatch = useAppDispatch();
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
 
@@ -59,7 +57,7 @@ export default function ToggleButtonPharmacy({ call ,user }: Props) {
         {statusOverlay ? (
           <div
             onClick={() => {
-              dispatch(acceptCall(call));
+              dispatch(acceptCall({ call: call, user: user }));
             }}
           >
             <SlCallIn className="hover:brightness-[0.75] " />
@@ -67,7 +65,7 @@ export default function ToggleButtonPharmacy({ call ,user }: Props) {
         ) : (
           <div
             onClick={() => {
-              dispatch(acceptCall(call));
+              dispatch(acceptCall({ call: call, user: user }));
             }}
           >
             <SlCallIn className="hover:brightness-[0.75] " />

@@ -40,6 +40,8 @@ function UserChat({ user }: Props): ReactElement {
     getHistoryById();
   }, [historyId]);
 
+  console.log("roomId", history?.roomID);
+
   return (
     <div>
       <ChatLayout>

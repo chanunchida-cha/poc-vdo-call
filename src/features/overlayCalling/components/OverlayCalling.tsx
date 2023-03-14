@@ -58,7 +58,7 @@ export default function OverlayCalling({ user }: Props) {
                       Calling...
                     </div>
                   </div>
-                  <ToggleButtonPharmacy call={call} />
+                  <ToggleButtonPharmacy call={call} user={user!}  />
                 </div>
               </div>
             )}

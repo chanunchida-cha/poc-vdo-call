@@ -25,6 +25,11 @@ type InitialState = {
   calls: Call[];
 };
 
+interface Payload {
+  call: Call;
+  user: User;
+}
+
 const initialState: InitialState = {
   mySocketID: "",
   yourStream: null,
@@ -57,7 +62,6 @@ export const callToDoctor = createAsyncThunk(
           from: user?.firstName,
           name: user?.firstName,
           user_pk: user?.id,
-          from: user?.firstName,
           patientName: user?.firstName,
         });
       });
@@ -103,7 +107,7 @@ export const doctorRejectCalling = createAsyncThunk(
 
 export const acceptCall = createAsyncThunk(
   "socketMedia/acceptCall",
-  async (info: Call, { getState, dispatch }) => {
+  async (payload: Payload, { getState, dispatch }) => {
     dispatch(setCallAccepted(true));
     dispatch(startMediaStream());
     const stream = getState().mediaStream;
@@ -112,10 +116,10 @@ export const acceptCall = createAsyncThunk(
     peer.on("signal", (item) => {
       socket.emit("answerCall", {
         signal: item,
-        user_pk: info.user_pk,
-        to: info.from,
-        name: info.name,
-        pharmacyName: info.name,
+        user_pk: payload.user.id,
+        to: payload.call.from,
+        name: payload.user.firstName,
+        pharmacyName: payload.user.firstName,
       });
     });
 
@@ -123,7 +127,7 @@ export const acceptCall = createAsyncThunk(
       dispatch(setYourStream(currentStream));
     });
 
-    peer.signal(info.signal);
+    peer.signal(payload.call.signal);
     initialState.connectionRef = peer;
     console.log("ทำงาน");
   }
