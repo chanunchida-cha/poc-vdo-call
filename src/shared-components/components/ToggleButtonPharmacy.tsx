@@ -41,7 +41,7 @@ export default function ToggleButtonPharmacy({ call, user }: Props) {
 
   return (
     <div className="mb-[4rem] flex justify-center ">
-      <div className=" flex cursor-pointer items-center justify-center pl-[4rem]">
+      <div className=" flex cursor-pointer items-center justify-center px-4 pl-[4rem]">
         <div
           className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
           onClick={() => setMute(!onMute)}
@@ -53,7 +53,7 @@ export default function ToggleButtonPharmacy({ call, user }: Props) {
           />
         </div>
       </div>
-      <div className="flex cursor-pointer items-center justify-center rounded-full  bg-primary-light text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
+      <div className="ml-3 mr-3  flex cursor-pointer items-center justify-center rounded-full bg-primary-light  pr-[4rem] text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
         {statusOverlay ? (
           <div
             onClick={() => {
@@ -72,7 +72,7 @@ export default function ToggleButtonPharmacy({ call, user }: Props) {
           </div>
         )}
       </div>
-      <div className="flex cursor-pointer items-center justify-center rounded-full  bg-red-600 text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
+      <div className="ml-3 mr-3  flex cursor-pointer items-center justify-center rounded-full bg-red-600  pr-[4rem] text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
         {statusOverlay ? (
           <div onClick={() => dispatch(setOverlayStatus())}>
             <SlCallEnd className="hover:brightness-[0.75] " />
