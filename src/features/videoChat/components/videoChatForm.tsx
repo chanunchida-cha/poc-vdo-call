@@ -2,14 +2,17 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import ChatUi from "../layouts/ChatUi";
 import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMuteDeclined";
 import { useAppDispatch, useAppSelector } from "@/stores/store";
-import { startMediaStream } from "@/stores/slice/media/mediaSlice";
 import {
   callToDoctor,
   getNotification,
 } from "@/stores/slice/media/socketMediaSlice";
 import { User } from "@/models/interface/InterfaceUser";
-import { setCalls } from "@/stores/slice/videoCallSlice";
+import { IoChevronBackCircle } from "react-icons/io5";
 import { sendChat } from "@/stores/slice/chat/chatSlice";
+import {
+  ChatMessageMe,
+  ChatMessageOther,
+} from "@/features/chat/components/ChatMessage";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
@@ -31,9 +34,8 @@ function VideoChatForm({ user }: Props) {
   const vidoCall = useAppSelector((state) => state.videoCall);
   const [text, setText] = useState("");
   const socket = useAppSelector((state) => state.socketMedia.socket);
-  const [chat, setChat] = useState<
-    { user_pk: string; name: string; message: string }[]
-  >([]);
+  const [onChat, setOnChat] = useState(false);
+  const [chat, setChat] = useState<{ user_pk: string; message: string ,role:string}[]>([]);
 
   useEffect(() => {
     if (mediaStream) {
@@ -50,12 +52,11 @@ function VideoChatForm({ user }: Props) {
     console.log("yourStream", yourStream);
   });
 
-useEffect(() => {
-  socket.on("sendChat", ({ user_pk, name, message }) => {
-    setChat([...chat, { user_pk, name, message }]);
-  });
-
-}, [chat])
+  useEffect(() => {
+    socket.on("sendChat", ({ user_pk, message,role }) => {
+      setChat([...chat, { user_pk, message,role }]);
+    });
+  }, [chat]);
   console.log("chat", chat);
 
   return (
@@ -88,7 +89,7 @@ useEffect(() => {
               />
             )}
             <div className="absolute bottom-20 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around md:bottom-[4rem] lg:bottom-[10rem]  ">
-              <ToggleCallMuteDeclined />
+              <ToggleCallMuteDeclined setOnChat={setOnChat} />
             </div>
           </div>
         }
@@ -100,31 +101,22 @@ useEffect(() => {
               </p>
               <div className=" mx-6 h-px bg-primary"></div>
               {chat.map((text) => {
+                console.log(text.user_pk);
+                console.log(user?.firstName);
                 return (
                   <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
-                    {text.name === user?.firstName ? (
-                      <div className=" flex flex-row  items-end justify-end space-x-2 p-4">
-                        <p className=" text-strat mx-2 flex items-center rounded-tr-2xl rounded-bl-2xl rounded-tl-2xl bg-slate-200 p-4 before:content-[attr(before)]">
-                          {text.message}
-                        </p>
-                        <img
-                          src="https://i.pinimg.com/originals/a2/10/97/a210973a8646e616ae36e19a977aecd3.jpg"
-                          alt="image"
-                          className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
-                        />
-                      </div>
+                    {text.user_pk === user?.firstName ? (
+                      <ChatMessageMe
+                        name={text.user_pk}
+                        avatar={`https://ui-avatars.com/api/?name= ${text.user_pk}`}
+                        message={text.message}
+                      />
                     ) : (
-                      <div className=" flex flex-row  items-end justify-start space-x-2 p-4 ">
-                        <img
-                          src={`https://ui-avatars.com/api/?name= ${user?.firstName}`}
-                          alt="image"
-                          className="h-10 w-10 rounded-full border-none object-cover align-middle shadow-lg"
-                        />
-
-                        <p className=" text-strat sm:text-strat mx-4 flex items-center rounded-tr-2xl rounded-br-2xl rounded-tl-2xl  bg-slate-200 p-4 before:content-[attr(before)]">
-                          {text.message}
-                        </p>
-                      </div>
+                      <ChatMessageOther
+                        name={text.user_pk}
+                        avatar={`https://ui-avatars.com/api/?name= ${text.user_pk}`}
+                        message={text.message}
+                      />
                     )}
 
                     <div className="flex justify-end p-4"></div>
@@ -157,9 +149,9 @@ useEffect(() => {
                 onClick={() => {
                   dispatch(
                     sendChat({
-                      user_pk: user?.id!,
-                      name: user?.firstName!,
+                      user_pk: user?.firstName!,
                       message: text,
+                      role: user?.role!,
                     })
                   );
                   setText("");
@@ -174,6 +166,90 @@ useEffect(() => {
             </div>
           </div>
         }
+        chatMobile={
+          <div className="h-screen w-screen bg-white">
+            <div className="h-screen">
+              <div className="mt-[4rem] h-[80%] w-full rounded-2xl bg-white drop-shadow-xl">
+                <div className="mx-6 flex items-center pb-2 pt-2">
+                  <button
+                    className="text-4xl text-gray-500"
+                    onClick={() => setOnChat(false)}
+                  >
+                    <IoChevronBackCircle />
+                  </button>
+                  <span className="ml-3 text-2xl text-primary">Yok Park</span>
+                </div>
+
+                <div className=" mx-6 h-px bg-primary"></div>
+                <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
+                  {chat.map((text) => {
+                    return (
+                      <>
+                        {text.user_pk === user?.firstName ? (
+                          <ChatMessageMe
+                            name={text.user_pk}
+                            avatar={`https://ui-avatars.com/api/?name= ${text.user_pk}`}
+                            message={text.message}
+                          />
+                        ) : (
+                          <ChatMessageOther
+                            name={text.user_pk}
+                            avatar={`https://ui-avatars.com/api/?name= ${text.user_pk}`}
+                            message={text.message}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="auto-col-max grid grid-flow-col grid-cols-4 py-4 ">
+                <div className="auto-col-max col-span-3 grid  grid-flow-col grid-cols-5 justify-evenly rounded-xl bg-input-massage p-2 ">
+                  <input
+                    type="text"
+                    className="col-span-4 m-2  h-[2rem] rounded-3xl bg-white py-3 px-2 drop-shadow-xl "
+                    id="exampleFormControlInput1"
+                    placeholder="Imput massage"
+                  />
+                  <div className="col-span-1 h-full place-self-center py-3">
+                    <img
+                      src="/assets/images/attach-file.png"
+                      alt="attach"
+                      className="h-[1.5rem] w-[1.5rem]  "
+                    />
+                  </div>
+                  <div className=" col-span-1 h-full place-self-center py-3">
+                    <img
+                      src="/assets/images/smile.png"
+                      alt="smile"
+                      className=" h-[1.5rem] w-[1.5rem]  "
+                    />
+                  </div>
+                </div>
+                <div
+                  className="col-span-1 mx-1 grid h-full items-center justify-items-center rounded-xl bg-input-massage"
+                  onClick={() => {
+                    dispatch(
+                      sendChat({
+                        user_pk: user?.firstName!,
+                        message: text,
+                        role: user?.role!,
+                      })
+                    );
+                    setText("");
+                  }}
+                >
+                  <img
+                    className=" mx-2 h-[1.5rem] w-[1.5rem]  "
+                    src="/assets/images/send.png"
+                    alt="send"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        onChat={onChat}
       ></ChatUi>
     </>
   );

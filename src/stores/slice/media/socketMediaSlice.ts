@@ -57,6 +57,8 @@ export const callToDoctor = createAsyncThunk(
           from: user?.firstName,
           name: user?.firstName,
           user_pk: user?.id,
+          from: user?.firstName,
+          patientName: user?.firstName,
         });
       });
 
@@ -113,6 +115,7 @@ export const acceptCall = createAsyncThunk(
         user_pk: info.user_pk,
         to: info.from,
         name: info.name,
+        pharmacyName: info.name,
       });
     });
 
