@@ -36,7 +36,7 @@ function Layout({}: Props) {
                   muted
                   ref={myVideo}
                   autoPlay
-                  className="h-full w-full object-cover sm:rounded-xl"
+                  className="h-screen w-full bg-black object-cover  drop-shadow-xl lg:h-5/6 lg:rounded-3xl"
                 />
               )}
             </div>
