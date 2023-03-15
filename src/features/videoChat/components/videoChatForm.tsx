@@ -85,7 +85,7 @@ function VideoChatForm({ user }: Props) {
                 muted
                 ref={yourVideoRef}
                 autoPlay
-                className="absolute right-0 m-4 h-[8rem] w-[12rem] rounded-2xl bg-slate-600 sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
+                className="absolute right-0 m-4 h-[8rem] w-[12rem] rounded-2xl bg-black sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
               />
             )}
             <div className="absolute bottom-20 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around md:bottom-[4rem] lg:bottom-[10rem]  ">
@@ -94,8 +94,8 @@ function VideoChatForm({ user }: Props) {
           </div>
         }
         chat={
-          <div className="hidden  h-screen  w-screen flex-1 basis-1/5 flex-col sm:m-4 sm:mx-1 md:my-4  lg:block lg:pr-4 2xl:block">
-            <div className=" max-h-fit w-full flex-col justify-center rounded-2xl bg-white drop-shadow-xl lg:h-3/4 ">
+          <div className="hidden  h-screen  w-screen flex-1 basis-1/5 flex-col sm:m-4 sm:mx-1 md:my-4  lg:block lg:pr-4 2xl:block ">
+            <div className=" max-h-fit w-full flex-col justify-center overflow-x-hidden rounded-2xl bg-white drop-shadow-xl lg:h-3/4 ">
               <p className=" mx-6 pt-6 text-start text-2xl text-primary">
                 Yok Park
               </p>
