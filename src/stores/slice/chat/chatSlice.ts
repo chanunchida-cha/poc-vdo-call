@@ -3,8 +3,8 @@ import { store } from "@/stores/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Chat {
+  name: string;
   user_pk: string;
-
   role: string;
   message: string;
 }
@@ -20,9 +20,9 @@ const initialState: InitialState = {
 export const sendChat = createAsyncThunk(
   "sendChat/sendChat",
   async (info: Chat, { getState, dispatch }) => {
-    const { user_pk, role, message } = info;
+    const { name, user_pk, role, message } = info;
     const { socket } = getState().socketMedia;
-    socket.emit("sendChat", { user_pk,  message, role });
+    socket.emit("sendChat", { name, user_pk, message, role });
   }
 );
 

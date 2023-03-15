@@ -35,7 +35,7 @@ function VideoChatForm({ user }: Props) {
   const [text, setText] = useState("");
   const socket = useAppSelector((state) => state.socketMedia.socket);
   const [onChat, setOnChat] = useState(false);
-  const [chat, setChat] = useState<{ user_pk: string; message: string ,role:string}[]>([]);
+  const [chat, setChat] = useState<{ name: string; message: string }[]>([]);
 
   useEffect(() => {
     if (mediaStream) {
@@ -50,11 +50,11 @@ function VideoChatForm({ user }: Props) {
       yourVideoRef.current.srcObject = yourStream;
     }
     console.log("yourStream", yourStream);
-  });
+  }, [yourStream]);
 
   useEffect(() => {
-    socket.on("sendChat", ({ user_pk, message,role }) => {
-      setChat([...chat, { user_pk, message,role }]);
+    socket.on("sendChat", ({ name, message }) => {
+      setChat([...chat, { name, message }]);
     });
   }, [chat]);
   console.log("chat", chat);
@@ -101,20 +101,20 @@ function VideoChatForm({ user }: Props) {
               </p>
               <div className=" mx-6 h-px bg-primary"></div>
               {chat.map((text) => {
-                console.log(text.user_pk);
+                console.log(text.name);
                 console.log(user?.firstName);
                 return (
                   <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
-                    {text.user_pk === user?.firstName ? (
+                    {text.name === user?.firstName ? (
                       <ChatMessageMe
-                        name={text.user_pk}
-                        avatar={`https://ui-avatars.com/api/?name= ${text.user_pk}`}
+                        name={text.name}
+                        avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
                         message={text.message}
                       />
                     ) : (
                       <ChatMessageOther
-                        name={text.user_pk}
-                        avatar={`https://ui-avatars.com/api/?name= ${text.user_pk}`}
+                        name={text.name}
+                        avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
                         message={text.message}
                       />
                     )}
@@ -149,7 +149,8 @@ function VideoChatForm({ user }: Props) {
                 onClick={() => {
                   dispatch(
                     sendChat({
-                      user_pk: user?.firstName!,
+                      name: user?.firstName!,
+                      user_pk: user?.id!,
                       message: text,
                       role: user?.role!,
                     })
@@ -185,16 +186,16 @@ function VideoChatForm({ user }: Props) {
                   {chat.map((text) => {
                     return (
                       <>
-                        {text.user_pk === user?.firstName ? (
+                        {text.name === user?.firstName ? (
                           <ChatMessageMe
-                            name={text.user_pk}
-                            avatar={`https://ui-avatars.com/api/?name= ${text.user_pk}`}
+                            name={text.name}
+                            avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
                             message={text.message}
                           />
                         ) : (
                           <ChatMessageOther
-                            name={text.user_pk}
-                            avatar={`https://ui-avatars.com/api/?name= ${text.user_pk}`}
+                            name={text.name}
+                            avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
                             message={text.message}
                           />
                         )}
@@ -231,7 +232,8 @@ function VideoChatForm({ user }: Props) {
                   onClick={() => {
                     dispatch(
                       sendChat({
-                        user_pk: user?.firstName!,
+                        name: user?.firstName!,
+                        user_pk: user?.id!,
                         message: text,
                         role: user?.role!,
                       })

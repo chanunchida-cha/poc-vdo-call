@@ -69,6 +69,8 @@ export const callToDoctor = createAsyncThunk(
       socket.on("callAccepted", (signal) => {
         dispatch(setCallAccepted(true));
         peer.signal(signal);
+        if (peer.streams.length < 1) return alert("not have yourStream");
+        dispatch(setYourStream(peer.streams[0]));
       });
 
       peer.on("stream", (currentStream) => {
@@ -124,6 +126,7 @@ export const acceptCall = createAsyncThunk(
     });
 
     peer.on("stream", (currentStream) => {
+      if (!currentStream) return alert("not have yourStream");
       dispatch(setYourStream(currentStream));
     });
 

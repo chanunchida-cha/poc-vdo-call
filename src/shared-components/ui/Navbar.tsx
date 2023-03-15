@@ -40,7 +40,6 @@ export default function Navbar(props: Status) {
     dispatch(setCalling({ status: true }));
     dispatch(startMediaStream());
     dispatch(toggleMicrophone());
-    
   };
 
   const callButton = [
@@ -69,7 +68,7 @@ export default function Navbar(props: Status) {
 
   useEffect(() => {
     if (isOnline === false) {
-      dispatch(setDoctorBusy({ user_pk: data?.id, name: data?.firstName }));
+      dispatch(setDoctorBusy({ name: data?.firstName }));
     } else if (isOnline === true) {
       dispatch(setDoctorReady({ user_pk: data?.id, name: data?.firstName }));
     }
