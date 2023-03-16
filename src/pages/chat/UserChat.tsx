@@ -65,7 +65,7 @@ function UserChat({ user }: Props): ReactElement {
 
         <ChatByRoomId
           roomId={history?.roomID!}
-          userLogin={user.firstName}
+          userLogin={user}
           phamacyName={pharmacyName}
         />
       </ChatLayout>

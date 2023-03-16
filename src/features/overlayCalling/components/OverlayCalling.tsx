@@ -33,38 +33,56 @@ export default function OverlayCalling({ user }: Props) {
         { isReceivingCall: true, from, name, signal, user_pk },
       ]);
     });
+    socket.on("rejectCallByCalling", ({ from, message }) => {
+      let newCall = calls.filter((call) => {
+        return call.from !== from;
+      });
+      setCalls(newCall);
+    });
   }, [calls]);
 
-  console.log("calls", calls);
+  console.log(calls);
+  
+  useEffect(() => {
+    socket.on("callFail", ({ message }) => {
+      console.log(message);
+    });
+    socket.on("callTimeout", ({ message }) => {
+      console.log(message);
+    });
+    socket.on("callReject", ({ message }) => {
+      console.log(message);
+    });
+    socket.on("timeoutCounter", ({ message }) => {
+      console.log(message);
+    });
+  }, []);
 
   return (
     <>
-      {calls.map((call: Call) => {
-        return (
-          <div key={call.from}>
-            {call.isReceivingCall && !vidoCall.callAccepted && (
-              <div className="fixed inset-0 z-50 flex h-screen w-full items-center justify-center bg-black opacity-[0.87]">
-                <div className="grid h-[40rem] w-[25rem] grid-rows-2">
-                  <div className="mx-auto mt-[4rem]  text-white">
-                    <div className="text-center  text-4xl font-bold xs:pt-16 sm:pt-0">
-                      {call.name}
-                    </div>
-                    <div className="text-center text-base font-[400]">
-                      Video call...
-                    </div>
-                  </div>
-                  <div className="mx-auto self-end text-white">
-                    <div className="mb-[7rem] text-center text-2xl font-[500]">
-                      Calling...
+      {calls.length > 0 && !vidoCall.callAccepted && (
+        <div className="fixed inset-0  z-50 h-screen  w-screen bg-black bg-opacity-[0.87]  sm:px-[15rem]">
+          {calls.map((call: Call) => {
+            return (
+              <>
+                {call.isReceivingCall && !vidoCall.callAccepted && (
+                  <div className="sm:mt-5">
+                    <div className="grid grid-cols-2 gap-4 rounded-br-lg rounded-bl-lg border border-gray-200 bg-white px-[1rem] py-[1rem] shadow-xl   sm:rounded-lg">
+                      <div className=" flex items-center  justify-center text-[0.8rem] font-bold text-primary sm:text-[1.5rem]">
+                        {call.name}...
+                      </div>
+
+                      <div className="flex justify-end">
+                        <ToggleButtonPharmacy call={call} user={user!} />
+                      </div>
                     </div>
                   </div>
-                  <ToggleButtonPharmacy call={call} user={user!}  />
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      })}
+                )}
+              </>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }

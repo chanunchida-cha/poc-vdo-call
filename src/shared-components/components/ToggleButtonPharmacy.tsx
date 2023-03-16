@@ -40,61 +40,22 @@ export default function ToggleButtonPharmacy({ call, user }: Props) {
   const [onVDO, setVDO] = useState(false);
 
   return (
-    <div className="mb-[4rem] flex justify-center ">
-      <div className=" flex cursor-pointer items-center justify-center px-4 pl-[4rem]">
+    <div className=" flex justify-center items-center ">
+      <div className="mx-2   flex h-[2rem] w-[2rem] sm:h-[4rem] sm:w-[4rem] cursor-pointer items-center justify-center  rounded-full bg-primary-light  text-[1rem] sm:text-[2rem] text-white  ">
         <div
-          className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
-          onClick={() => setMute(!onMute)}
-        >
-          <ToggleIcon
-            onClick={onMute}
-            Icon={<BsFillMicFill />}
-            IconToggle={<BsFillMicMuteFill />}
-          />
-        </div>
-      </div>
-      <div className="ml-3 mr-3  flex cursor-pointer items-center justify-center rounded-full bg-primary-light  pr-[4rem] text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
-        {statusOverlay ? (
-          <div
-            onClick={() => {
-              dispatch(acceptCall({ call: call, user: user }));
-            }}
-          >
-            <SlCallIn className="hover:brightness-[0.75] " />
-          </div>
-        ) : (
-          <div
-            onClick={() => {
-              dispatch(acceptCall({ call: call, user: user }));
-            }}
-          >
-            <SlCallIn className="hover:brightness-[0.75] " />
-          </div>
-        )}
-      </div>
-      <div className="ml-3 mr-3  flex cursor-pointer items-center justify-center rounded-full bg-red-600  pr-[4rem] text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl">
-        {statusOverlay ? (
-          <div onClick={() => dispatch(setOverlayStatus())}>
-            <SlCallEnd className="hover:brightness-[0.75] " />
-          </div>
-        ) : (
-          <div>
-            <SlCallEnd className="hover:brightness-[0.75] " />
-          </div>
-        )}
-      </div>
-      <div className="ml-3 mr-3 flex cursor-pointer items-center justify-center pr-[4rem]">
-        <div
-          className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
           onClick={() => {
-            setVDO(!onVDO);
+            dispatch(acceptCall({ call: call, user: user }));
           }}
         >
-          <ToggleIcon
-            onClick={onVDO}
-            Icon={<IoVideocam />}
-            IconToggle={<IoVideocamOff />}
-          />
+          <SlCallIn className="hover:brightness-[0.75] " />
+        </div>
+      </div>
+      <div className="mx-2   flex h-[2rem] w-[2rem] sm:h-[4rem] sm:w-[4rem] cursor-pointer items-center justify-center  rounded-full bg-red-700  text-[1rem] sm:text-[2rem] text-white  ">
+        <div 
+        onClick={() => dispatch(setOverlayStatus())}
+        
+        >
+          <SlCallEnd className="hover:brightness-[0.75] " />
         </div>
       </div>
     </div>

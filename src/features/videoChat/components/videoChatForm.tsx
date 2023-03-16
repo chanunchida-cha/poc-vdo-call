@@ -57,6 +57,14 @@ function VideoChatForm({ user }: Props) {
       setChat([...chat, { name, message }]);
     });
   }, [chat]);
+
+  useEffect(() => {
+    socket.on("callAccept",(data)=>{
+      console.log("callAccept",data);
+      
+    })
+  
+  }, [])
   console.log("chat", chat);
 
   return (

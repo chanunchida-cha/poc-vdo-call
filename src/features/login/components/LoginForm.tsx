@@ -49,6 +49,7 @@ function LoginForm() {
   // ------ UseEffect and Hook -------
   useSetUserStorage(data, error);
   useEffect(() => {
+    if (data?.role !== "pharmacy") return;
     if (data?.role === "pharmacy") {
       // dispatch(setDoctorReady({ user_pk: data.id, name: data.firstName }));
       const payload = { user_pk: data.id, name: data.firstName };
