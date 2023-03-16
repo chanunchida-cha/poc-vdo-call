@@ -95,16 +95,17 @@ function VideoChatForm({ user }: Props) {
         }
         chat={
           <div className="hidden  h-screen  w-screen flex-1 basis-1/5 flex-col sm:m-4 sm:mx-1 md:my-4  lg:block lg:pr-4 2xl:block ">
-            <div className=" max-h-fit w-full flex-col justify-center overflow-x-hidden rounded-2xl bg-white drop-shadow-xl lg:h-3/4 ">
+            <div className=" max-h-fit w-full flex-col justify-center overflow-x-hidden rounded-2xl bg-white drop-shadow-xl lg:h-3/4">
               <p className=" mx-6 pt-6 text-start text-2xl text-primary">
                 Yok Park
               </p>
               <div className=" mx-6 h-px bg-primary"></div>
+              <div className="h-auto-full overflow-x-hidden  flex-col justify-between" >
               {chat.map((text) => {
                 console.log(text.name);
                 console.log(user?.firstName);
                 return (
-                  <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
+                  <div className="  h-5/6  w-full   flex-col justify-between">
                     {text.name === user?.firstName ? (
                       <ChatMessageMe
                         name={text.name}
@@ -123,6 +124,8 @@ function VideoChatForm({ user }: Props) {
                   </div>
                 );
               })}
+              </div>
+             
             </div>
 
             <div className="auto-col-max grid grid-flow-col grid-cols-10 py-4 ">
@@ -182,7 +185,7 @@ function VideoChatForm({ user }: Props) {
                 </div>
 
                 <div className=" mx-6 h-px bg-primary"></div>
-                <div className="  my-2 h-5/6  w-full   flex-col justify-between px-4">
+                <div className="  h-auto  w-full   flex-col justify-between px-0  pb-0">
                   {chat.map((text) => {
                     return (
                       <>
