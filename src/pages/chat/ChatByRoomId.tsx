@@ -10,16 +10,16 @@ import React, { ReactElement } from "react";
 interface Props {
   roomId: string;
   userLogin: User;
-  phamacyName?: string;
+  pharmacyName?: string;
   patientName?: string;
 }
 
-function ChatByRoomId({ roomId, userLogin, phamacyName, patientName }: Props) {
+function ChatByRoomId({ roomId, userLogin, pharmacyName, patientName }: Props) {
   const { data, isLoading, error } = useGetChatLogByRoomIdQuery(roomId);
   console.log(data);
 
   return (
-    <ChatRoom title={phamacyName ? phamacyName! : patientName!} data={data}>
+    <ChatRoom title={pharmacyName ? pharmacyName! : patientName!} data={data}>
       {data?.chat?.map((chatLog) => {
         console.log("name", chatLog.name);
         console.log("login", userLogin);

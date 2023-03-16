@@ -16,6 +16,7 @@ function UserChat({ user }: Props): ReactElement {
   const [activeChannel, setActiveChannel] = useState(0);
   const [historyId, sethistoryId] = useState<string>("");
   const [pharmacyName, setPharmacyName] = useState<string>("");
+  const [licenseNo, setLicenseNo] = useState<string>("");
   const [
     getAllhistorys,
     { data: historys, isLoading: loadingHistory, error: errorHistory },
@@ -66,7 +67,7 @@ function UserChat({ user }: Props): ReactElement {
         <ChatByRoomId
           roomId={history?.roomID!}
           userLogin={user}
-          phamacyName={pharmacyName}
+          pharmacyName={pharmacyName!}
         />
       </ChatLayout>
     </div>

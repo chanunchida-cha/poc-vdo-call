@@ -120,8 +120,8 @@ export const acceptCall = createAsyncThunk(
         signal: item,
         user_pk: payload.user.id,
         to: payload.call.from,
-        name: payload.user.firstName,
         pharmacyName: payload.user.firstName,
+        license_no: payload.user.licenseNo,
       });
     });
 
