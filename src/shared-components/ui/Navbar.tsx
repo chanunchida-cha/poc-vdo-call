@@ -35,6 +35,7 @@ export default function Navbar(props: Status) {
   const cookies = Cookie();
   const firstname = cookies.get("firstname");
   const { data, isLoading, error } = useGetUserQuery(firstname!);
+  const socket = useAppSelector((state) => state.socketMedia.socket);
 
   const callUser = () => {
     dispatch(setCalling({ status: true }));
@@ -63,6 +64,7 @@ export default function Navbar(props: Status) {
 
   const logout = () => {
     cookies.removeAll();
+    socket.emit("logout");
     router.push("/login");
   };
 

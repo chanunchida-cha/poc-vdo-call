@@ -22,7 +22,7 @@ export const sendChat = createAsyncThunk(
   async (info: Chat, { getState, dispatch }) => {
     const { name, user_pk, role, message } = info;
     const { socket } = getState().socketMedia;
-    socket.emit("sendChat", { name, user_pk, message, role });
+    await socket.emit("sendChat", { name, user_pk, message, role });
   }
 );
 
