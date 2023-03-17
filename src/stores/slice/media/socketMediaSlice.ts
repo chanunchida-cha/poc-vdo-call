@@ -154,7 +154,7 @@ export const errorCallNotification = createAsyncThunk(
         dispatch(setCallAccepted(false));
         dispatch(setYourStream(null));
         dispatch(stopMediaStream(stream));
-        //window.location.reload()
+        window.location.reload();
       } catch {}
     });
 
