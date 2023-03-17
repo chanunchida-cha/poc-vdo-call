@@ -9,3 +9,35 @@ body{
 ::-webkit-scrollbar {
     display: none;
 }
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    max-width: 100%;
+    padding-bottom: 40px;
+}
+
+.message {
+    position: relative;
+    font-size: 15px;
+    width: auto;
+    min-width: 1vw;
+    max-width: 70%;
+    padding: 10px;
+}
+
+.message.to {
+    margin-left: auto;
+    text-align: left;
+    border-radius: 10px 10px 0px 10px;
+    background: #fffbf3;
+    padding: 10px;
+}
+
+.message.from {
+    margin-right: auto;
+    border-radius: 10px 10px 10px 0px;
+    background: #fffbf3;
+    padding: 10px;
+}
