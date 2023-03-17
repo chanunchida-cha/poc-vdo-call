@@ -27,6 +27,8 @@ interface Props {
   user: User;
 
   call: Call;
+
+  onAccept: ()=> void;
 }
 import { User } from "@/models/interface/InterfaceUser";
 

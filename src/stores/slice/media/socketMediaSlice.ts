@@ -4,7 +4,7 @@ import { serviceName } from "@/models/const/routeName";
 import { io, Socket } from "socket.io-client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Peer from "simple-peer";
-import { setCallAccepted, setCallEnded, setCalling } from "../videoCallSlice";
+import { setCallAccepted, setCallEnded, setCalling, setPharmacyCamera } from "../videoCallSlice";
 import { GetUser } from "@/stores/service/getUserService";
 import { startMediaStream,stopMediaStream } from "./mediaSlice";
 
@@ -52,7 +52,9 @@ export const callToDoctor = createAsyncThunk(
   "socketMedia/callToDoctor",
   async (user: User, { getState, dispatch }) => {
     const stream = getState().mediaStream;
-    if (stream !== null) {
+    const onCall = getState().videoCall.callAccepted
+    console.log("onCall : "+onCall)
+    if (stream !== null && !onCall) {
       console.log("hello");
       const peer = new Peer({ initiator: true, trickle: false, stream });
 
@@ -66,7 +68,7 @@ export const callToDoctor = createAsyncThunk(
         });
       });
 
-      socket.on("callAccepted", (signal) => {
+      socket.on("callAccepted", ({signal, pharmacyName, license_no, patientName}) => {
         dispatch(setCallAccepted(true));
         peer.signal(signal);
         if (peer.streams.length < 1) return alert("not have yourStream");
@@ -176,6 +178,22 @@ export const errorCallNotification = createAsyncThunk(
   }
 );
 
+export const onChangeMediaStatus = createAsyncThunk(
+  "socketMedia/onChangeMediaStatus",
+  async (_, { getState, dispatch }) => {
+    const stream = getState().mediaStream;
+    socket.on("muteMic", ({ status }) => {
+      console.log(status);
+    });
+
+    socket.on("closeCam", ({ status }) => {
+      dispatch(setPharmacyCamera(status))
+      console.log(status);
+    });
+
+  }
+);
+
 export const endCall = createAsyncThunk(
   "socketMedia/endCall",
   async (_, { dispatch }) => {
@@ -199,6 +217,15 @@ export const answerReject = createAsyncThunk(
   async (payload: Payload, { dispatch }) => {
     socket.emit("answerReject", {
       to:payload.call.from
+    });
+  }
+);
+
+export const onChangeCam = createAsyncThunk(
+  "socketMedia/onChangeCam",
+  async (status: boolean, { dispatch }) => {
+    socket.emit("closeCam", {
+      status
     });
   }
 );

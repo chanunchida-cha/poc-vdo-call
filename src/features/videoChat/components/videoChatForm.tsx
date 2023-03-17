@@ -6,6 +6,7 @@ import {
   callToDoctor,
   errorCallNotification,
   getNotification,
+  onChangeMediaStatus,
 } from "@/stores/slice/media/socketMediaSlice";
 import { User } from "@/models/interface/InterfaceUser";
 import { IoChevronBackCircle } from "react-icons/io5";
@@ -42,6 +43,7 @@ function VideoChatForm({ user }: Props) {
     if (mediaStream) {
       myVideoRef.current.srcObject = mediaStream;
       dispatch(errorCallNotification());
+      dispatch(onChangeMediaStatus());
       if (vidoCall.calling) {
         dispatch(callToDoctor(user!));
         dispatch(getNotification());
@@ -91,6 +93,7 @@ function VideoChatForm({ user }: Props) {
 
             {vidoCall.callAccepted && (
               <video
+                hidden ={!vidoCall.openPharmacyCamera}
                 playsInline
                 muted
                 ref={yourVideoRef}

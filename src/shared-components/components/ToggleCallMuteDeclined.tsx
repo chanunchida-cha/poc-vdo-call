@@ -15,8 +15,8 @@ import {
 } from "react-icons/bs";
 import { IoVideocam, IoVideocamOff } from "react-icons/io5";
 import { setCalling, setOpenUserCamera } from "@/stores/slice/videoCallSlice";
-import { stopMediaStream } from "@/stores/slice/media/mediaSlice";
-import { cancelCall, endCall } from "@/stores/slice/media/socketMediaSlice";
+import { startMediaStream, stopMediaStream } from "@/stores/slice/media/mediaSlice";
+import { cancelCall, endCall, onChangeCam } from "@/stores/slice/media/socketMediaSlice";
 
 interface Status {
   setOnChat: any;
@@ -67,7 +67,12 @@ export default function ToggleCallMuteDeclined(Props: Status) {
         <button
           className="flex items-center justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
           onClick={() => {
-            console.log("---------close cam------------")
+            if(onVDO){
+              dispatch(startMediaStream());
+            }else{
+              dispatch(stopMediaStream());
+            }
+            dispatch(onChangeCam(onVDO))
             setVDO(!onVDO);
             dispatch(setOpenUserCamera(!vidoCall.openUserCamera));
           }}
