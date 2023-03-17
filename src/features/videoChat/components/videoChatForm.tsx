@@ -40,10 +40,12 @@ function VideoChatForm({ user }: Props) {
   useEffect(() => {
     if (mediaStream) {
       myVideoRef.current.srcObject = mediaStream;
-      dispatch(callToDoctor(user!));
-      dispatch(getNotification());
+      if (vidoCall.calling) {
+        dispatch(callToDoctor(user!));
+        dispatch(getNotification());
+      }
     }
-  }, [mediaStream]);
+  }, [mediaStream, vidoCall.calling]);
 
   useEffect(() => {
     if (yourStream) {
@@ -59,12 +61,10 @@ function VideoChatForm({ user }: Props) {
   }, [chat]);
 
   useEffect(() => {
-    socket.on("callAccept",(data)=>{
-      console.log("callAccept",data);
-      
-    })
-  
-  }, [])
+    socket.on("callAccept", (data) => {
+      console.log("callAccept", data);
+    });
+  }, []);
   console.log("chat", chat);
 
   return (
@@ -108,32 +108,31 @@ function VideoChatForm({ user }: Props) {
                 Yok Park
               </p>
               <div className=" mx-6 h-px bg-primary"></div>
-              <div className="h-auto-full overflow-x-hidden  flex-col justify-between" >
-              {chat.map((text) => {
-                console.log(text.name);
-                console.log(user?.firstName);
-                return (
-                  <div className="  h-5/6  w-full   flex-col justify-between">
-                    {text.name === user?.firstName ? (
-                      <ChatMessageMe
-                        name={text.name}
-                        avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
-                        message={text.message}
-                      />
-                    ) : (
-                      <ChatMessageOther
-                        name={text.name}
-                        avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
-                        message={text.message}
-                      />
-                    )}
+              <div className="h-auto-full flex-col  justify-between overflow-x-hidden">
+                {chat.map((text) => {
+                  console.log(text.name);
+                  console.log(user?.firstName);
+                  return (
+                    <div className="  h-5/6  w-full   flex-col justify-between">
+                      {text.name === user?.firstName ? (
+                        <ChatMessageMe
+                          name={text.name}
+                          avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
+                          message={text.message}
+                        />
+                      ) : (
+                        <ChatMessageOther
+                          name={text.name}
+                          avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
+                          message={text.message}
+                        />
+                      )}
 
-                    <div className="flex justify-end p-4"></div>
-                  </div>
-                );
-              })}
+                      <div className="flex justify-end p-4"></div>
+                    </div>
+                  );
+                })}
               </div>
-             
             </div>
 
             <div className="auto-col-max grid grid-flow-col grid-cols-10 py-4 ">
