@@ -21,12 +21,12 @@ const Wrapper = styled.div`
 
 export const ChatMessageOther: React.FC<ChatMessageProps> = ({ name, avatar, message }) => {
     return (
-        <div className="flex flex-wrap pb-8 max-w-[100%] ">
+        <div className="container ">
         <Wrapper>
-            <div className="flex flex-row items-center justify-end space-x-2 p-4">
+            <div className="flex flex-row items-center justify-start space-x-2 p-4">
             <div className="flex flex-row">
                 <img src={avatar} alt={name} className="w-10 h-10 rounded-full" />
-                <p className="text-sm font-semibold text-primary-light max-w-[70%] ml-3 rounded bg-[#fffbf3] p-3">{message}</p>
+                <p className="text-sm font-semibold text-primary-light message from">{message}</p>
             </div>
             </div>
         </Wrapper>
@@ -36,12 +36,12 @@ export const ChatMessageOther: React.FC<ChatMessageProps> = ({ name, avatar, mes
 
 export const ChatMessageMe: React.FC<ChatMessageProps> = ({ name, avatar, message }) => {
     return (
-        <div className="flex flex-wrap pb-8 max-w-[100%] ">
+        <div className="container">
         <Wrapper>
             <div className="space-x-2 p-4">
             <div className="flex flex-row-2 justify-end">
-                <p className="text-sm font-semibold text-primary-light max-w-[70%] mr-3 rounded bg-[#fffbf3] p-3 col-span-5">{message}</p>
-                <img src={avatar} alt={name} className="w-10 h-10 rounded-full grid-cols-start-6" />
+                <p className="text-sm font-semibold text-primary-light message to">{message}</p>
+                <img src={avatar} alt={name} className="w-10 h-10 rounded-full" />
             </div>
             </div>
         </Wrapper>

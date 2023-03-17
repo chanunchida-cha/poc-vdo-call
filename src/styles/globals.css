@@ -33,6 +33,7 @@ body{
     border-radius: 10px 10px 0px 10px;
     background: #fffbf3;
     padding: 10px;
+    margin: 5px;
 }
 
 .message.from {
@@ -40,4 +41,5 @@ body{
     border-radius: 10px 10px 10px 0px;
     background: #fffbf3;
     padding: 10px;
+    margin: 5px;
 }
