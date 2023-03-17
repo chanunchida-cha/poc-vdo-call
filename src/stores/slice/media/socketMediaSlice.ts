@@ -4,9 +4,14 @@ import { serviceName } from "@/models/const/routeName";
 import { io, Socket } from "socket.io-client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Peer from "simple-peer";
-import { setCallAccepted, setCallEnded, setCalling, setPharmacyCamera } from "../videoCallSlice";
+import {
+  setCallAccepted,
+  setCallEnded,
+  setCalling,
+  setPharmacyCamera,
+} from "../videoCallSlice";
 import { GetUser } from "@/stores/service/getUserService";
-import { startMediaStream,stopMediaStream } from "./mediaSlice";
+import { startMediaStream, stopMediaStream } from "./mediaSlice";
 
 interface Call {
   isReceivingCall: boolean;
@@ -52,8 +57,8 @@ export const callToDoctor = createAsyncThunk(
   "socketMedia/callToDoctor",
   async (user: User, { getState, dispatch }) => {
     const stream = getState().mediaStream;
-    const onCall = getState().videoCall.callAccepted
-    console.log("onCall : "+onCall)
+    const onCall = getState().videoCall.callAccepted;
+    console.log("onCall : " + onCall);
     if (stream !== null && !onCall) {
       console.log("hello");
       const peer = new Peer({ initiator: true, trickle: false, stream });
@@ -68,10 +73,13 @@ export const callToDoctor = createAsyncThunk(
         });
       });
 
-      socket.on("callAccepted", ({signal, pharmacyName, license_no, patientName}) => {
-        dispatch(setCallAccepted(true));
-        peer.signal(signal);
-      });
+      socket.on(
+        "callAccepted",
+        ({ signal, pharmacyName, license_no, patientName }) => {
+          dispatch(setCallAccepted(true));
+          peer.signal(signal);
+        }
+      );
 
       peer.on("stream", (currentStream) => {
         if (!currentStream) return alert("not have yourStream");
@@ -140,38 +148,35 @@ export const errorCallNotification = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     const stream = getState().mediaStream;
     socket.on("endCallTime", (obj) => {
-      try{
+      try {
         dispatch(setCallEnded(true));
         dispatch(setCalling(false));
         dispatch(setCallAccepted(false));
         dispatch(setYourStream(null));
-        dispatch(stopMediaStream(stream)); 
+        dispatch(stopMediaStream(stream));
         //window.location.reload()
-      }catch{
-
-      }
+      } catch {}
     });
 
     socket.on("callReject", ({ message }) => {
       console.log(message);
-      try{
+      try {
         dispatch(setCalling(false));
-        dispatch(stopMediaStream(stream));  
-      }catch{
-
+        dispatch(stopMediaStream(stream));
+      } catch (error) {
+        console.log(error);
       }
     });
 
     socket.on("callFail", ({ message }) => {
       console.log(message);
-      try{
+      try {
         dispatch(setCalling(false));
-        dispatch(stopMediaStream(stream));  
-      }catch{
-
+        dispatch(stopMediaStream(stream));
+      } catch (error) {
+        console.log(error);
       }
     });
-
   }
 );
 
@@ -184,10 +189,9 @@ export const onChangeMediaStatus = createAsyncThunk(
     });
 
     socket.on("closeCam", ({ status }) => {
-      dispatch(setPharmacyCamera(status))
+      dispatch(setPharmacyCamera(status));
       console.log(status);
     });
-
   }
 );
 
@@ -200,9 +204,9 @@ export const endCall = createAsyncThunk(
 
 export const cancelCall = createAsyncThunk(
   "socketMedia/cancelCall",
-  async (_, { getState,dispatch }) => {
+  async (_, { getState, dispatch }) => {
     dispatch(setCalling(false));
-    dispatch(setCallAccepted(false))
+    dispatch(setCallAccepted(false));
     socket.emit("cancelCall", {});
     const stream = getState().mediaStream;
     dispatch(stopMediaStream(stream));
@@ -213,7 +217,7 @@ export const answerReject = createAsyncThunk(
   "socketMedia/answerReject",
   async (payload: Payload, { dispatch }) => {
     socket.emit("answerReject", {
-      to:payload.call.from
+      to: payload.call.from,
     });
   }
 );
@@ -222,7 +226,7 @@ export const onChangeCam = createAsyncThunk(
   "socketMedia/onChangeCam",
   async (status: boolean, { dispatch }) => {
     socket.emit("closeCam", {
-      status
+      status,
     });
   }
 );

@@ -78,11 +78,12 @@ function VideoChatForm({ user }: Props) {
           <div className="relative h-screen flex-1 basis-1/2  rounded-2xl  lg:mx-4 lg:my-4   ">
             <div className="absolute  h-3/4 w-full md:h-full">
               {/* <div className=" h-screen w-full bg-black object-cover  drop-shadow-xl md:rounded-3xl lg:h-5/6 "></div> */}
-              {mediaStream && (
+              {vidoCall.callAccepted && (
                 <video
+                  hidden={!vidoCall.openPharmacyCamera}
                   playsInline
                   muted
-                  ref={myVideoRef}
+                  ref={yourVideoRef}
                   autoPlay
                   className=" h-screen w-full bg-black object-cover  drop-shadow-xl lg:h-5/6 lg:rounded-3xl"
                 />
@@ -91,12 +92,11 @@ function VideoChatForm({ user }: Props) {
               {/* <div className=" h-full w-full bg-black  object-cover drop-shadow-xl md:rounded-3xl "></div> */}
             </div>
 
-            {vidoCall.callAccepted && (
+            {mediaStream && (
               <video
-                hidden ={!vidoCall.openPharmacyCamera}
                 playsInline
                 muted
-                ref={yourVideoRef}
+                ref={myVideoRef}
                 autoPlay
                 className="absolute right-0 m-4 h-[8rem] w-[12rem] rounded-2xl bg-black sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
               />

@@ -69,12 +69,11 @@ export default function Navbar(props: Status) {
   };
 
   useEffect(() => {
-    if (isOnline === false) {
+    if (!isOnline) {
       dispatch(setDoctorBusy({ name: data?.firstName }));
+    } else if (isOnline && data) {
+      dispatch(setDoctorReady({ user_pk: data?.id, name: data?.firstName }));
     }
-    // } else if (isOnline === true) {
-    //   dispatch(setDoctorReady({ user_pk: data?.id, name: data?.firstName }));
-    // }
   }, [isOnline]);
 
   return (
