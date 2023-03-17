@@ -30,6 +30,43 @@ export const stopMediaStream = createAsyncThunk(
   }
 );
 
+export const muteMediaMic = createAsyncThunk(
+  "mediaStream/muteMediaMic",
+  async (stream:MediaStream) => {
+    try {
+      console.log(stream)
+      if (stream) {
+        stream.getAudioTracks().forEach((elem: any) =>{
+          elem.enabled = false; // or false to mute it.
+          return true;
+        })
+      }
+    } catch (error) {
+      console.log("Failed to mute media stream")
+      throw new Error("Failed to mute media stream");
+    }
+  }
+);
+
+export const enableMediaMic = createAsyncThunk(
+  "mediaStream/enableMediaMic",
+  async (stream:MediaStream) => {
+    try {
+      console.log(stream)
+
+      if (stream) {
+        stream.getAudioTracks().forEach((elem: any) =>{
+          elem.enabled = true; // or false to mute it.
+          return true;
+        })
+      }
+    } catch (error) {
+      console.log("Failed to mute media stream")
+      throw new Error("Failed to mute media stream");
+    }
+  }
+);
+
 const mediaSlice = createSlice({
   name: "mediaStream",
   initialState: null,

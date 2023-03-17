@@ -71,8 +71,6 @@ export const callToDoctor = createAsyncThunk(
       socket.on("callAccepted", ({signal, pharmacyName, license_no, patientName}) => {
         dispatch(setCallAccepted(true));
         peer.signal(signal);
-        if (peer.streams.length < 1) return alert("not have yourStream");
-        dispatch(setYourStream(peer.streams[0]));
       });
 
       peer.on("stream", (currentStream) => {
@@ -113,7 +111,6 @@ export const acceptCall = createAsyncThunk(
   "socketMedia/acceptCall",
   async (payload: Payload, { getState, dispatch }) => {
     dispatch(setCallAccepted(true));
-    dispatch(startMediaStream());
     const stream = getState().mediaStream;
     const peer = new Peer({ initiator: false, trickle: false, stream });
 

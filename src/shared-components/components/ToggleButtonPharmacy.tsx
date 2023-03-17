@@ -31,6 +31,7 @@ interface Props {
   onAccept: ()=> void;
 }
 import { User } from "@/models/interface/InterfaceUser";
+import { startMediaStream } from "@/stores/slice/media/mediaSlice";
 
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
@@ -45,7 +46,8 @@ export default function ToggleButtonPharmacy({ call, user,onAccept }: Props) {
     <div className=" flex justify-center items-center ">
       <div className="mx-2   flex h-[2rem] w-[2rem] sm:h-[4rem] sm:w-[4rem] cursor-pointer items-center justify-center  rounded-full bg-primary-light  text-[1rem] sm:text-[2rem] text-white  ">
         <div
-          onClick={() => {
+          onClick={async () => {
+            await dispatch(startMediaStream());
             dispatch(acceptCall({ call: call, user: user }));
             onAccept()
           }}
