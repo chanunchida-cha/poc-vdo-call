@@ -38,7 +38,7 @@ export default function Navbar(props: Status) {
   const socket = useAppSelector((state) => state.socketMedia.socket);
 
   const callUser = () => {
-    dispatch(setCalling({ status: true }));
+    dispatch(setCalling(true));
     dispatch(startMediaStream());
     dispatch(toggleMicrophone());
   };

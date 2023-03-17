@@ -4,6 +4,7 @@ import ToggleCallMuteDeclined from "@/shared-components/components/ToggleCallMut
 import { useAppDispatch, useAppSelector } from "@/stores/store";
 import {
   callToDoctor,
+  errorCallNotification,
   getNotification,
 } from "@/stores/slice/media/socketMediaSlice";
 import { User } from "@/models/interface/InterfaceUser";
@@ -40,6 +41,7 @@ function VideoChatForm({ user }: Props) {
   useEffect(() => {
     if (mediaStream) {
       myVideoRef.current.srcObject = mediaStream;
+      dispatch(errorCallNotification());
       if (vidoCall.calling) {
         dispatch(callToDoctor(user!));
         dispatch(getNotification());

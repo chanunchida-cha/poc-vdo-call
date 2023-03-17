@@ -4,9 +4,9 @@ import { serviceName } from "@/models/const/routeName";
 import { io, Socket } from "socket.io-client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Peer from "simple-peer";
-import { setCallAccepted, setCallEnded } from "../videoCallSlice";
+import { setCallAccepted, setCallEnded, setCalling } from "../videoCallSlice";
 import { GetUser } from "@/stores/service/getUserService";
-import { startMediaStream } from "./mediaSlice";
+import { startMediaStream,stopMediaStream } from "./mediaSlice";
 
 interface Call {
   isReceivingCall: boolean;
@@ -136,11 +136,69 @@ export const acceptCall = createAsyncThunk(
   }
 );
 
-export const exitCall = createAsyncThunk(
-  "socketMedia/exitCall",
-  async (_, { dispatch }) => {
+export const errorCallNotification = createAsyncThunk(
+  "socketMedia/errorCallNotification",
+  async (_, { getState, dispatch }) => {
+    const stream = getState().mediaStream;
     socket.on("endCallTime", (obj) => {
-      dispatch(setCallEnded(true));
+      try{
+        dispatch(setCallEnded(true));
+        dispatch(setCalling(false));
+        dispatch(setCallAccepted(false));
+        dispatch(setYourStream(null));
+        dispatch(stopMediaStream(stream)); 
+        //window.location.reload()
+      }catch{
+
+      }
+    });
+
+    socket.on("callReject", ({ message }) => {
+      console.log(message);
+      try{
+        dispatch(setCalling(false));
+        dispatch(stopMediaStream(stream));  
+      }catch{
+
+      }
+    });
+
+    socket.on("callFail", ({ message }) => {
+      console.log(message);
+      try{
+        dispatch(setCalling(false));
+        dispatch(stopMediaStream(stream));  
+      }catch{
+
+      }
+    });
+
+  }
+);
+
+export const endCall = createAsyncThunk(
+  "socketMedia/endCall",
+  async (_, { dispatch }) => {
+    socket.emit("endCall", {});
+  }
+);
+
+export const cancelCall = createAsyncThunk(
+  "socketMedia/cancelCall",
+  async (_, { getState,dispatch }) => {
+    dispatch(setCalling(false));
+    dispatch(setCallAccepted(false))
+    socket.emit("cancelCall", {});
+    const stream = getState().mediaStream;
+    dispatch(stopMediaStream(stream));
+  }
+);
+
+export const answerReject = createAsyncThunk(
+  "socketMedia/answerReject",
+  async (payload: Payload, { dispatch }) => {
+    socket.emit("answerReject", {
+      to:payload.call.from
     });
   }
 );

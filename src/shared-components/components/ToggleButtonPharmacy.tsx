@@ -13,7 +13,7 @@ import { IoVideocam, IoVideocamOff } from "react-icons/io5";
 
 import Peer from "simple-peer";
 import { useGetUserQuery } from "@/stores/service/getUserService";
-import { acceptCall } from "@/stores/slice/media/socketMediaSlice";
+import { acceptCall, answerReject } from "@/stores/slice/media/socketMediaSlice";
 
 interface Call {
   isReceivingCall: boolean;
@@ -32,7 +32,7 @@ import { User } from "@/models/interface/InterfaceUser";
 
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
-export default function ToggleButtonPharmacy({ call, user }: Props) {
+export default function ToggleButtonPharmacy({ call, user,onAccept }: Props) {
   const dispatch = useAppDispatch();
   const statusOverlay = useAppSelector((state) => state.overlayStatusSlice);
 
@@ -45,6 +45,7 @@ export default function ToggleButtonPharmacy({ call, user }: Props) {
         <div
           onClick={() => {
             dispatch(acceptCall({ call: call, user: user }));
+            onAccept()
           }}
         >
           <SlCallIn className="hover:brightness-[0.75] " />
@@ -52,7 +53,10 @@ export default function ToggleButtonPharmacy({ call, user }: Props) {
       </div>
       <div className="mx-2   flex h-[2rem] w-[2rem] sm:h-[4rem] sm:w-[4rem] cursor-pointer items-center justify-center  rounded-full bg-red-700  text-[1rem] sm:text-[2rem] text-white  ">
         <div 
-        onClick={() => dispatch(setOverlayStatus())}
+        onClick={() => {
+          dispatch(answerReject({ call: call, user: user }))
+          dispatch(setOverlayStatus())
+        }}
         
         >
           <SlCallEnd className="hover:brightness-[0.75] " />

@@ -39,24 +39,30 @@ export default function OverlayCalling({ user }: Props) {
       });
       setCalls(newCall);
     });
+
+    socket.on("answerReject", ({ reject }) => {
+      let newCall = calls.filter((call) => {
+        return call.from !== reject;
+      });
+      setCalls(newCall);
+    });
+
   }, [calls]);
 
   console.log(calls);
   
   useEffect(() => {
-    socket.on("callFail", ({ message }) => {
-      console.log(message);
-    });
     socket.on("callTimeout", ({ message }) => {
-      console.log(message);
-    });
-    socket.on("callReject", ({ message }) => {
       console.log(message);
     });
     socket.on("timeoutCounter", ({ message }) => {
       console.log(message);
     });
   }, []);
+
+  const OnAccept= ()=>{
+    setCalls([])
+  }
 
   return (
     <>
@@ -73,7 +79,7 @@ export default function OverlayCalling({ user }: Props) {
                       </div>
 
                       <div className="flex justify-end">
-                        <ToggleButtonPharmacy call={call} user={user!} />
+                        <ToggleButtonPharmacy call={call} user={user!} onAccept={OnAccept} />
                       </div>
                     </div>
                   </div>

@@ -14,8 +14,9 @@ import {
   BsFillChatDotsFill,
 } from "react-icons/bs";
 import { IoVideocam, IoVideocamOff } from "react-icons/io5";
-import { setOpenUserCamera } from "@/stores/slice/videoCallSlice";
+import { setCalling, setOpenUserCamera } from "@/stores/slice/videoCallSlice";
 import { stopMediaStream } from "@/stores/slice/media/mediaSlice";
+import { cancelCall, endCall } from "@/stores/slice/media/socketMediaSlice";
 
 interface Status {
   setOnChat: any;
@@ -31,7 +32,9 @@ export default function ToggleCallMuteDeclined(Props: Status) {
       <div className="ml-3 mr-3 flex cursor-pointer items-center justify-center pl-[4rem]">
         <div
           className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
-          onClick={() => setMute(!onMute)}
+          onClick={() => {
+            console.log("---------close mic------------")
+            setMute(!onMute)}}
         >
           <ToggleIcon
             onClick={onMute}
@@ -42,7 +45,11 @@ export default function ToggleCallMuteDeclined(Props: Status) {
       </div>
       <div
         onClick={() => {
-          dispatch(stopMediaStream());
+          if(vidoCall.callAccepted){
+            dispatch(endCall())
+          }else{
+            dispatch(cancelCall())
+          }
         }}
         className="flex cursor-pointer items-center justify-center rounded-full  bg-red-600 text-white xs:h-10 xs:w-10 xs:p-7 xs:text-3xl sm:p-10 sm:text-5xl"
       >
@@ -60,6 +67,7 @@ export default function ToggleCallMuteDeclined(Props: Status) {
         <button
           className="flex items-center justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
           onClick={() => {
+            console.log("---------close cam------------")
             setVDO(!onVDO);
             dispatch(setOpenUserCamera(!vidoCall.openUserCamera));
           }}
