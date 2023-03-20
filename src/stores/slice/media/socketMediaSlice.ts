@@ -86,8 +86,6 @@ export const callToDoctor = createAsyncThunk(
         dispatch(setYourStream(currentStream));
       });
 
-      peer.on('close', () => { console.log('peer closed'); socket.off("callAccepted"); });
-
       dispatch(setConnectionRef(peer));
     }
   }
@@ -152,6 +150,7 @@ export const resetConnectionRef = createAsyncThunk(
     const { connectionRef } = getState().socketMedia;
     if (connectionRef) {
       connectionRef.destroy();
+      socket.off("callAccepted")
     }
     return null;
   }
@@ -162,15 +161,17 @@ export const errorCallNotification = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     const stream = getState().mediaStream;
     socket.on("endCallTime", (obj) => {
+      dispatch(resetConnectionRef());
+      dispatch(setCallEnded(true));
+      dispatch(setCalling(false));
+      dispatch(setCallAccepted(false));
       try {
-        dispatch(setCallEnded(true));
-        dispatch(setCalling(false));
-        dispatch(setCallAccepted(false));
         dispatch(setYourStream(null));
         dispatch(stopMediaStream(stream));
-        dispatch(resetConnectionRef());
         //window.location.reload();
-      } catch {}
+      } catch(err) {
+        console.log('error :' + err)
+      }
     });
 
     socket.on("callReject", ({ message }) => {
