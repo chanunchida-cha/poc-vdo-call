@@ -16,7 +16,6 @@ interface Props {
 
 function ChatByRoomId({ roomId, userLogin, pharmacyName, patientName }: Props) {
   console.log("room id", roomId);
-
   const { data, isLoading, error } = useGetChatLogByRoomIdQuery(roomId);
   console.log(data);
 

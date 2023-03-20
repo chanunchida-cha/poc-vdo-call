@@ -20,7 +20,6 @@ export { default as getServerSideProps } from "@/utils/getServerSideProps";
 type Props = {
   user: User;
 };
-
 interface Call {
   isReceivingCall: boolean;
   from: string;
@@ -98,7 +97,7 @@ function VideoChatForm({ user }: Props) {
                 muted
                 ref={myVideoRef}
                 autoPlay
-                className="absolute right-0 m-4 h-[8rem] w-[12rem] rounded-2xl bg-black sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
+                className="absolute right-0 m-4 h-[10rem] rounded-2xl bg-black sm:mr-[2.5rem] sm:mt-[2rem]  md:shrink-0 lg:rounded-2xl"
               />
             )}
             <div className="absolute bottom-20 left-0 right-0 m-auto flex h-20 w-auto flex-row items-center justify-around md:bottom-[4rem] lg:bottom-[10rem]  ">
