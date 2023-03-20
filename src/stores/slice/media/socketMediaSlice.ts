@@ -85,7 +85,10 @@ export const callToDoctor = createAsyncThunk(
         if (!currentStream) return alert("not have yourStream");
         dispatch(setYourStream(currentStream));
       });
-      //   initialState.connectionRef = peer;
+
+      peer.on('close', () => { console.log('peer closed'); socket.off("callAccepted"); });
+
+      dispatch(setConnectionRef(peer));
     }
   }
 );
@@ -138,8 +141,19 @@ export const acceptCall = createAsyncThunk(
     });
 
     peer.signal(payload.call.signal);
-    initialState.connectionRef = peer;
+    dispatch(setConnectionRef(peer));
     console.log("ทำงาน");
+  }
+);
+
+export const resetConnectionRef = createAsyncThunk(
+  "socketMedia/resetConnectionRef",
+  async (_, { getState }) => {
+    const { connectionRef } = getState().socketMedia;
+    if (connectionRef) {
+      connectionRef.destroy();
+    }
+    return null;
   }
 );
 
@@ -154,7 +168,8 @@ export const errorCallNotification = createAsyncThunk(
         dispatch(setCallAccepted(false));
         dispatch(setYourStream(null));
         dispatch(stopMediaStream(stream));
-        // window.location.reload();
+        dispatch(resetConnectionRef());
+        //window.location.reload();
       } catch {}
     });
 
@@ -244,6 +259,9 @@ const socketMediaSlice = createSlice({
     setYourStream: (state, action) => {
       state.yourStream = action.payload;
     },
+    setConnectionRef: (state, action) => {
+      state.connectionRef = action.payload;
+    },
     setCallNotification: (state, action) => {
       const { from, name, signal, user_pk } = action.payload;
       state.calls.push({ from, name, signal, isReceivingCall: true, user_pk });
@@ -272,5 +290,6 @@ export const {
   setDoctorReady,
   setDoctorBusy,
   setYourStream,
+  setConnectionRef,
   setCallNotification,
 } = socketMediaSlice.actions;
