@@ -16,6 +16,7 @@ import { startMediaStream } from "@/stores/slice/media/mediaSlice";
 import { toggleMicrophone } from "@/stores/slice/media/toggleMediaSlice";
 import {
   callToDoctor,
+  checkCanCallToDoctor,
   getNotification,
   setDoctorBusy,
   setDoctorReady,
@@ -36,12 +37,19 @@ export default function Navbar(props: Status) {
   const firstname = cookies.get("firstname");
   const { data, isLoading, error } = useGetUserQuery(firstname!);
   const socket = useAppSelector((state) => state.socketMedia.socket);
+  const vidoCall = useAppSelector((state) => state.videoCall);
 
   const callUser = () => {
     dispatch(setCalling(true));
-    dispatch(startMediaStream());
-    dispatch(toggleMicrophone());
+    dispatch(checkCanCallToDoctor())
   };
+
+  useEffect(() => {
+    if (vidoCall.canCall) {
+      dispatch(startMediaStream());
+      dispatch(toggleMicrophone());  
+    }
+  }, [vidoCall.canCall]);
 
   const callButton = [
     {

@@ -23,7 +23,7 @@ function index(props: Props) {
 
   return (
     <>
-      {vidoCall.calling ? (
+      {(vidoCall.calling && vidoCall.canCall) ? (
         <VideoChatForm user={user} />
       ) : data?.role === "pharmacy" && vidoCall.callAccepted ? (
         <VideoChatForm user={user} />

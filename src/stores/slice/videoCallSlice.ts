@@ -14,6 +14,7 @@ interface InitialState {
   callAccepted: boolean;
   callEnded: boolean;
   calling: boolean;
+  canCall:boolean;
   stream: MediaStream | undefined;
   name: string;
   calls: Call[];
@@ -29,6 +30,7 @@ interface InitialState {
 const initialState: InitialState = {
   callAccepted: false,
   calling: false,
+  canCall:false,
   callEnded: false,
   stream: undefined,
   name: "",
@@ -55,6 +57,9 @@ export const videoCallSlice = createSlice({
     },
     setCalling: (state, action) => {
       state.calling = action.payload;
+    },
+    setCanCall: (state, action) => {
+      state.canCall = action.payload;
     },
     setStream: (state, action) => {
       state.stream = action.payload;
@@ -93,6 +98,7 @@ export const {
   setCallAccepted,
   setCallEnded,
   setCalling,
+  setCanCall,
   setStream,
   setName,
   setCalls,

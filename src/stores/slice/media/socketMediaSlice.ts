@@ -8,6 +8,7 @@ import {
   setCallAccepted,
   setCallEnded,
   setCalling,
+  setCanCall,
   setPharmacyCamera,
 } from "../videoCallSlice";
 import { GetUser } from "@/stores/service/getUserService";
@@ -91,6 +92,22 @@ export const callToDoctor = createAsyncThunk(
   }
 );
 
+export const checkCanCallToDoctor = createAsyncThunk(
+  "socketMedia/checkCanCallToDoctor",
+  async (_, { getState, dispatch }) => {
+    const onCall = getState().videoCall.callAccepted;
+    console.log("onCall : " + onCall);
+    if (!onCall) {
+
+      socket.emit("checkCanCall");
+
+      socket.on("canCall",() => {
+        dispatch(setCanCall(true))
+      });  
+    }
+  }
+);
+
 export const getNotification = createAsyncThunk(
   "socketMedia/getNotification",
   async (_, { getState, dispatch }) => {
@@ -164,8 +181,10 @@ export const errorCallNotification = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     const stream = getState().mediaStream;
     socket.on("endCallTime", (obj) => {
+
       dispatch(resetConnectionRef());
       dispatch(setCallEnded(true));
+      dispatch(setCanCall(false));
       dispatch(setCalling(false));
       dispatch(setCallAccepted(false));
       try {
@@ -180,6 +199,7 @@ export const errorCallNotification = createAsyncThunk(
     socket.on("callReject", ({ message }) => {
       console.log(message);
       try {
+        dispatch(setCanCall(false));
         dispatch(setCalling(false));
         dispatch(stopMediaStream(stream));
       } catch (error) {
@@ -188,8 +208,10 @@ export const errorCallNotification = createAsyncThunk(
     });
 
     socket.on("callFail", ({ message }) => {
+      console.log('--callfail--')
       console.log(message);
       try {
+        dispatch(setCanCall(false));
         dispatch(setCalling(false));
         dispatch(stopMediaStream(stream));
       } catch (error) {
@@ -224,6 +246,7 @@ export const endCall = createAsyncThunk(
 export const cancelCall = createAsyncThunk(
   "socketMedia/cancelCall",
   async (_, { getState, dispatch }) => {
+    dispatch(setCanCall(false));
     dispatch(setCalling(false));
     dispatch(setCallAccepted(false));
     socket.emit("cancelCall", {});
