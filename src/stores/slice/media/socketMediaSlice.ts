@@ -131,6 +131,9 @@ export const acceptCall = createAsyncThunk(
         pharmacyName: payload.user.firstName,
         license_no: payload.user.licenseNo,
       });
+      //pharmacyName: payload.user.firstName
+      //license_no: payload.user.licenseNo
+      //patientName: payload.call.name
     });
 
     peer.on("stream", (currentStream) => {

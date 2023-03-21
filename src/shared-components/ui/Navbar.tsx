@@ -74,7 +74,7 @@ export default function Navbar(props: Status) {
     } else if (isOnline && data?.role === "pharmacy") {
       dispatch(setDoctorReady({ user_pk: data?.id, name: data?.firstName }));
     }
-  }, [isOnline]);
+  }, [isOnline,data]);
 
   return (
     <>
