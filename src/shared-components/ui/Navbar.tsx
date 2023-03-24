@@ -41,32 +41,27 @@ export default function Navbar(props: Status) {
 
   const callUser = () => {
     dispatch(setCalling(true));
-    dispatch(checkCanCallToDoctor())
+    dispatch(checkCanCallToDoctor());
   };
 
   useEffect(() => {
     if (vidoCall.canCall) {
       dispatch(startMediaStream());
-      dispatch(toggleMicrophone());  
+      dispatch(toggleMicrophone());
     }
+
   }, [vidoCall.canCall]);
 
   const callButton = [
     {
       title: "สนทนาด้วยเสียง",
       icon: <VoiceCall />,
-      setOverlay: () => {
-        console.log("กด");
-
-        callUser();
-      },
+      callUser: callUser,
     },
     {
       title: "วิดีโอคอล",
       icon: <VDOCall />,
-      setOverlay: () => {
-        callUser();
-      },
+      callUser: callUser,
     },
   ];
 
@@ -82,7 +77,7 @@ export default function Navbar(props: Status) {
     } else if (isOnline && data?.role === "pharmacy") {
       dispatch(setDoctorReady({ user_pk: data?.id, name: data?.firstName }));
     }
-  }, [isOnline,data]);
+  }, [isOnline, data]);
 
   return (
     <>

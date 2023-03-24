@@ -104,6 +104,7 @@ export const checkCanCallToDoctor = createAsyncThunk(
       socket.on("canCall",() => {
         dispatch(setCanCall(true))
       });  
+
     }
   }
 );
