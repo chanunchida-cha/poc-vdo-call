@@ -15,6 +15,7 @@ import {
   ChatMessageMe,
   ChatMessageOther,
 } from "@/features/chat/components/ChatMessage";
+import ImageUploading from 'react-images-uploading';
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
@@ -37,6 +38,7 @@ function VideoChatForm({ user }: Props) {
   const socket = useAppSelector((state) => state.socketMedia.socket);
   const [onChat, setOnChat] = useState(false);
   const [chat, setChat] = useState<{ name: string; message: string }[]>([]);
+  const [currentImageList,setImage] = useState([])
 
   useEffect(() => {
     if (mediaStream) {
@@ -70,6 +72,38 @@ function VideoChatForm({ user }: Props) {
   }, []);
   console.log("chat", chat);
 
+  const onFileChange = async (imageList :any, addUpdateIndex :any) =>{
+    var ready_to_upload_img_list = [];
+
+    if (!!addUpdateIndex){
+      for(let i =0;i< addUpdateIndex.length;i++){
+        ready_to_upload_img_list.push(imageList[addUpdateIndex[i]].file);
+      }
+    }
+
+    if (ready_to_upload_img_list.length >0){
+      const formData =new FormData();
+      for(let i=0;i<ready_to_upload_img_list.length;i++){
+        formData.append('uploadfile',ready_to_upload_img_list[i])
+      }
+      let promise =new Promise((rootResolver,)=> fetch('http://localhost:8080/multi', {
+        method: 'POST',
+        body: formData
+      })
+        .then(async res => {
+          let result_json :any =await res.json()
+          rootResolver(result_json.url)
+        }))
+
+      let allUploaded :any = []
+      let tmpRes:any = await promise
+
+      for(let i=0;i<tmpRes.length;i++){
+        allUploaded.push(tmpRes[i])
+      }
+      setImage(allUploaded)
+    }
+  }
   return (
     <>
       <ChatUi
@@ -142,11 +176,25 @@ function VideoChatForm({ user }: Props) {
             <div className="auto-col-max grid grid-flow-col grid-cols-10 py-4 ">
               <div className=" auto-col-max col-span-9 grid  grid-flow-col grid-cols-7 justify-evenly rounded-xl bg-input-massage p-2 ">
                 <div className=" col-span-1 flex h-full items-center justify-center  ">
-                  <img
-                    src="/assets/images/attach-file.png"
-                    alt="attach"
-                    className="h-7 w-7  "
-                  />
+                  <ImageUploading
+                  multiple={true}
+                  value={currentImageList}
+                  onChange={onFileChange}
+                  acceptType={['jpg','png','jpeg','webp']}>
+                  {({
+                    imageList,
+                    onImageUpload,
+                  }) => (
+                    // write your building UI
+                    <div onClick={onImageUpload}>
+                      <img
+                      src="/assets/images/attach-file.png"
+                      alt="attach"
+                      className="h-7 w-7 "
+                      />
+                    </div>
+                    )}
+                  </ImageUploading>
                 </div>
 
                 <input
@@ -161,14 +209,31 @@ function VideoChatForm({ user }: Props) {
               <div
                 className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage"
                 onClick={() => {
-                  dispatch(
-                    sendChat({
-                      name: user?.firstName!,
-                      user_pk: user?.id!,
-                      message: text,
-                      role: user?.role!,
-                    })
-                  );
+                  if(text !==""){
+                    dispatch(
+                      sendChat({
+                        name: user?.firstName!,
+                        user_pk: user?.id!,
+                        message: text,
+                        role: user?.role!,
+                        type:"message"
+                      })
+                    );
+                  }
+                  if(currentImageList.length>0){
+                    currentImageList.forEach(element => {
+                      dispatch(
+                        sendChat({
+                          name: user?.firstName!,
+                          user_pk: user?.id!,
+                          message: element,
+                          role: user?.role!,
+                          type:"image"
+                        })
+                      );
+                    });
+                    setImage([]);
+                  }
                   setText("");
                 }}
               >
@@ -244,14 +309,31 @@ function VideoChatForm({ user }: Props) {
                 <div
                   className="col-span-1 mx-1 grid h-full items-center justify-items-center rounded-xl bg-input-massage"
                   onClick={() => {
-                    dispatch(
-                      sendChat({
-                        name: user?.firstName!,
-                        user_pk: user?.id!,
-                        message: text,
-                        role: user?.role!,
-                      })
-                    );
+                    if(text !==""){
+                      dispatch(
+                        sendChat({
+                          name: user?.firstName!,
+                          user_pk: user?.id!,
+                          message: text,
+                          role: user?.role!,
+                          type:"message"
+                        })
+                      );
+                    }
+                    if(currentImageList.length>0){
+                      currentImageList.forEach(element => {
+                        dispatch(
+                          sendChat({
+                            name: user?.firstName!,
+                            user_pk: user?.id!,
+                            message: element,
+                            role: user?.role!,
+                            type:"image"
+                          })
+                        );
+                      });
+                      setImage([]);
+                    }
                     setText("");
                   }}
                 >

@@ -7,6 +7,7 @@ interface Chat {
   user_pk: string;
   role: string;
   message: string;
+  type:string
 }
 
 type InitialState = {
@@ -20,9 +21,9 @@ const initialState: InitialState = {
 export const sendChat = createAsyncThunk(
   "sendChat/sendChat",
   async (info: Chat, { getState, dispatch }) => {
-    const { name, user_pk, role, message } = info;
+    const { name, user_pk, role, message, type } = info;
     const { socket } = getState().socketMedia;
-    await socket.emit("sendChat", { name, user_pk, message, role });
+    await socket.emit("sendChat", { name, user_pk, message, role, type });
   }
 );
 
