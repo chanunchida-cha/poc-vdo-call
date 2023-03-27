@@ -105,6 +105,7 @@ export const checkCanCallToDoctor = createAsyncThunk(
         dispatch(setCanCall(true))
       });  
 
+
     }
   }
 );
