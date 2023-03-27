@@ -48,8 +48,8 @@ export default function ToggleCallMuteDeclined(Props: Status) {
         >
           <ToggleIcon
             onClick={onMute}
-            Icon={<BsFillMicFill />}
-            IconToggle={<BsFillMicMuteFill />}
+            Icon={<BsFillMicFill size={35}/>}
+            IconToggle={<BsFillMicMuteFill size={35}/>}
           />
         </div>
       </div>
@@ -75,7 +75,8 @@ export default function ToggleCallMuteDeclined(Props: Status) {
       </div>
       <div className="ml-3 mr-3 flex items-center justify-center pr-[4rem] ">
         <button
-          className="flex items-center justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
+          className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
+          // className="flex items-center justify-center rounded-full bg-zinc-600 text-white xs:p-2 xs:text-3xl sm:p-3 sm:text-5xl"
           onClick={() => {
             if(mediaStream){
               if(onVDO){
@@ -92,18 +93,18 @@ export default function ToggleCallMuteDeclined(Props: Status) {
         >
           <ToggleIcon
             onClick={onVDO}
-            Icon={<IoVideocam />}
-            IconToggle={<IoVideocamOff />}
+            Icon= {<IoVideocam size={40}/>}
+            IconToggle={<IoVideocamOff size={40}/>}
           />
         </button>
 
         <button
-          className="flex items-center  justify-center rounded-full bg-zinc-600 text-white xs:ml-3 xs:p-2 xs:text-3xl sm:hidden sm:p-3 sm:text-5xl"
+          className="flex items-center justify-center rounded-full bg-zinc-600 text-white xs:ml-3 xs:p-3 xs:text-3xl sm:hidden sm:p-3 sm:text-5xl"
           onClick={() => {
             Props.setOnChat(true);
           }}
         >
-          <BsFillChatDotsFill />
+          <BsFillChatDotsFill size={35}/>
         </button>
 
         {/* </div> */}
