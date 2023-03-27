@@ -60,8 +60,17 @@ function VideoChatForm({ user }: Props) {
   }, [yourStream]);
 
   useEffect(() => {
-    socket.on("sendChat", ({ name, message }) => {
-      setChat([...chat, { name, message }]);
+    socket.on("sendChat", ({ sendObj, status }) => {
+      if(status === "SUCCESS"){
+        let chatResult: { name: any; message: any; }[] =[]
+        sendObj.forEach((element :any) => {
+          chatResult.push({
+            name:element.name,
+            message:element.message
+          })
+        });
+        setChat([...chat, ...chatResult]);
+      }
     });
   }, [chat]);
 
@@ -86,14 +95,16 @@ function VideoChatForm({ user }: Props) {
       for(let i=0;i<ready_to_upload_img_list.length;i++){
         formData.append('uploadfile',ready_to_upload_img_list[i])
       }
-      let promise =new Promise((rootResolver,)=> fetch('http://localhost:8080/multi', {
+      let promise =new Promise((rootResolver,)=> fetch('http://localhost:8080/minioupload', {
         method: 'POST',
         body: formData
       })
         .then(async res => {
           let result_json :any =await res.json()
           rootResolver(result_json.url)
-        }))
+        })
+        
+        )
 
       let allUploaded :any = []
       let tmpRes:any = await promise
@@ -209,31 +220,34 @@ function VideoChatForm({ user }: Props) {
               <div
                 className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage"
                 onClick={() => {
+                  let chatArray =[]
                   if(text !==""){
-                    dispatch(
-                      sendChat({
-                        name: user?.firstName!,
-                        user_pk: user?.id!,
-                        message: text,
-                        role: user?.role!,
-                        type:"message"
-                      })
-                    );
+                    chatArray.push({
+                      name: user?.firstName!,
+                      user_pk: user?.id!,
+                      message: text,
+                      role: user?.role!,
+                      type:"message"
+                    })
                   }
                   if(currentImageList.length>0){
                     currentImageList.forEach(element => {
-                      dispatch(
-                        sendChat({
+                      chatArray.push(
+                        {
                           name: user?.firstName!,
                           user_pk: user?.id!,
                           message: element,
                           role: user?.role!,
                           type:"image"
-                        })
-                      );
+                        }
+                      )
                     });
                     setImage([]);
                   }
+                  dispatch(
+                    sendChat(chatArray)
+                  );
+
                   setText("");
                 }}
               >
@@ -309,31 +323,33 @@ function VideoChatForm({ user }: Props) {
                 <div
                   className="col-span-1 mx-1 grid h-full items-center justify-items-center rounded-xl bg-input-massage"
                   onClick={() => {
+                    let chatArray =[]
                     if(text !==""){
-                      dispatch(
-                        sendChat({
-                          name: user?.firstName!,
-                          user_pk: user?.id!,
-                          message: text,
-                          role: user?.role!,
-                          type:"message"
-                        })
-                      );
+                      chatArray.push({
+                        name: user?.firstName!,
+                        user_pk: user?.id!,
+                        message: text,
+                        role: user?.role!,
+                        type:"message"
+                      })
                     }
                     if(currentImageList.length>0){
                       currentImageList.forEach(element => {
-                        dispatch(
-                          sendChat({
+                        chatArray.push(
+                          {
                             name: user?.firstName!,
                             user_pk: user?.id!,
                             message: element,
                             role: user?.role!,
                             type:"image"
-                          })
-                        );
+                          }
+                        )
                       });
                       setImage([]);
                     }
+                    dispatch(
+                      sendChat(chatArray)
+                    );
                     setText("");
                   }}
                 >
