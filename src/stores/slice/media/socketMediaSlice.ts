@@ -197,6 +197,18 @@ export const errorCallNotification = createAsyncThunk(
       }
     });
 
+    socket.on("callTimeout", ({ message }) => {
+      console.log('--callTimeout stop stream--')
+      try {
+        dispatch(setCanCall(false));
+        dispatch(setCalling(false));  
+        dispatch(stopMediaStream(stream));
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+
     socket.on("callReject", ({ message }) => {
       console.log(message);
       try {

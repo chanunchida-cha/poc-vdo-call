@@ -47,14 +47,19 @@ export default function OverlayCalling({ user }: Props) {
       setCalls(newCall);
     });
 
+    socket.on("callTimeout", ({ message ,rejectId}) => {
+      console.log('--callTimeout clear overlay--')
+      let newCall = calls.filter((call) => {
+        return call.from !== rejectId;
+      });
+      setCalls(newCall);
+    });
+
   }, [calls]);
 
   console.log(calls);
   
   useEffect(() => {
-    socket.on("callTimeout", ({ message }) => {
-      console.log(message);
-    });
     socket.on("timeoutCounter", ({ message }) => {
       console.log(message);
     });
