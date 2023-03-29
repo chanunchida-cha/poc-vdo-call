@@ -24,6 +24,7 @@ interface InitialState {
   connectionRef: null;
   openUserCamera: boolean;
   openPharmacyCamera: boolean;
+  isSetCallbackFromSocket: boolean;
   mySocketID: string;
 }
 
@@ -41,7 +42,7 @@ const initialState: InitialState = {
   connectionRef: null,
   openUserCamera: true,
   openPharmacyCamera: true,
- 
+  isSetCallbackFromSocket:false,
   mySocketID: "",
 };
 
@@ -89,7 +90,9 @@ export const videoCallSlice = createSlice({
     setPharmacyCamera: (state, action) => {
       state.openPharmacyCamera = action.payload;
     },
-    
+    setIsSetCallbackFromSocket:(state, action) => {
+      state.isSetCallbackFromSocket = action.payload;
+    }, 
   },
 });
 
@@ -108,4 +111,5 @@ export const {
   setConnectionRef,
   setOpenUserCamera,
   setPharmacyCamera,
+  setIsSetCallbackFromSocket,
 } = videoCallSlice.actions;
