@@ -206,6 +206,25 @@ function VideoChatForm({ user }: Props) {
                     </div>
                     )}
                   </ImageUploading>
+                  <ImageUploading
+                  multiple={true}
+                  value={currentImageList}
+                  onChange={onFileChange}
+                  acceptType={['jpg','png','jpeg','webp']}>
+                  {({
+                    imageList,
+                    onImageUpload,
+                  }) => (
+                    // write your building UI
+                    <div onClick={onImageUpload}>
+                      <img
+                      src="/assets/images/photo.png"
+                      alt="attach"
+                      className="h-7 w-7 "
+                      />
+                    </div>
+                    )}
+                  </ImageUploading>
                 </div>
 
                 <input
