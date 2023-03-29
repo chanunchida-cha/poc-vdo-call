@@ -15,6 +15,7 @@ import mediaSlice from "./slice/media/mediaSlice";
 import toggleMediaSlice from "./slice/media/toggleMediaSlice";
 import socketMediaSlice from "./slice/media/socketMediaSlice";
 import chatSlice from "./slice/chat/chatSlice";
+import mediaRecordSlice from "./slice/media/mediaRecordSlice";
 
 const reducer = {
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -25,6 +26,7 @@ const reducer = {
   [GetChatLogByRoomId.reducerPath]: GetChatLogByRoomId.reducer,
   userState: LoginSlice,
   videoCall: videoCallSlice,
+  mediaRecord: mediaRecordSlice,
   mediaStream: mediaSlice,
   toggleMedia: toggleMediaSlice,
   socketMedia: socketMediaSlice,

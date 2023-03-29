@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/stores/store";
 import { useEffect, useState } from "react";
 
 import { User } from "@/models/interface/InterfaceUser";
+import { callbackCallNotification } from "@/stores/slice/media/socketMediaSlice";
 
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
@@ -24,6 +25,8 @@ export default function OverlayCalling({ user }: Props) {
   const dispatch = useAppDispatch();
   const socket = useAppSelector((state) => state.socketMedia.socket);
   const [calls, setCalls] = useState<Call[]>([]);
+  const [onLoadSetCallback, setOnLoadSetCallback] = useState(false)
+
 
   useEffect(() => {
     socket.on("callUser", ({ from, name, signal, user_pk }) => {
@@ -64,6 +67,20 @@ export default function OverlayCalling({ user }: Props) {
       console.log(message);
     });
   }, []);
+
+  useEffect(()=>{
+    if(onLoadSetCallback){
+      console.log("setcallbackCallNotification")
+      setOnLoadSetCallback(false)
+      dispatch(callbackCallNotification())
+    }
+  }, [onLoadSetCallback])
+
+  useEffect(()=>{
+    if(!vidoCall.isSetCallbackFromSocket){
+      setOnLoadSetCallback(true)
+    }
+  }, [vidoCall.isSetCallbackFromSocket])
 
   const OnAccept= ()=>{
     setCalls([])

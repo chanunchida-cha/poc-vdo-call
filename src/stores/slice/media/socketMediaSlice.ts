@@ -9,10 +9,12 @@ import {
   setCallEnded,
   setCalling,
   setCanCall,
+  setIsSetCallbackFromSocket,
   setPharmacyCamera,
 } from "../videoCallSlice";
 import { GetUser } from "@/stores/service/getUserService";
 import { startMediaStream, stopMediaStream } from "./mediaSlice";
+import { setStartMediaRecord } from "./mediaRecordSlice";
 
 interface Call {
   isReceivingCall: boolean;
@@ -76,7 +78,8 @@ export const callToDoctor = createAsyncThunk(
 
       socket.on(
         "callAccepted",
-        ({ signal, pharmacyName, license_no, patientName }) => {
+        ({ signal, pharmacyName, license_no, patientName,room_id }) => {
+          dispatch(setStartMediaRecord({stream, room_id, name:patientName}));
           dispatch(setCallAccepted(true));
           peer.signal(signal);
         }
@@ -170,19 +173,22 @@ export const resetConnectionRef = createAsyncThunk(
   async (_, { getState }) => {
     const { connectionRef } = getState().socketMedia;
     if (connectionRef) {
-      connectionRef.destroy();
-      socket.off("callAccepted")
+      try{
+        connectionRef.destroy();
+        socket.off("callAccepted")  
+      }catch{
+        console.log("peer destroy :fail")
+      }
     }
     return null;
   }
 );
 
-export const errorCallNotification = createAsyncThunk(
-  "socketMedia/errorCallNotification",
+export const callbackCallNotification = createAsyncThunk(
+  "socketMedia/callbackCallNotification",
   async (_, { getState, dispatch }) => {
-    const stream = getState().mediaStream;
-    socket.on("endCallTime", (obj) => {
-
+    dispatch(setIsSetCallbackFromSocket(true))
+    socket.on("endCallTime", (obj) => { 
       dispatch(resetConnectionRef());
       dispatch(setCallEnded(true));
       dispatch(setCanCall(false));
@@ -190,6 +196,7 @@ export const errorCallNotification = createAsyncThunk(
       dispatch(setCallAccepted(false));
       try {
         dispatch(setYourStream(null));
+        const stream = getState().mediaStream;
         dispatch(stopMediaStream(stream));
         //window.location.reload();
       } catch(err) {
@@ -198,10 +205,11 @@ export const errorCallNotification = createAsyncThunk(
     });
 
     socket.on("callTimeout", ({ message }) => {
-      console.log('--callTimeout stop stream--')
       try {
+        dispatch(resetConnectionRef());
         dispatch(setCanCall(false));
         dispatch(setCalling(false));  
+        const stream = getState().mediaStream;
         dispatch(stopMediaStream(stream));
       } catch (error) {
         console.log(error);
@@ -210,26 +218,33 @@ export const errorCallNotification = createAsyncThunk(
 
 
     socket.on("callReject", ({ message }) => {
-      console.log(message);
+      dispatch(resetConnectionRef());
+      dispatch(setCallAccepted(false));
+      dispatch(setCanCall(false));
+      dispatch(setCalling(false));
       try {
+        const stream = getState().mediaStream;
+        dispatch(stopMediaStream(stream));
+      } catch (error) {
+        console.log("error :",error);
+      }
+    });
+
+    socket.on("callFail", ({ message }) => {
+      try {
+        dispatch(resetConnectionRef());
         dispatch(setCanCall(false));
         dispatch(setCalling(false));
+        const stream = getState().mediaStream;
         dispatch(stopMediaStream(stream));
       } catch (error) {
         console.log(error);
       }
     });
 
-    socket.on("callFail", ({ message }) => {
-      console.log('--callfail--')
-      console.log(message);
-      try {
-        dispatch(setCanCall(false));
-        dispatch(setCalling(false));
-        dispatch(stopMediaStream(stream));
-      } catch (error) {
-        console.log(error);
-      }
+    socket.on("callRoomId",({ pharmacyName, license_no, patientName,room_id }) => {
+      const stream = getState().mediaStream;
+      dispatch(setStartMediaRecord({stream, room_id, name:pharmacyName}));
     });
   }
 );
@@ -259,6 +274,7 @@ export const endCall = createAsyncThunk(
 export const cancelCall = createAsyncThunk(
   "socketMedia/cancelCall",
   async (_, { getState, dispatch }) => {
+    dispatch(resetConnectionRef());
     dispatch(setCanCall(false));
     dispatch(setCalling(false));
     dispatch(setCallAccepted(false));
