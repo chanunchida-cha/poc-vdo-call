@@ -14,7 +14,7 @@ import {
 } from "../videoCallSlice";
 import { GetUser } from "@/stores/service/getUserService";
 import { startMediaStream, stopMediaStream } from "./mediaSlice";
-import { setStartMediaRecord } from "./mediaRecordSlice";
+import { setStartMediaRecord, setStartMediaRecordCombineAudio, setStopMediaRecord } from "./mediaRecordSlice";
 
 interface Call {
   isReceivingCall: boolean;
@@ -76,10 +76,12 @@ export const callToDoctor = createAsyncThunk(
         });
       });
 
+      let video_room_id =""
       socket.on(
         "callAccepted",
         ({ signal, pharmacyName, license_no, patientName,room_id }) => {
-          dispatch(setStartMediaRecord({stream, room_id, name:patientName}));
+          video_room_id=room_id
+          //dispatch(setStartMediaRecord({stream, room_id, name:patientName}));
           dispatch(setCallAccepted(true));
           peer.signal(signal);
         }
@@ -87,6 +89,7 @@ export const callToDoctor = createAsyncThunk(
 
       peer.on("stream", (currentStream) => {
         if (!currentStream) return alert("not have yourStream");
+        dispatch(setStartMediaRecordCombineAudio({stream: currentStream,yourstream: stream,room_id:video_room_id}));
         dispatch(setYourStream(currentStream));
       });
 
@@ -189,6 +192,13 @@ export const callbackCallNotification = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     dispatch(setIsSetCallbackFromSocket(true))
     socket.on("endCallTime", (obj) => { 
+      try{
+        const mediaRecorder = getState().mediaRecord.mediaRecorder;
+        console.log("mediaRecorder : ",mediaRecorder)
+        dispatch(setStopMediaRecord(mediaRecorder))
+      }catch{
+
+      }
       dispatch(resetConnectionRef());
       dispatch(setCallEnded(true));
       dispatch(setCanCall(false));
@@ -244,7 +254,7 @@ export const callbackCallNotification = createAsyncThunk(
 
     socket.on("callRoomId",({ pharmacyName, license_no, patientName,room_id }) => {
       const stream = getState().mediaStream;
-      dispatch(setStartMediaRecord({stream, room_id, name:pharmacyName}));
+      //dispatch(setStartMediaRecord({stream, room_id, name:pharmacyName}));
     });
   }
 );
