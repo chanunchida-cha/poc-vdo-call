@@ -89,7 +89,7 @@ export const callToDoctor = createAsyncThunk(
 
       peer.on("stream", (currentStream) => {
         if (!currentStream) return alert("not have yourStream");
-        dispatch(setStartMediaRecordCombineAudio({stream: currentStream,yourstream: stream,room_id:video_room_id}));
+        dispatch(setStartMediaRecordCombineAudio({stream: currentStream,yourstream: stream,room_id:video_room_id, role:"user"}));
         dispatch(setYourStream(currentStream));
       });
 
@@ -254,7 +254,8 @@ export const callbackCallNotification = createAsyncThunk(
 
     socket.on("callRoomId",({ pharmacyName, license_no, patientName,room_id }) => {
       const stream = getState().mediaStream;
-      //dispatch(setStartMediaRecord({stream, room_id, name:pharmacyName}));
+      const currentStream = getState().socketMedia.yourStream;
+      dispatch(setStartMediaRecordCombineAudio({stream: currentStream,yourstream: stream,room_id:room_id, role:"doctor"}));
     });
   }
 );

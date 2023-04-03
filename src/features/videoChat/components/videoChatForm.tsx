@@ -93,7 +93,7 @@ function VideoChatForm({ user }: Props) {
       for(let i=0;i<ready_to_upload_img_list.length;i++){
         formData.append('uploadfile',ready_to_upload_img_list[i])
       }
-      let promise =new Promise((rootResolver,)=> fetch('http://localhost:8080/minioupload', {
+      let promise =new Promise((rootResolver,)=> fetch('http://localhost:8080/minio/upload', {
         method: 'POST',
         body: formData
       })

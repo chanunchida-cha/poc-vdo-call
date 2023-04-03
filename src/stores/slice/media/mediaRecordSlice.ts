@@ -1,3 +1,4 @@
+import { UpdateHistoryPharmacyVideo, UpdateHistoryUserVideo } from "@/stores/service/updateHistorySrevice";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface RecordState {
@@ -32,7 +33,7 @@ const startMediaRecord =  (payload:{stream:MediaStream, room_id:string, name:str
                 var newfile = new File([blob], payload.room_id+"-"+payload.name+".webm",{type:'video/webm'});
                 formData.append('uploadfile',newfile)
           
-                fetch('http://localhost:8080/minioupload', {
+                fetch('http://localhost:8080/minio/upload', {
                     method: 'POST',
                     body: formData
                 })
@@ -56,7 +57,7 @@ const startMediaRecord =  (payload:{stream:MediaStream, room_id:string, name:str
     }
 }
   
-const startMediaRecordCombineAudio =  (payload:{stream:MediaStream, yourstream:MediaStream, room_id:string}) => {
+const startMediaRecordCombineAudio =  (payload:{stream:MediaStream, yourstream:MediaStream, room_id:string,role:string}) => {
     try {
         if (payload.stream && payload.yourstream) {
             let options = {mimeType: 'video/webm; codecs=vp8'};
@@ -85,16 +86,26 @@ const startMediaRecordCombineAudio =  (payload:{stream:MediaStream, yourstream:M
                     const blob = new Blob(chunks);
                     const audioURL = URL.createObjectURL(blob);
                     const formData =new FormData();
-                    var newfile = new File([blob], payload.room_id+".webm",{type:'video/webm'});
+                    var newfile = new File([blob], payload.room_id+"-"+payload.role+".webm",{type:'video/webm'});
+                    console.log("payload room id:",payload.room_id)
                     formData.append('uploadfile',newfile)
           
-                    fetch('http://localhost:8080/minioupload', {
+                    fetch('http://localhost:8080/minio/upload', {
                         method: 'POST',
                         body: formData
                     })
                     .then(async res => {
                         let result_json :any =await res.json()
                         console.log(result_json)
+                        try{
+                            if(payload.role ==="user"){
+                                UpdateHistoryUserVideo(payload.room_id,result_json.data[0].file_path)
+                            }else if(payload.role ==="doctor"){
+                                UpdateHistoryPharmacyVideo(payload.room_id,result_json.data[0].file_path)
+                            }    
+                        }catch{
+
+                        }
                     }).catch(err=>{
                         console.log(err)
                     })
@@ -135,6 +146,7 @@ const mediaRecordSlice = createSlice({
         state.mediaRecorder = startMediaRecord(action.payload);
     },
     setStartMediaRecordCombineAudio: (state,action) => {
+        console.log("record:", action.payload)
         state.mediaRecorder = startMediaRecordCombineAudio(action.payload);
     },
     setStopMediaRecord: (state) =>{
