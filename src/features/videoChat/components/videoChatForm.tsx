@@ -14,7 +14,7 @@ import {
   ChatMessageMe,
   ChatMessageOther,
 } from "@/features/chat/components/ChatMessage";
-import ImageUploading from 'react-images-uploading';
+import ImageUploading from "react-images-uploading";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 type Props = {
@@ -37,7 +37,7 @@ function VideoChatForm({ user }: Props) {
   const socket = useAppSelector((state) => state.socketMedia.socket);
   const [onChat, setOnChat] = useState(false);
   const [chat, setChat] = useState<{ name: string; message: string }[]>([]);
-  const [currentImageList,setImage] = useState([])
+  const [currentImageList, setImage] = useState([]);
 
   useEffect(() => {
     if (mediaStream) {
@@ -59,13 +59,13 @@ function VideoChatForm({ user }: Props) {
 
   useEffect(() => {
     socket.on("sendChat", ({ sendObj, status }) => {
-      if(status === "SUCCESS"){
-        let chatResult: { name: any; message: any; }[] =[]
-        sendObj.forEach((element :any) => {
+      if (status === "SUCCESS") {
+        let chatResult: { name: any; message: any }[] = [];
+        sendObj.forEach((element: any) => {
           chatResult.push({
-            name:element.name,
-            message:element.message
-          })
+            name: element.name,
+            message: element.message,
+          });
         });
         setChat([...chat, ...chatResult]);
       }
@@ -79,40 +79,39 @@ function VideoChatForm({ user }: Props) {
   }, []);
   console.log("chat", chat);
 
-  const onFileChange = async (imageList :any, addUpdateIndex :any) =>{
+  const onFileChange = async (imageList: any, addUpdateIndex: any) => {
     var ready_to_upload_img_list = [];
 
-    if (!!addUpdateIndex){
-      for(let i =0;i< addUpdateIndex.length;i++){
+    if (!!addUpdateIndex) {
+      for (let i = 0; i < addUpdateIndex.length; i++) {
         ready_to_upload_img_list.push(imageList[addUpdateIndex[i]].file);
       }
     }
 
-    if (ready_to_upload_img_list.length >0){
-      const formData =new FormData();
-      for(let i=0;i<ready_to_upload_img_list.length;i++){
-        formData.append('uploadfile',ready_to_upload_img_list[i])
+    if (ready_to_upload_img_list.length > 0) {
+      const formData = new FormData();
+      for (let i = 0; i < ready_to_upload_img_list.length; i++) {
+        formData.append("uploadfile", ready_to_upload_img_list[i]);
       }
-      let promise =new Promise((rootResolver,)=> fetch('http://localhost:8080/minioupload', {
-        method: 'POST',
-        body: formData
-      })
-        .then(async res => {
-          let result_json :any =await res.json()
-          rootResolver(result_json.url)
+      let promise = new Promise((rootResolver) =>
+        fetch("http://localhost:8080/minio/upload", {
+          method: "POST",
+          body: formData,
+        }).then(async (res) => {
+          let result_json: any = await res.json();
+          rootResolver(result_json.url);
         })
-        
-        )
+      );
 
-      let allUploaded :any = []
-      let tmpRes:any = await promise
+      let allUploaded: any = [];
+      let tmpRes: any = await promise;
 
-      for(let i=0;i<tmpRes.length;i++){
-        allUploaded.push(tmpRes[i])
+      for (let i = 0; i < tmpRes.length; i++) {
+        allUploaded.push(tmpRes[i]);
       }
-      setImage(allUploaded)
+      setImage(allUploaded);
     }
-  }
+  };
   return (
     <>
       <ChatUi
@@ -186,41 +185,55 @@ function VideoChatForm({ user }: Props) {
               <div className=" auto-col-max col-span-9 grid  grid-flow-col grid-cols-7 justify-evenly rounded-xl bg-input-massage p-2 ">
                 <div className=" col-span-1 flex h-full items-center justify-center  ">
                   <ImageUploading
-                  multiple={true}
-                  value={currentImageList}
-                  onChange={onFileChange}
-                  acceptType={['jpg','png','jpeg','webp']}>
-                  {({
-                    imageList,
-                    onImageUpload,
-                  }) => (
-                    // write your building UI
-                    <div onClick={onImageUpload}>
-                      <img
-                      src="/assets/images/attach-file.png"
-                      alt="attach"
-                      className="h-7 w-7 "
-                      />
-                    </div>
+                    multiple={true}
+                    value={currentImageList}
+                    onChange={onFileChange}
+                    acceptType={["jpg", "png", "jpeg", "webp"]}
+                  >
+                    {({ imageList, onImageUpload }) => (
+                      // write your building UI
+                      <div onClick={onImageUpload}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          className="h-6 w-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"
+                          />
+                        </svg>
+                      </div>
                     )}
                   </ImageUploading>
                   <ImageUploading
-                  multiple={true}
-                  value={currentImageList}
-                  onChange={onFileChange}
-                  acceptType={['jpg','png','jpeg','webp']}>
-                  {({
-                    imageList,
-                    onImageUpload,
-                  }) => (
-                    // write your building UI
-                    <div onClick={onImageUpload}>
-                      <img
-                      src="/assets/images/photo.png"
-                      alt="attach"
-                      className="h-7 w-7 "
-                      />
-                    </div>
+                    multiple={true}
+                    value={currentImageList}
+                    onChange={onFileChange}
+                    acceptType={["jpg", "png", "jpeg", "webp"]}
+                  >
+                    {({ imageList, onImageUpload }) => (
+                      // write your building UI
+                      <div onClick={onImageUpload} className="pl-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="h-6 w-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+                          />
+                        </svg>
+                      </div>
                     )}
                   </ImageUploading>
                 </div>
@@ -237,42 +250,52 @@ function VideoChatForm({ user }: Props) {
               <div
                 className="col-span-1 mx-1 grid h-full cursor-pointer items-center justify-items-center rounded-xl bg-input-massage"
                 onClick={() => {
-                  let chatArray =[]
-                  if(text !==""){
+                  let chatArray = [];
+                  if (text !== "") {
                     chatArray.push({
                       name: user?.firstName!,
                       user_pk: user?.id!,
                       message: text,
                       role: user?.role!,
-                      type:"message"
-                    })
+                      type: "message",
+                    });
                   }
-                  if(currentImageList.length>0){
-                    currentImageList.forEach(element => {
-                      chatArray.push(
-                        {
-                          name: user?.firstName!,
-                          user_pk: user?.id!,
-                          message: element,
-                          role: user?.role!,
-                          type:"image"
-                        }
-                      )
+                  if (currentImageList.length > 0) {
+                    currentImageList.forEach((element) => {
+                      chatArray.push({
+                        name: user?.firstName!,
+                        user_pk: user?.id!,
+                        message: element,
+                        role: user?.role!,
+                        type: "image",
+                      });
                     });
                     setImage([]);
                   }
-                  dispatch(
-                    sendChat(chatArray)
-                  );
+                  dispatch(sendChat(chatArray));
 
                   setText("");
                 }}
               >
-                <img
+                {/* <img
                   className=" mx-2 h-[1.5rem] w-[1.5rem]  "
                   src="/assets/images/send.png"
                   alt="send"
-                />
+                /> */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                  />
+                </svg>
               </div>
             </div>
           </div>
@@ -340,33 +363,29 @@ function VideoChatForm({ user }: Props) {
                 <div
                   className="col-span-1 mx-1 grid h-full items-center justify-items-center rounded-xl bg-input-massage"
                   onClick={() => {
-                    let chatArray =[]
-                    if(text !==""){
+                    let chatArray = [];
+                    if (text !== "") {
                       chatArray.push({
                         name: user?.firstName!,
                         user_pk: user?.id!,
                         message: text,
                         role: user?.role!,
-                        type:"message"
-                      })
+                        type: "message",
+                      });
                     }
-                    if(currentImageList.length>0){
-                      currentImageList.forEach(element => {
-                        chatArray.push(
-                          {
-                            name: user?.firstName!,
-                            user_pk: user?.id!,
-                            message: element,
-                            role: user?.role!,
-                            type:"image"
-                          }
-                        )
+                    if (currentImageList.length > 0) {
+                      currentImageList.forEach((element) => {
+                        chatArray.push({
+                          name: user?.firstName!,
+                          user_pk: user?.id!,
+                          message: element,
+                          role: user?.role!,
+                          type: "image",
+                        });
                       });
                       setImage([]);
                     }
-                    dispatch(
-                      sendChat(chatArray)
-                    );
+                    dispatch(sendChat(chatArray));
                     setText("");
                   }}
                 >
