@@ -1,48 +1,72 @@
 // Path: src\features\chat\layouts\ChatHistory.tsx
+import SearchBar from "@/utils/SearchBar";
 import React, { ReactElement, useState } from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { RiMessage2Fill } from "react-icons/ri";
 
 interface Props {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 // chat history ส่วนของ web
 function ChatHistory({ children }: Props): ReactElement {
   const [isChat, setIsChat] = useState(true);
 
   return (
-   
-    
-    <div className={`
-      flex-1 h-full overflow-hidden mt-14 lg:mt-0 flex flex-col bg-white lg:rounded-[2rem] shadow-lg
-      max-w-[80px] sm:max-w-sm
-    `}>
-
+    <div
+      className={`
+      mt-14 flex h-full max-w-[80px] flex-1 flex-col overflow-hidden bg-white shadow-lg sm:max-w-sm
+      lg:mt-0 lg:rounded-[2rem]
+    `}
+    >
       {/* ส่วนตัวหนังสือ chat */}
+      {/*Func SearchBar รับ component มาจาก folder Utils */}
       <div className="p-4 pb-0">
-        <div className="border-b-2 border-primary pb-2">
-          <h1 className="text-md sm:text-xl font-bold text-primary">Chat</h1>
+        <div className="flex flex-row border-b-2 border-primary pb-2">
+          <h1 className="flex flex-1 text-md font-bold text-primary sm:text-xl items-center">Chat</h1>
+          <SearchBar/> 
         </div>
       </div>
 
       {/* ส่วนผู้ติดต่อที่เคยแชทด้วย */}
-      <div className="flex-1 -y-auto overflow-x-hidden">
-        {children}
-      </div>
+      <div className="-y-auto flex-1 overflow-x-hidden">{children}</div>
 
       {/* ส่วนไอคอนโทรกับแชท */}
-      <div className="hidden sm:flex flex-row justify-between items-center px-4 py-2 space-x-4 bg-secondary-light h-14">
-        <div className="flex-shrink-0 flex flex-row justify-between items-center space-x-4 w-full">
+      <div className="hidden h-14 flex-row items-center justify-between space-x-4 bg-secondary-light px-4 py-2 sm:flex">
+        <div className="flex w-full flex-shrink-0 flex-row items-center justify-between space-x-4">
           <div className="w-1/2">
-            <button className="w-full h-full flex justify-center items-center rounded-full" onClick={() => setIsChat(true)}>
-              <RiMessage2Fill size={20} className={isChat ? "text-secondary" : "text-white"} />
-              <p className={`${isChat ? "text-secondary" : "text-white"} text-sm ml-2`}>Chat</p>
+            <button
+              className="flex h-full w-full items-center justify-center rounded-full"
+              onClick={() => setIsChat(true)}
+            >
+              <RiMessage2Fill
+                size={20}
+                className={isChat ? "text-secondary" : "text-white"}
+              />
+              <p
+                className={`${
+                  isChat ? "text-secondary" : "text-white"
+                } ml-2 text-sm`}
+              >
+                Chat
+              </p>
             </button>
           </div>
           <div className="w-1/2">
-           <button  className="w-full h-full flex justify-center items-center rounded-full" onClick={() => setIsChat(false)}>
-              <FaPhoneAlt size={20} className={isChat ? "text-white" : "text-secondary"} />
-              <p className={`${isChat ? "text-white" : "text-secondary"} text-sm ml-2`}>Call</p>
+            <button
+              className="flex h-full w-full items-center justify-center rounded-full"
+              onClick={() => setIsChat(false)}
+            >
+              <FaPhoneAlt
+                size={20}
+                className={isChat ? "text-white" : "text-secondary"}
+              />
+              <p
+                className={`${
+                  isChat ? "text-white" : "text-secondary"
+                } ml-2 text-sm`}
+              >
+                Call
+              </p>
             </button>
           </div>
         </div>
