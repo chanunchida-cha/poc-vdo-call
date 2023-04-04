@@ -22,10 +22,15 @@ function index(props: Props) {
   const { data, isLoading, error } = useGetUserQuery(user.firstName!);
   const socket = useAppSelector((state) => state.socketMedia.socket);
 
+  useEffect(() => {
+    socket.on("callFail", () => {
+      return alert("ไม่มีเภสัชพร้อมให้บริการ กรุณาโทรใหม่อีกครั้ง");
+    });
+  }, []);
 
   return (
     <>
-      {(vidoCall.calling && vidoCall.canCall) ? (
+      {vidoCall.calling && vidoCall.canCall ? (
         <VideoChatForm user={user} />
       ) : data?.role === "pharmacy" && vidoCall.callAccepted ? (
         <VideoChatForm user={user} />
@@ -36,8 +41,6 @@ function index(props: Props) {
       )}
 
       <OverlayCalling user={user} />
-
-      
     </>
   );
 }
