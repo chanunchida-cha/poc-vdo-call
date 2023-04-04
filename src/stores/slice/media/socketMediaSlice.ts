@@ -14,7 +14,11 @@ import {
 } from "../videoCallSlice";
 import { GetUser } from "@/stores/service/getUserService";
 import { startMediaStream, stopMediaStream } from "./mediaSlice";
-import { setStartMediaRecord, setStartMediaRecordCombineAudio, setStopMediaRecord } from "./mediaRecordSlice";
+import {
+  setStartMediaRecord,
+  setStartMediaRecordCombineAudio,
+  setStopMediaRecord,
+} from "./mediaRecordSlice";
 
 interface Call {
   isReceivingCall: boolean;
@@ -76,11 +80,11 @@ export const callToDoctor = createAsyncThunk(
         });
       });
 
-      let video_room_id =""
+      let video_room_id = "";
       socket.on(
         "callAccepted",
-        ({ signal, pharmacyName, license_no, patientName,room_id }) => {
-          video_room_id=room_id
+        ({ signal, pharmacyName, license_no, patientName, room_id }) => {
+          video_room_id = room_id;
           //dispatch(setStartMediaRecord({stream, room_id, name:patientName}));
           dispatch(setCallAccepted(true));
           peer.signal(signal);
@@ -89,12 +93,20 @@ export const callToDoctor = createAsyncThunk(
 
       peer.on("stream", (currentStream) => {
         if (!currentStream) return alert("not have yourStream");
-        dispatch(setStartMediaRecordCombineAudio({stream: currentStream,yourstream: stream,room_id:video_room_id, role:"user"}));
+        dispatch(
+          setStartMediaRecordCombineAudio({
+            stream: currentStream,
+            yourstream: stream,
+            room_id: video_room_id,
+            role: "user",
+          })
+        );
         dispatch(setYourStream(currentStream));
       });
 
       dispatch(setConnectionRef(peer));
     }
+    
   }
 );
 
@@ -104,13 +116,11 @@ export const checkCanCallToDoctor = createAsyncThunk(
     const onCall = getState().videoCall.callAccepted;
     console.log("onCall : " + onCall);
     if (!onCall) {
-
       socket.emit("checkCanCall");
-
-      socket.on("canCall",() => {
-        dispatch(setCanCall(true))
-      });  
-
+    
+      socket.on("canCall", () => {
+        dispatch(setCanCall(true));
+      });
     }
   }
 );
@@ -176,11 +186,11 @@ export const resetConnectionRef = createAsyncThunk(
   async (_, { getState }) => {
     const { connectionRef } = getState().socketMedia;
     if (connectionRef) {
-      try{
+      try {
         connectionRef.destroy();
-        socket.off("callAccepted")  
-      }catch{
-        console.log("peer destroy :fail")
+        socket.off("callAccepted");
+      } catch {
+        console.log("peer destroy :fail");
       }
     }
     return null;
@@ -190,15 +200,13 @@ export const resetConnectionRef = createAsyncThunk(
 export const callbackCallNotification = createAsyncThunk(
   "socketMedia/callbackCallNotification",
   async (_, { getState, dispatch }) => {
-    dispatch(setIsSetCallbackFromSocket(true))
-    socket.on("endCallTime", (obj) => { 
-      try{
+    dispatch(setIsSetCallbackFromSocket(true));
+    socket.on("endCallTime", (obj) => {
+      try {
         const mediaRecorder = getState().mediaRecord.mediaRecorder;
-        console.log("mediaRecorder : ",mediaRecorder)
-        dispatch(setStopMediaRecord(mediaRecorder))
-      }catch{
-
-      }
+        console.log("mediaRecorder : ", mediaRecorder);
+        dispatch(setStopMediaRecord(mediaRecorder));
+      } catch {}
       dispatch(resetConnectionRef());
       dispatch(setCallEnded(true));
       dispatch(setCanCall(false));
@@ -209,8 +217,8 @@ export const callbackCallNotification = createAsyncThunk(
         const stream = getState().mediaStream;
         dispatch(stopMediaStream(stream));
         //window.location.reload();
-      } catch(err) {
-        console.log('error :' + err)
+      } catch (err) {
+        console.log("error :" + err);
       }
     });
 
@@ -218,14 +226,13 @@ export const callbackCallNotification = createAsyncThunk(
       try {
         dispatch(resetConnectionRef());
         dispatch(setCanCall(false));
-        dispatch(setCalling(false));  
+        dispatch(setCalling(false));
         const stream = getState().mediaStream;
         dispatch(stopMediaStream(stream));
       } catch (error) {
         console.log(error);
       }
     });
-
 
     socket.on("callReject", ({ message }) => {
       dispatch(resetConnectionRef());
@@ -236,7 +243,7 @@ export const callbackCallNotification = createAsyncThunk(
         const stream = getState().mediaStream;
         dispatch(stopMediaStream(stream));
       } catch (error) {
-        console.log("error :",error);
+        console.log("error :", error);
       }
     });
 
@@ -252,11 +259,21 @@ export const callbackCallNotification = createAsyncThunk(
       }
     });
 
-    socket.on("callRoomId",({ pharmacyName, license_no, patientName,room_id }) => {
-      const stream = getState().mediaStream;
-      const currentStream = getState().socketMedia.yourStream;
-      dispatch(setStartMediaRecordCombineAudio({stream: currentStream,yourstream: stream,room_id:room_id, role:"doctor"}));
-    });
+    socket.on(
+      "callRoomId",
+      ({ pharmacyName, license_no, patientName, room_id }) => {
+        const stream = getState().mediaStream;
+        const currentStream = getState().socketMedia.yourStream;
+        dispatch(
+          setStartMediaRecordCombineAudio({
+            stream: currentStream,
+            yourstream: stream,
+            room_id: room_id,
+            role: "doctor",
+          })
+        );
+      }
+    );
   }
 );
 
