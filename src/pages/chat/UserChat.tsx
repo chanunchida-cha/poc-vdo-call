@@ -8,6 +8,7 @@ import {
 } from "@/stores/service/getHistoryService";
 import { type User } from "@/models/interface/InterfaceUser";
 import ChatByRoomId from "./ChatByRoomId";
+import SearchBar from "@/utils/SearchBar";
 interface Props {
   user: User;
 }
@@ -45,6 +46,7 @@ function UserChat({ user }: Props): ReactElement {
 
   return (
     <div>
+      
       <ChatLayout>
         <ChatHistory>
           {historys?.map((history, index) => {

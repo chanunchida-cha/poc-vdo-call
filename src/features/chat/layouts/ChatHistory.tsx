@@ -21,9 +21,11 @@ function ChatHistory({ children }: Props): ReactElement {
       {/* ส่วนตัวหนังสือ chat */}
       {/*Func SearchBar รับ component มาจาก folder Utils */}
       <div className="p-4 pb-0">
-        <div className="flex flex-row border-b-2 border-primary pb-2">
-          <h1 className="flex flex-1 text-md font-bold text-primary sm:text-xl items-center">Chat</h1>
-          <SearchBar/> 
+        <div className="flex flex-col border-b-2 border-primary pb-2 md:flex-row">
+          <h1 className="text-md flex flex-1 items-center font-bold text-primary sm:text-xl">
+            Chat
+          </h1>
+          <SearchBar />
         </div>
       </div>
 
