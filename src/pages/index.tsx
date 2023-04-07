@@ -8,6 +8,7 @@ import { useGetUserQuery } from "@/stores/service/getUserService";
 import { type User } from "@/models/interface/InterfaceUser";
 import DoctorChat from "./chat/DoctorChat";
 import UserChat from "./chat/UserChat";
+import VideoChat from "@/features/videoChat/components/videoChatPharmacy/videoChat";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 interface Props {
@@ -19,11 +20,17 @@ function index(props: Props) {
   const vidoCall = useAppSelector((state) => state.videoCall);
   // const router = useRouter();
   const { data, isLoading, error } = useGetUserQuery(user.firstName!);
-  console.log("users", user.firstName);
+  const socket = useAppSelector((state) => state.socketMedia.socket);
+
+  useEffect(() => {
+    socket.on("callFail", () => {
+      return alert("ไม่มีเภสัชพร้อมให้บริการ กรุณาโทรใหม่อีกครั้ง");
+    });
+  }, []);
 
   return (
     <>
-      {(vidoCall.calling && vidoCall.canCall) ? (
+      {vidoCall.calling && vidoCall.canCall ? (
         <VideoChatForm user={user} />
       ) : data?.role === "pharmacy" && vidoCall.callAccepted ? (
         <VideoChatForm user={user} />

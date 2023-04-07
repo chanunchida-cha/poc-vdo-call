@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout";
 
 type Props = {};
 
-const VideoChatPharmacy = (props: Props) => {
+const VideoChat = (props: Props) => {
   return (
     <div className="">
       <Layout />
@@ -11,4 +11,4 @@ const VideoChatPharmacy = (props: Props) => {
   );
 };
 
-export default VideoChatPharmacy;
+export default VideoChat;

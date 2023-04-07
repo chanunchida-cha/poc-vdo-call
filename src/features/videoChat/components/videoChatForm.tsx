@@ -99,7 +99,7 @@ function VideoChatForm({ user }: Props) {
           body: formData,
         }).then(async (res) => {
           let result_json: any = await res.json();
-          rootResolver(result_json.url);
+          rootResolver(result_json.data);
         })
       );
 
@@ -107,7 +107,7 @@ function VideoChatForm({ user }: Props) {
       let tmpRes: any = await promise;
 
       for (let i = 0; i < tmpRes.length; i++) {
-        allUploaded.push(tmpRes[i]);
+        allUploaded.push(tmpRes[i].file_path);
       }
       setImage(allUploaded);
     }
