@@ -380,7 +380,7 @@ function VideoChatForm({ user }: Props) {
                           user_pk: user?.id!,
                           message: element,
                           role: user?.role!,
-                          type: "image",
+                          type: "imawge",
                         });
                       });
                       setImage([]);

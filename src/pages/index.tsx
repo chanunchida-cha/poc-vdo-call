@@ -8,7 +8,6 @@ import { useGetUserQuery } from "@/stores/service/getUserService";
 import { type User } from "@/models/interface/InterfaceUser";
 import DoctorChat from "./chat/DoctorChat";
 import UserChat from "./chat/UserChat";
-import VideoChat from "@/features/videoChat/components/videoChatPharmacy/videoChat";
 export { default as getServerSideProps } from "@/utils/getServerSideProps";
 
 interface Props {
@@ -41,6 +40,7 @@ function index(props: Props) {
       )}
 
       <OverlayCalling user={user} />
+
     </>
   );
 }

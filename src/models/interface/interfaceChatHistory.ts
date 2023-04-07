@@ -1,11 +1,13 @@
 export interface Chat {
-    name: string;
-    role: string;
-    text: string;
-    date: string;
-  }
-  export interface ChatHistory {
-    _id: string;
-    roomID: string;
-    chat: Chat[];
-  }
+  user_pk: string;
+  name: string;
+  role: string;
+  text: string;
+  date: string;
+  type:string
+}
+export interface ChatHistory {
+  _id: string;
+  roomID: string;
+  chat: Chat[];
+}

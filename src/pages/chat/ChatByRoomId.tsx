@@ -33,12 +33,15 @@ function ChatByRoomId({ roomId, userLogin, pharmacyName, patientName }: Props) {
                   name={chatLog.name}
                   avatar={`https://ui-avatars.com/api/?name= ${chatLog.name}`}
                   message={chatLog.text}
+                  type={chatLog.type}
                 />
               ) : (
                 <ChatMessageOther
                   name={chatLog.name}
                   avatar={`https://ui-avatars.com/api/?name= ${chatLog.name}`}
                   message={chatLog.text}
+                  type={chatLog.type}
+
                 />
               ))}
             {userLogin.role === "user" &&
@@ -47,12 +50,14 @@ function ChatByRoomId({ roomId, userLogin, pharmacyName, patientName }: Props) {
                   name={chatLog.name}
                   avatar={`https://ui-avatars.com/api/?name= ${chatLog.name}`}
                   message={chatLog.text}
+                  type={chatLog.type}
                 />
               ) : (
                 <ChatMessageOther
                   name={chatLog.name}
                   avatar={`https://ui-avatars.com/api/?name= ${chatLog.name}`}
                   message={chatLog.text}
+                  type={chatLog.type}
                 />
               ))}
           </>

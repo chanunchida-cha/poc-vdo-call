@@ -1,3 +1,4 @@
+import SearchBar from '@/utils/SearchBar';
 import React, { ReactElement, useState } from 'react'
 import { FaPhoneAlt } from "react-icons/fa";
 import { RiMessage2Fill } from "react-icons/ri";
@@ -13,6 +14,8 @@ function ChatLayout({children}: Props): ReactElement {
     //children รับมาจากหน้า chatroom & chathistory
     return (
         <div className="flex flex-col h-screen relative">
+
+          
             <div className="flex-1 overflow-hidden lg:p-24 flex flex-row justify-between md:gap-2 lg:gap-10">
                 {children}
             </div>
@@ -35,6 +38,7 @@ function ChatLayout({children}: Props): ReactElement {
                 </div>
             </div>
         </div>
+        
           
         
     )
