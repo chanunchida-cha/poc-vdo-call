@@ -14,13 +14,13 @@ function ChatHistory({ children }: Props): ReactElement {
   return (
     <div
       className={`
-      mt-14 flex h-full max-w-[80px] flex-1 flex-col overflow-hidden bg-white shadow-lg sm:max-w-sm
+      mt-4 flex h-full max-w-[80px] flex-1 flex-col overflow-hidden bg-white shadow-lg sm:max-w-sm
       lg:mt-0 lg:rounded-[2rem]
     `}
     >
       {/* ส่วนตัวหนังสือ chat */}
       {/*Func SearchBar รับ component มาจาก folder Utils */}
-      <div className="p-4 pb-0">
+      <div className=" p-4 pb-0">
         <div className="flex flex-col border-b-2 border-primary pb-2 md:flex-row">
           <h1 className="text-md flex flex-1 items-center font-bold text-primary sm:text-xl">
             Chat

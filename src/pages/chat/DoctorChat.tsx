@@ -13,6 +13,7 @@ import {
   useLazyGetHistoryByIdQuery,
 } from "@/stores/service/getHistoryService";
 import ChatByRoomId from "./ChatByRoomId";
+import SearchBar from "@/utils/SearchBar";
 interface Props {
   user: User;
 }
@@ -48,7 +49,7 @@ function DoctorChat({ user }: Props): ReactElement {
 
   return (
     <div>
-      <ChatLayout>
+      <ChatLayout> 
         <ChatHistory>
           {allHistory?.map((history, index) => {
             return (

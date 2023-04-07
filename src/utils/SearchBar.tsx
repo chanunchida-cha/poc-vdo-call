@@ -2,11 +2,11 @@ import React from "react";
 
 function SearchBar() {
   return (
-    <form className="  flex flex-row items-center">
+    <form className="flex  flex-row items-center">
       <label htmlFor="simple-search" className="sr-only">
         Search
       </label>
-      <div className=" hidden md:block relative w-auto">
+      <div className="hidden md:block   relative w-auto">
         <input
           type="text"
           id="simple-search"
@@ -17,7 +17,7 @@ function SearchBar() {
       </div>
       <button
         type="submit"
-        className="ml-2 rounded-lg border border-primary bg-primary p-2.5 text-sm font-medium text-white hover:bg-primary focus:outline-none focus:ring-4 focus:ring-primary "
+        className="hidden md:block   ml-2 rounded-lg border border-primary bg-primary p-2.5 text-sm font-medium text-white hover:bg-primary focus:outline-none focus:ring-4 focus:ring-primary "
       >
         <svg
           className="h-5 w-5"
