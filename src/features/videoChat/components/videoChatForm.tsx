@@ -165,12 +165,15 @@ function VideoChatForm({ user }: Props) {
                           name={text.name}
                           avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
                           message={text.message}
+                          userId={user.id}
+                        
                         />
                       ) : (
                         <ChatMessageOther
                           name={text.name}
                           avatar={`https://ui-avatars.com/api/?name= ${text.name}`}
                           message={text.message}
+                          userId={user.id}
                         />
                       )}
 

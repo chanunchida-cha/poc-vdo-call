@@ -1,5 +1,6 @@
+import { showImage } from "@/utils/awsSDK/showImage";
 import { type } from "os";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface ChatMessageProps {
@@ -7,6 +8,7 @@ interface ChatMessageProps {
   avatar: string;
   message?: string;
   type: string;
+  userId: string;
 }
 
 const Wrapper = styled.div`
@@ -25,16 +27,16 @@ export const ChatMessageOther: React.FC<ChatMessageProps> = ({
   avatar,
   message,
   type,
+  userId,
 }) => {
-  const showImage = async () => {
-    const AWS = require("aws-sdk");
-    const buckerName = "researcher/";
-    let imageUrl;
+  const [s3url, setS3url] = useState<string>();
 
-    if (type === "image") {
-      imageUrl = message;
-    }
-  };
+  useEffect(() => {
+    const loadImage = async () => {
+      await showImage(type, message!, setS3url);
+    };
+    loadImage();
+  }, [userId]);
 
   return (
     <div className="container ">
@@ -44,7 +46,11 @@ export const ChatMessageOther: React.FC<ChatMessageProps> = ({
             <img src={avatar} alt={name} className="h-10 w-10 rounded-full" />
 
             <p className="message from text-sm font-semibold text-primary-light">
-              {message}
+              {s3url !== "" ? (
+                <img className="h-40 w-40 rounded-lg" src={s3url} />
+              ) : (
+                <>{message}</>
+              )}
             </p>
           </div>
         </div>
@@ -57,14 +63,28 @@ export const ChatMessageMe: React.FC<ChatMessageProps> = ({
   name,
   avatar,
   message,
+  type,
+  userId,
 }) => {
+  const [s3url, setS3url] = useState("");
+
+  useEffect(() => {
+    const loadImage = async () => {
+      await showImage(type, message!, setS3url);
+    };
+    loadImage();
+  }, [message]);
   return (
     <div className="container">
       <Wrapper>
         <div className="space-x-2 p-4">
           <div className="flex-row-2 flex justify-end">
             <p className="message to text-sm font-semibold text-primary-light">
-              {message}
+              {type === "image" ? (
+                <img className="h-40 w-40 rounded-lg" src={s3url} />
+              ) : (
+                <>{message}</>
+              )}
             </p>
             <img src={avatar} alt={name} className="h-10 w-10 rounded-full" />
           </div>
