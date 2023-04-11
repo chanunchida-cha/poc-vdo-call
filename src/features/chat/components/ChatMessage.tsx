@@ -47,7 +47,7 @@ export const ChatMessageOther: React.FC<ChatMessageProps> = ({
 
             <p className="message from text-sm font-semibold text-primary-light">
               {s3url !== "" ? (
-                <img className="h-40 w-40 rounded-lg" src={s3url} />
+                <img className="h-40  object-fill rounded-lg" src={s3url} />
               ) : (
                 <>{message}</>
               )}
@@ -81,7 +81,7 @@ export const ChatMessageMe: React.FC<ChatMessageProps> = ({
           <div className="flex-row-2 flex justify-end">
             <p className="message to text-sm font-semibold text-primary-light">
               {type === "image" ? (
-                <img className="h-40 w-40 rounded-lg" src={s3url} />
+                <img className="h-40  object-fill rounded-lg" src={s3url} />
               ) : (
                 <>{message}</>
               )}
